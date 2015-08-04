@@ -164,7 +164,7 @@ ul, ol, li {
 }
 
 .chronosRecovery {
-  background-color: #3CD153;
+  background-color: #14FF15;
   color: white;
   text-align: center; 
   font-size: 3rem; 
@@ -206,11 +206,15 @@ div.footer {
      font-size: 2rem;
 }
 
-
- .left {
+.leftCheckbox {
     float: left;
     margin-left: 5px;
    margin-top:6px;
+}
+
+.left {
+    float: left;
+    margin-left: 5px;
 }
 
 .right {

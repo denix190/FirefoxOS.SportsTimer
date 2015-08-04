@@ -388,7 +388,7 @@ function displayListUpdateSequence() {
             var spanlbl = document.createElement("span");
             label.appendChild(spanlbl);
             
-            spanl.className = "left";
+            spanl.className = "leftCheckbox";
             spanr.className = "right";
             
             spanl.appendChild(a);
