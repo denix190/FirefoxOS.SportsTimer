@@ -210,6 +210,11 @@ function storeSeq() {
         var breakTime = breakTimeId.value;
         var nbRetry = nbRetryId.value;
         var nameSeq = nameId.value;
+
+        if (nameSeq.length == 0) {
+            window.alert(navigator.mozL10n.get("idAlertNoName"));
+            return;
+        }
         console.log("nameSeq:" + nameSeq)
         
         var opt = document.createElement('option'); // create new option element
@@ -374,8 +379,25 @@ function displayListUpdateSequence() {
             checkbox.value = cursor.value.id;
             checkbox.id = "checkBoxSeq";
 
-            a.appendChild(checkbox);
-            li.appendChild(a);
+            var spanl = document.createElement("span");
+            var spanr = document.createElement("span");
+            
+            var label = document.createElement("label");
+            label.className = "pack-checkbox";
+            label.appendChild(checkbox);
+            var spanlbl = document.createElement("span");
+            label.appendChild(spanlbl);
+            
+            spanl.className = "left";
+            spanr.className = "right";
+            
+            spanl.appendChild(a);
+            // a.appendChild(checkbox);
+            spanr.appendChild(label);
+            
+            li.appendChild(spanl);
+            li.appendChild(spanr);
+            
        		listSeq.appendChild(li);
 
             cursor.continue();
