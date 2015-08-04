@@ -287,11 +287,11 @@
   <section role="region" id="addSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-add-seq-back" href="#"><span class="icon icon-close">back</span></a>
-      <h1>New exercise</h1>
+      <h1 data-l10n-id="idNewExercise">New exercise</h1>
     </header>
     <article class="content scrollable header">
-        <p>
-          Effort time:
+        <p width="100%">
+          <span data-l10n-id="idEffortTime">Effort time</span>
          <select name="duration" id="duration">
            <option value="15">15 sec</option>
            <option value="30">30 sec</option> 
@@ -308,8 +308,8 @@
          </select>
         </p>
 
-        <p>
-          Recovery:
+        <p width="100%">
+          <span data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTime">
           <option value="0">None</option>
             <option value="15">15 sec</option>
@@ -327,18 +327,18 @@
          </select>
         </p>
 
-        <p>
-          Rounds:
+        <p width="100%">
+          <span data-l10n-id="idRounds">Rounds:</span>
           <input id="nbRetry" type="number" placeholder="1" required min="1" max="10" value="1" />
         </p>
 
-        <p>
-          Name:
+        <p width="100%">
+          <span data-l10n-id="idNameExercise">Name</span>
           <input id="nameSeq" type="text" maxlength="15" required>
         </p>
         
          <div>
-           <button id="btn-add-seq" class="recommend">Add Exercise</button>
+           <button id="btn-add-seq" class="recommend" data-l10n-id="idAddExercise">Add Exercise</button>
          </div>
 
     </article>
@@ -348,11 +348,11 @@
   <section role="region" id="updSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-upd-seq-back" href="#"><span class="icon icon-close">back</span></a>
-      <h1>Update Exercise</h1>
+      <h1 data-l10n-id="idExercise">Update Exercise</h1>
     </header>
     <article class="content scrollable header">
         <p>
-          Effort time:
+         <span data-l10n-id="idEffortTime">Effort time</span> 
          <select name="duration" id="durationUpd">
            <option value="15">15 sec</option>
            <option value="30">30 sec</option> 
@@ -370,7 +370,7 @@
         </p>
 
         <p>
-          Recovery:
+          <span data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTimeUpd">
           <option value="0">None</option>
             <option value="15">15 sec</option>
@@ -389,18 +389,18 @@
         </p>
 
         <p>
-          Rounds:
+          <span data-l10n-id="idRounds">Rounds:</span>
           <input id="nbRetryUpd" type="number" placeholder="1" required min="1" max="10" value="1" />
         </p>
 
         <p>
-          Name:
+          <span data-l10n-id="idNameExercise">Name:</span>
           <input id="nameSeqUpd" type="text" required>
         </p>
         
          <div>
            <input type="hidden" id="idUpd" maxlength="15"  value="">
-           <button id="btn-upd-seq" class="recommend">Update Exercise</button>
+           <button id="btn-upd-seq" data-l10n-id="idUpdateExercise" class="recommend">Update Exercise</button>
          </div>
 
     </article>
