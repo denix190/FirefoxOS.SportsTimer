@@ -126,6 +126,7 @@ listItemSeq.onclick = function(e) {
                     console.log(value);
                     
                     var name = document.getElementById('nameSeqUpd');
+                    var desc = document.getElementById('descSeqUpd');
                     var nbRetry = document.getElementById('nbRetryUpd');
                     var breakTime = document.getElementById('breakTimeUpd');
                     var duration = document.getElementById('durationUpd');
@@ -135,6 +136,8 @@ listItemSeq.onclick = function(e) {
                     nbRetry.value = request.result.nbRetry;
                     breakTime.value = request.result.breakTime;
                     duration.value = request.result.duration;
+                    desc.value = request.result.desc;
+                    
                     idUpd.value = id;
                 };
             } catch (ex) {
@@ -205,11 +208,13 @@ function storeSeq() {
         var breakTimeId = document.getElementById("breakTime");         
         var nbRetryId = document.getElementById("nbRetry");
         var nameId = document.getElementById("nameSeq");
-
+        var descId = document.getElementById("descSeq");
+        
         var duration = durationId.value;
         var breakTime = breakTimeId.value;
         var nbRetry = nbRetryId.value;
         var nameSeq = nameId.value;
+        var descSeq = descId.value;
 
         if (nameSeq.length == 0) {
             window.alert(navigator.mozL10n.get("idAlertNoName"));
@@ -235,6 +240,7 @@ function storeSeq() {
             duration: duration,
             breakTime: breakTime,
             nbRetry: nbRetry,
+            desc: descSeq,
             created:new Date()
         }
         
@@ -265,11 +271,13 @@ function updateSeq() {
         var breakTimeId = document.getElementById('breakTimeUpd');
         var durationId = document.getElementById('durationUpd');
         var idUpd = document.getElementById('idUpd');
-
+        var descIdUpd = document.getElementById("descSeqUpd");
+        
         var duration = durationId.value;
         var breakTime = breakTimeId.value;
         var nbRetry = nbRetryId.value;
         var nameSeq = nameId.value;
+        var descSeq = descIdUpd.value;
         var id = parseInt(idUpd.value);
 
         var transaction = db.transaction(["chronos"],"readwrite");
@@ -282,6 +290,7 @@ function updateSeq() {
             duration: duration,
             breakTime: breakTime,
             nbRetry: nbRetry,
+            desc: descSeq,
             created:new Date()
         }
         
@@ -415,9 +424,6 @@ function startSeq() {
         
         btnStart.textContent = navigator.mozL10n.get("idStart");
         if ( typeCounter == 1 || typeCounter == 2) {
-            //var btn = document.getElementById('btn-pause-seq');
-            // btn.textContent ="Retry";
-            
             typeCounterPause = typeCounter;
             typeCounter = 3;
             timer = window.clearInterval(timer);

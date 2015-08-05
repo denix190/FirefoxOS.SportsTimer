@@ -204,7 +204,9 @@
     }
   </style>
 </head>
+
 <body>
+  
   <section id="index" data-position="current">
     <section data-type="sidebar">
       <header>
@@ -234,13 +236,14 @@
           <li><a id="btn-go-param-seq" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>          
           <li><a id="btn-go-add-seq" href="#" data-click="nav" data-click-location="add" data-l10n-id="idNewExercise">New exercise</a></li>
           <li><a id="btn-go-list-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExercises">Exercises</a></li>
+          <li><a id="btn-go-about-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
         </ul>
       </nav>
 
       <!--/section -->
     </section>
 
-    <!-- First screen -->
+    <!-- Main screen -->
     <section id="drawer" role="region">
       <header class="fixed">
         <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
@@ -283,7 +286,7 @@
   </section> <!-- end index -->
 
   
-  <!--·························· addSeq ··························-->
+  <!--·························· add Exercise ··························-->
   <section role="region" id="addSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-add-seq-back" href="#"><span class="icon icon-close">back</span></a>
@@ -336,6 +339,11 @@
           <span data-l10n-id="idNameExercise">Name</span>
           <input id="nameSeq" type="text" maxlength="15" required>
         </p>
+
+        <p width="100%">
+          <span data-l10n-id="idDescExercise">Description</span>
+          <textarea id="descSeq"></textarea>
+        </p>
         
          <div>
            <button id="btn-add-seq" class="recommend" data-l10n-id="idAddExercise">Add Exercise</button>
@@ -344,7 +352,7 @@
     </article>
   </section>
 
-  <!--·························· updSeq ··························-->
+  <!--·························· update Exercise ··························-->
   <section role="region" id="updSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-upd-seq-back" href="#"><span class="icon icon-close">back</span></a>
@@ -397,6 +405,11 @@
           <span data-l10n-id="idNameExercise">Name:</span>
           <input id="nameSeqUpd" type="text" required>
         </p>
+
+       <p width="100%">
+          <span data-l10n-id="idDescExercise">Description</span>
+          <textarea id="descSeqUpd"></textarea>
+        </p>
         
          <div>
            <input type="hidden" id="idUpd" maxlength="15"  value="">
@@ -406,7 +419,7 @@
     </article>
   </section> 
 
-    <!--·························· ListSeq ··························-->
+    <!--·························· List Exercises ··························-->
   <section role="region" id="listSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-list-seq-back" href="#"><span class="icon icon-close">back</span></a>

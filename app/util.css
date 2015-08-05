@@ -155,22 +155,22 @@ ul, ol, li {
     background-color: #E00018;
     color: white;
   text-align: center;
-  font-size: 5.0rem; 
+  font-size: 6.0rem; 
   margin: 10px 10px 0px 5px;
   border-width: 1px;
   border-style: dotted;
   border-radius: 10px;
-  height: 6.0rem;
+  height: 7.0rem;
 }
 
 .chronosRecovery {
   background-color: #14FF15;
-  color: white;
+  color: black;
   text-align: center; 
   font-size: 3rem; 
   margin: 10px 10px 0px 5px;
-  border-width: 1px;
-  border-style: dotted;
+  border-width: 0px;
+  border-style: none;
   border-radius: 10px;
   height: 4.5rem; 
   /*float:left; */
@@ -178,12 +178,12 @@ ul, ol, li {
 
 .chronosRound {
   background-color: #64A0E3;
-  color: white;
+  color: black;
   text-align: ext-align: center;
   font-size: 3rem; 
   margin: 10px 10px 0px 5px; 
-  border-width: 1px;
-  border-style: dotted;
+  border-width: 0px;
+  border-style: none;
   border-radius: 10px;
   height: 4.5rem; 
   /* float:right; */
