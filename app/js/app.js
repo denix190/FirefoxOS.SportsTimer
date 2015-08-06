@@ -69,6 +69,18 @@ document.querySelector('#btn-go-param-seq').addEventListener('click', function (
     displayListUpdateSequence();
 });
 
+// Display the panel About.
+document.querySelector('#btn-go-about-seq').addEventListener('click', function () {
+    document.querySelector('#pnl_about').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+    displayListUpdateSequence();
+});
+
+// Hide panel About
+document.querySelector('#btn-go-about-seq-back').addEventListener('click', function () {
+   document.querySelector('#pnl_about').className = 'right';
+   document.querySelector('[data-position="current"]').className = 'current';
+});
 
 document.querySelector('#btn-start-seq').addEventListener('click', startSeq);
 document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
@@ -123,8 +135,6 @@ listItemSeq.onclick = function(e) {
                 request.onsuccess = function(evt) {
                     
                     var value = evt.target.result;
-                    console.log(value);
-                    
                     var name = document.getElementById('nameSeqUpd');
                     var desc = document.getElementById('descSeqUpd');
                     var nbRetry = document.getElementById('nbRetryUpd');

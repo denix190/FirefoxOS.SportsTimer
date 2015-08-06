@@ -220,4 +220,15 @@ div.footer {
 .right {
     float: right;
     margin-right: 5px;
-} 
+}
+
+.about {
+    padding-top: 5px;
+}
+
+.aboutText {
+    width:50%;
+    float:right;
+    padding-top: 20px;
+    font-size:1.3rem;
+}
