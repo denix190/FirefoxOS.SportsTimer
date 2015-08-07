@@ -1,10 +1,10 @@
 {
-  "name": "Sports Timer",
+  "name": "SportsTimer",
   "description": "Sports Timer is a application for Workout Timer / Training Timer",
   "launch_path": "/app.html",
   "icons": {
-    "128": "/images/app_timer_128.png",
-    "60": "/images/app_timer_60.png"
+    "128": "https://denix190.github.io/FirefoxOS.SportsTimer/images/app_timer_128.png",
+    "60": "https://denix190.github.io/FirefoxOS.SportsTimer/images/app_timer_60.png"
   },
   "developer": {
     "name": "Denis Minier",
