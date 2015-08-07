@@ -1,6 +1,6 @@
 {
-  "name": "Sports Timier",
-  "description": "Une description courte de l'application",
+  "name": "Sports Timer",
+  "description": "Sports Timer is a application for Workout Timer / Training Timer",
   "launch_path": "/app.html",
   "icons": {
     "128": "/images/app_timer_128.png",
