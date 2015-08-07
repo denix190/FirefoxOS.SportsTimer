@@ -1,0 +1,23 @@
+The following files are distributed with this git repository under their respective 
+licenses. The author of Sports Timer does not own the copyright for these libraries,
+plug-ins and art work. The corresponding copyright owners are listed below.
+
+`thirdparty/l10n.js`
+Author: Mozilla Foundation (copyright holder)
+URL: https://github.com/mozilla-b2g/gaia/blob/master/shared/js/l10n.js
+License: Apache 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+`thirdparty/style`
+Author: Mozilla Foundation (copyright holder)
+URL: https://github.com/buildingfirefoxos/Building-Blocks/tree/gh-pages/style
+License: Apache 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+`thirdparty/util.css`
+Author: Mozilla Foundation (copyright holder)
+URL: https://github.com/buildingfirefoxos/Building-Blocks/tree/gh-pages/util.css
+License: Apache 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+`thirdparty/transitions.css`
+Author: Mozilla Foundation (copyright holder)
+URL: https://github.com/buildingfirefoxos/Building-Blocks/tree/gh-pages/transitions.css
+License: Apache 2.0 - http://www.apache.org/licenses/LICENSE-2.0
