@@ -1,6 +1,6 @@
 {
-  "name": "Sports Timer",
-  "description": "Sports Timer is a Timer application for Firefox OS",
+  "name": "SportsTimer",
+  "description": "Sports Timer is a application for Workout Timer / Training Timer for Firefox OS",
   "launch_path": "/app.html",
   "icons": {
     "128": "/images/app_timer_128.png",
@@ -9,16 +9,8 @@
   "version": "1.0",
   "developer": {
     "name": "Denis Minier",
-    "url": "http://ta152-h1-hp"
+    "url": "http://denix190.github.io/FirefoxOS.SportsTimer"
   },
  
-  "permissions": {
-    "datastores-owned": {
-     "sportsTimerData": {
-       "access": "readwrite",
-       "description": "Sport Timer data"
-     }
-    }
-  },
   "default_locale": "en"
 }
