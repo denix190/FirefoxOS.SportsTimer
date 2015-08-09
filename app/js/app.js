@@ -224,6 +224,9 @@ function init() {
 function startSes() {
     if (flagStartSes) {
         timerSession = window.clearInterval(timerSession);
+        var btnStartSes = document.getElementById('btn-startSes-seq'); 
+        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
+        flagStartSes = false;
     } else {
         timerSession = window.setInterval(displaySession, 1000);
         var btnStartSes = document.getElementById('btn-startSes-seq'); 
@@ -231,13 +234,20 @@ function startSes() {
         flagStartSes = true;
     }
 }
-
+/**
+ * Cancel the current Session.
+*/
 function cancelSes() {
-    timerSession = window.clearInterval(timerSession);
-    var btnStartSes = document.getElementById('btn-startSes-seq'); 
-    btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
-    sessionSec = 0;
-    sessionStart = false;
+    try {
+        timerSession = window.clearInterval(timerSession);
+        var btnStartSes = document.getElementById('btn-startSes-seq'); 
+        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
+        sessionSec = 0;
+        flagStartSes = false;
+        displaySecond(chronoSession, sessionSec);
+    } catch(e) {
+        console.log(e);
+    }
 }
 
 function displaySession() {
@@ -586,6 +596,7 @@ function display() {
 function displaySecond(display, nbSec) {
     var seconds = new String(nbSec % 60);
     var minutes = new String(Math.floor(nbSec / 60));
+    var hours = Math.floor(nbSec / 3600);
     
     if (seconds.length < 2) {
         seconds = '0' + seconds;
@@ -593,7 +604,12 @@ function displaySecond(display, nbSec) {
     if (minutes.length < 2) {
         minutes = '0' + minutes;
     }
-    display.textContent = minutes + ":" + seconds;
+
+    if (hours == 0) {
+        display.textContent = minutes + ":" + seconds;
+    } else {
+        display.textContent = new String(hours) + ":" + minutes + ":" + seconds;
+    }
 }
 
 function endExercise() {
