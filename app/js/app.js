@@ -7,6 +7,7 @@ var note = null;
 
 var db;
 var timer;
+var timerSession;
 
 var durationCounter;
 var breakTimeCounter;
@@ -25,6 +26,8 @@ var chronoDisplay = document.getElementById('chronoDisplay');
 var breakTimeDisplay = document.getElementById('breakTimeDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
+var chronoSession = document.getElementById('chronoSession');
+var sessionSec = 0;
 
 // Display the panel adding a new Sequence.
 document.querySelector('#btn-go-add-seq').addEventListener('click', function () {
@@ -82,8 +85,13 @@ document.querySelector('#btn-go-about-seq-back').addEventListener('click', funct
    document.querySelector('[data-position="current"]').className = 'current';
 });
 
+// Exercise
 document.querySelector('#btn-start-seq').addEventListener('click', startSeq);
 document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
+
+// Session
+document.querySelector('#btn-startSes-seq').addEventListener('click', startSes);
+document.querySelector('#btn-cancelSes-seq').addEventListener('click', cancelSes);
 
 document.querySelector('#btn-add-seq').addEventListener('click', storeSeq);
 document.querySelector('#btn-upd-seq').addEventListener('click', updateSeq);
@@ -208,6 +216,18 @@ function init() {
     }
 }
 
+function startSes() {
+    timerSession = window.setInterval(displaySession, 1000);
+}
+
+function cancelSes() {
+    timerSession = window.clearInterval(timerSession);
+}
+
+function displaySession() {
+    sessionSec++;
+    displaySecond(chronoSession, sessionSec);
+}
 
 /**
  * Add a new Sequence.
