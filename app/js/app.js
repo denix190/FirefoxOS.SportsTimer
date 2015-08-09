@@ -21,6 +21,7 @@ var typeCounter;
 var typeCounterPause;
 var flagSound = true;
 var flagStart = false;
+var flagStartSes = false;
 
 var chronoDisplay = document.getElementById('chronoDisplay');
 var breakTimeDisplay = document.getElementById('breakTimeDisplay');
@@ -216,12 +217,27 @@ function init() {
     }
 }
 
+/**
+* Start a new Session.
+* Change the text of the button
+*/ 
 function startSes() {
-    timerSession = window.setInterval(displaySession, 1000);
+    if (flagStartSes) {
+        timerSession = window.clearInterval(timerSession);
+    } else {
+        timerSession = window.setInterval(displaySession, 1000);
+        var btnStartSes = document.getElementById('btn-startSes-seq'); 
+        btnStartSes.textContent = navigator.mozL10n.get("idPauseSes");
+        flagStartSes = true;
+    }
 }
 
 function cancelSes() {
     timerSession = window.clearInterval(timerSession);
+    var btnStartSes = document.getElementById('btn-startSes-seq'); 
+    btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
+    sessionSec = 0;
+    sessionStart = false;
 }
 
 function displaySession() {
