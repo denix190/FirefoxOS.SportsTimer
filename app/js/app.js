@@ -91,8 +91,8 @@ document.querySelector('#btn-start-seq').addEventListener('click', startSeq);
 document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
 
 // Session
-document.querySelector('#btn-startSes-seq').addEventListener('click', startSes);
-document.querySelector('#btn-cancelSes-seq').addEventListener('click', cancelSes);
+document.querySelector('#btn-start-ses').addEventListener('click', startSes);
+document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
 
 document.querySelector('#btn-add-seq').addEventListener('click', storeSeq);
 document.querySelector('#btn-upd-seq').addEventListener('click', updateSeq);
@@ -224,12 +224,12 @@ function init() {
 function startSes() {
     if (flagStartSes) {
         timerSession = window.clearInterval(timerSession);
-        var btnStartSes = document.getElementById('btn-startSes-seq'); 
+        var btnStartSes = document.getElementById('btn-start-ses'); 
         btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
         flagStartSes = false;
     } else {
         timerSession = window.setInterval(displaySession, 1000);
-        var btnStartSes = document.getElementById('btn-startSes-seq'); 
+        var btnStartSes = document.getElementById('btn-start-ses'); 
         btnStartSes.textContent = navigator.mozL10n.get("idPauseSes");
         flagStartSes = true;
     }
