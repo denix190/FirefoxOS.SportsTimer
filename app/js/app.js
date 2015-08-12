@@ -86,6 +86,23 @@ document.querySelector('#btn-go-about-seq-back').addEventListener('click', funct
    document.querySelector('[data-position="current"]').className = 'current';
 });
 
+
+// Display the panel List session.
+document.querySelector('#btn-go-sessions').addEventListener('click', function () {
+    document.querySelector('#listSessions').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+
+});
+
+// Hide panel Liste sessions.
+document.querySelector('#btn-go-sessions-back').addEventListener('click', function () {
+   document.querySelector('#listSessions').className = 'right';
+   document.querySelector('[data-position="current"]').className = 'current';
+});
+
+
+// Button Event.
+
 // Exercise
 document.querySelector('#btn-start-seq').addEventListener('click', startSeq);
 document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
@@ -662,12 +679,16 @@ function loadParameters(id) {
         }
         
         request.onsuccess = function(event) {
-            console.log("parameters value: " + request.result.value);
-            flagSound = request.result.value;
-            var chk = document.getElementById("chk-sound");
-            console.log("chk: " + chk.checked);
-
-            chk.checked = flagSound;
+            try {
+                console.log("parameters value: " + request.result.value);
+                flagSound = request.result.value;
+                var chk = document.getElementById("chk-sound");
+                console.log("chk: " + chk.checked);
+                
+                chk.checked = flagSound;
+            } catch(e) {
+                console.log(e);
+            }
         }
 
     } catch(e) {
