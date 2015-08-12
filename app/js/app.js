@@ -7,7 +7,7 @@ var note = null;
 
 var db;
 var timer;
-var timerSession;
+
 
 var durationCounter;
 var breakTimeCounter;
@@ -21,14 +21,14 @@ var typeCounter;
 var typeCounterPause;
 var flagSound = true;
 var flagStart = false;
-var flagStartSes = false;
+
 
 var chronoDisplay = document.getElementById('chronoDisplay');
 var breakTimeDisplay = document.getElementById('breakTimeDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
-var chronoSession = document.getElementById('chronoSession');
-var sessionSec = 0;
+
+var session = new Session();
 
 // Display the panel adding a new Sequence.
 document.querySelector('#btn-go-add-seq').addEventListener('click', function () {
@@ -217,43 +217,14 @@ function init() {
     }
 }
 
-/**
-* Start a new Session.
-* Change the text of the button
-*/ 
 function startSes() {
-    if (flagStartSes) {
-        timerSession = window.clearInterval(timerSession);
-        var btnStartSes = document.getElementById('btn-start-ses'); 
-        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
-        flagStartSes = false;
-    } else {
-        timerSession = window.setInterval(displaySession, 1000);
-        var btnStartSes = document.getElementById('btn-start-ses'); 
-        btnStartSes.textContent = navigator.mozL10n.get("idPauseSes");
-        flagStartSes = true;
-    }
-}
-/**
- * Cancel the current Session.
-*/
-function cancelSes() {
-    try {
-        timerSession = window.clearInterval(timerSession);
-        var btnStartSes = document.getElementById('btn-startSes-seq'); 
-        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
-        sessionSec = 0;
-        flagStartSes = false;
-        displaySecond(chronoSession, sessionSec);
-    } catch(e) {
-        console.log(e);
-    }
+    session.startSes();
 }
 
-function displaySession() {
-    sessionSec++;
-    displaySecond(chronoSession, sessionSec);
+function cancelSes() {
+    session.cancelSes();
 }
+
 
 /**
  * Add a new Sequence.
@@ -702,4 +673,63 @@ function loadParameters(id) {
     } catch(e) {
         console.log(e);
     }
+}
+
+/**
+ * Class Session.
+*/ 
+
+function Session() {
+    this.flagStartSes = false;
+    this.timerSession;
+    this.chronoSession = document.getElementById('chronoSession');
+    this.sessionSec = 0;
+}
+
+/**
+* Start a new Session.
+* Change the text of the button
+*/ 
+Session.prototype.startSes = function() {
+
+    if (this.flagStartSes) {
+        this.timerSession = window.clearInterval(this.timerSession);
+        var btnStartSes = document.getElementById('btn-start-ses'); 
+        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
+        this.flagStartSes = false;
+    } else {
+        this.timerSession = window.setInterval(displaySession, 1000);
+        var btnStartSes = document.getElementById('btn-start-ses'); 
+        btnStartSes.textContent = navigator.mozL10n.get("idPauseSes");
+        this.flagStartSes = true;
+    }
+}
+
+/**
+ * Cancel the current Session.
+*/
+Session.prototype.cancelSes = function() {
+    try {
+        this.timerSession = window.clearInterval(this.timerSession);
+        var btnStartSes = document.getElementById('btn-start-ses'); 
+        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
+        this.sessionSec = 0;
+        this.flagStartSes = false;
+        displaySecond(this.chronoSession, this.sessionSec);
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+Session.prototype.getSessionSec = function () {
+    return this.sessionSec;
+}
+
+Session.prototype.addSessionSec = function () {
+    this.sessionSec++;
+}
+
+function displaySession() {
+    session.addSessionSec();
+    displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
 }
