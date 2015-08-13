@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="style/drawer.css">
   <link rel="stylesheet" href="style/lists.css">
   <link rel="stylesheet" href="style/switches.css">
+  <link rel="stylesheet" href="icons/styles/media_icons.css">
   
   <!-- Transitions -->
   <link rel="stylesheet" href="transitions.css">
@@ -234,7 +235,7 @@
       <nav>
         <ul>
           <li><a id="btn-go-param-seq" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>          
-          <li><a id="btn-go-add-seq" href="#" data-click="nav" data-click-location="add" data-l10n-id="idNewExercise">New exercise</a></li>
+          <!-- <li><a id="btn-go-add-seq" href="#" data-click="nav" data-click-location="add" data-l10n-id="idNewExercise">New exercise</a></li> -->
           <li><a id="btn-go-list-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExercises">Exercises</a></li>
           <li><a id="btn-go-sessions" href="#" data-click="nav" data-click-location="open" data-l10n-id="idSessions">Sessions</a></li>
           <li><a id="btn-go-about-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
@@ -281,7 +282,8 @@
               </div>
             <div class="footer">
              <div style="width:48%; float:left;">
-                <button data-l10n-id="idStartSes" id="btn-start-ses" class="recommend" style="width:99%">Start Session</button>
+                <button class="media-icon media-pause"  id="btn-start-ses"  >Session</button>
+               
               </div>
               <div style="width:48%; float:right;">
                 <button data-l10n-id="idCancelSes" id="btn-cancel-ses" class="danger" style="width:99%">Cancel</button>
@@ -304,7 +306,13 @@
   <section role="region" id="addSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-add-seq-back" href="#"><span class="icon icon-close">back</span></a>
-      <h1 data-l10n-id="idNewExercise">New exercise</h1>
+       <menu type="toolbar">
+      <!-- a href="#"><span class="icon icon-edit">edit</span></a -->
+      <!-- a href="#"><span class="icon icon-add">add</span></a-->
+         <button id="btn-add-seq" data-l10n-id="idAddExercise">Save</button>
+       </menu>
+      
+      <h1 data-l10n-id="idExercise">Exercise</h1>
     </header>
     <article class="content scrollable header">
       <p width="100%">
@@ -363,9 +371,9 @@
           <textarea id="descSeq"></textarea>
         </p>
         
-         <div>
+         <!--div>
            <button id="btn-add-seq" class="recommend" data-l10n-id="idAddExercise">Add Exercise</button>
-         </div>
+         </div -->
 
     </article>
   </section>
@@ -441,6 +449,13 @@
   <section role="region" id="listSeq" data-position="right">
     <header class="fixed">
       <a id="btn-go-list-seq-back" href="#"><span class="icon icon-close">back</span></a>
+
+ <!-- <li><a id="btn-go-add-seq" href="#" data-click="nav" data-click-location="add" data-l10n-id="idNewExercise">New exercise</a></li> -->
+      
+      
+      <menu type="toolbar">
+        <a href="#" id="btn-go-add-seq"><span class="icon icon-add" >add</span></a>
+      </menu>
       <h1 data-l10n-id="idListExercises">List Exercises</h1>
     </header>
     <article class="scrollable header">

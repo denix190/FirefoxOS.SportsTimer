@@ -33,13 +33,14 @@ var session = new Session();
 // Display the panel adding a new Sequence.
 document.querySelector('#btn-go-add-seq').addEventListener('click', function () {
     document.querySelector('#addSeq').className = 'current';
-    document.querySelector('[data-position="current"]').className = 'left';
+    document.querySelector('#listSeq').className = 'right';
 });
 
 
 document.querySelector('#btn-go-add-seq-back').addEventListener('click', function () {
-  document.querySelector('#addSeq').className = 'right';
-  document.querySelector('[data-position="current"]').className = 'current';
+    document.querySelector('#addSeq').className = 'right';
+    document.querySelector('#listSeq').className = 'current';
+  // document.querySelector('[data-position="current"]').className = 'current';
 });
 
 // Display the panel updating Sequences.
@@ -94,7 +95,7 @@ document.querySelector('#btn-go-sessions').addEventListener('click', function ()
 
 });
 
-// Hide panel Liste sessions.
+// Hide panel List sessions.
 document.querySelector('#btn-go-sessions-back').addEventListener('click', function () {
    document.querySelector('#listSessions').className = 'right';
    document.querySelector('[data-position="current"]').className = 'current';
@@ -111,7 +112,10 @@ document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
 document.querySelector('#btn-start-ses').addEventListener('click', startSes);
 document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
 
+// Store new exercise.
 document.querySelector('#btn-add-seq').addEventListener('click', storeSeq);
+
+// Update an exercise.
 document.querySelector('#btn-upd-seq').addEventListener('click', updateSeq);
 
 document.querySelector('#btn-del-seq').addEventListener('click', deleteSequences);
@@ -296,10 +300,11 @@ function storeSeq() {
         
         request.onsuccess = function(event) {
             console.log("sequence add");
+            displayListUpdateSequence();
         }
   
         document.querySelector('#addSeq').className = 'right';
-        document.querySelector('[data-position="current"]').className = 'current';
+        document.querySelector('#listSeq').className = 'current';
     } catch(e) {
         console.log(e);
     }
