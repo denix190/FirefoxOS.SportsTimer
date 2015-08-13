@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="style/lists.css">
   <link rel="stylesheet" href="style/switches.css">
   <link rel="stylesheet" href="icons/styles/media_icons.css">
+  <link rel="stylesheet" href="icons/styles/action_icons.css">
   
   <!-- Transitions -->
   <link rel="stylesheet" href="transitions.css">
@@ -234,8 +235,7 @@
       </audio>
       <nav>
         <ul>
-          <li><a id="btn-go-param-seq" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>          
-          <!-- <li><a id="btn-go-add-seq" href="#" data-click="nav" data-click-location="add" data-l10n-id="idNewExercise">New exercise</a></li> -->
+          <li><a id="btn-go-param-seq" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>
           <li><a id="btn-go-list-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExercises">Exercises</a></li>
           <li><a id="btn-go-sessions" href="#" data-click="nav" data-click-location="open" data-l10n-id="idSessions">Sessions</a></li>
           <li><a id="btn-go-about-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
@@ -280,17 +280,20 @@
               <div style="width:48%; float:right;">
                 <button data-l10n-id="idCancel" id="btn-cancel-seq" class="danger">Cancel</button>
               </div>
-            <div class="footer">
-             <div style="width:48%; float:left;">
-                <button class="media-icon media-pause"  id="btn-start-ses"  >Session</button>
-               
-              </div>
-              <div style="width:48%; float:right;">
-                <button data-l10n-id="idCancelSes" id="btn-cancel-ses" class="danger" style="width:99%">Cancel</button>
-              </div>
-              <div style="width:100%; float:right;">
-                <span>Total Time </span><span id="chronoSession">00:00</span>
-              </div>
+              <div class="footer">
+                <div width="100%">
+                  <div style="width:40%;float:left;">
+                    <span style="font-size:2rem;text-align:center;">Session</span>
+                    <span>TOTAL&nbsp;</span><span id="chronoSession">00:00</span>
+                  </div>
+                  <div style="width:60%; float:right;">
+                    <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
+                    <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
+                    <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
+                  </div>
+                </div>
+                <!-- <div style="width:100%; float:right;"> -->
+                <!-- </div> -->
            </div>
             
           </div>

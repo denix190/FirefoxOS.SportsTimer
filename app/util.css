@@ -232,3 +232,10 @@ div.footer {
     padding-top: 20px;
     font-size:1.3rem;
 }
+
+button.icon_button {
+    width:40px;
+    padding:0px 0px 0px 0px;
+    border-radius: 20px;
+    background-color:aqua;
+}

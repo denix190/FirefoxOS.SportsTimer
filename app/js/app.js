@@ -40,7 +40,6 @@ document.querySelector('#btn-go-add-seq').addEventListener('click', function () 
 document.querySelector('#btn-go-add-seq-back').addEventListener('click', function () {
     document.querySelector('#addSeq').className = 'right';
     document.querySelector('#listSeq').className = 'current';
-  // document.querySelector('[data-position="current"]').className = 'current';
 });
 
 // Display the panel updating Sequences.
@@ -110,6 +109,7 @@ document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
 
 // Session
 document.querySelector('#btn-start-ses').addEventListener('click', startSes);
+document.querySelector('#btn-pause-ses').addEventListener('click', pauseSes);
 document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
 
 // Store new exercise.
@@ -240,6 +240,10 @@ function init() {
 
 function startSes() {
     session.startSes();
+}
+
+function pauseSes() {
+    session.pauseSes();
 }
 
 function cancelSes() {
@@ -718,16 +722,20 @@ function Session() {
 */ 
 Session.prototype.startSes = function() {
 
+    if (this.flagStartSes == false) {
+        this.timerSession = window.setInterval(displaySession, 1000);
+        this.flagStartSes = true;
+    }
+}
+
+/**
+* Pause Session.
+*/ 
+Session.prototype.pauseSes = function() {
+
     if (this.flagStartSes) {
         this.timerSession = window.clearInterval(this.timerSession);
-        var btnStartSes = document.getElementById('btn-start-ses'); 
-        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
         this.flagStartSes = false;
-    } else {
-        this.timerSession = window.setInterval(displaySession, 1000);
-        var btnStartSes = document.getElementById('btn-start-ses'); 
-        btnStartSes.textContent = navigator.mozL10n.get("idPauseSes");
-        this.flagStartSes = true;
     }
 }
 
@@ -737,8 +745,6 @@ Session.prototype.startSes = function() {
 Session.prototype.cancelSes = function() {
     try {
         this.timerSession = window.clearInterval(this.timerSession);
-        var btnStartSes = document.getElementById('btn-start-ses'); 
-        btnStartSes.textContent = navigator.mozL10n.get("idStartSes");
         this.sessionSec = 0;
         this.flagStartSes = false;
         displaySecond(this.chronoSession, this.sessionSec);
