@@ -1,8 +1,9 @@
 'use strict';
 
+const STATE_EX_EFFORT = 1;
+const STATE_EX_RECOVERY = 2;
+const STATE_EX_PAUSE = 3;
 
-const PAUSE = 3;
-const RECOVERY = 2;
 
 var dbName = "chronosData";
 var dbVersion = 11;
@@ -17,9 +18,9 @@ var durationCounter;
 var breakTimeCounter;
 var nbRetryCounter;
               
-var durationSeq;
-var breakTimeSeq;
-var nbRetrySeq;
+var durationEx;
+var breakTimeEx;
+var nbRetryEx;
 
 var typeCounter;
 var typeCounterPause;
@@ -34,58 +35,59 @@ var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
 var session = new Session();
 
-// Display the panel adding a new Sequence.
-document.querySelector('#btn-go-add-seq').addEventListener('click', function () {
-    document.querySelector('#addSeq').className = 'current';
-    document.querySelector('#listSeq').className = 'right';
+// Display the panel adding a Exercise.
+document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
+    document.querySelector('#addExercise').className = 'current';
+    document.querySelector('#listExercise').className = 'right';
 });
 
 
-document.querySelector('#btn-go-add-seq-back').addEventListener('click', function () {
-    document.querySelector('#addSeq').className = 'right';
-    document.querySelector('#listSeq').className = 'current';
+document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
+    document.querySelector('#addExercise').className = 'right';
+    document.querySelector('#listExercise').className = 'current';
 });
 
-// Display the panel updating Sequences.
-document.querySelector('#btn-go-list-seq').addEventListener('click', function () {
-    document.querySelector('#listSeq').className = 'current';
+// Display the panel updating Exercises.
+document.querySelector('#btn-go-list-ex').addEventListener('click', function () {
+    document.querySelector('#listExercise').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateSequence();
+    displayListUpdateExercise();
 });
 
-document.querySelector('#btn-go-list-seq-back').addEventListener('click', function () {
-  document.querySelector('#listSeq').className = 'right';
+document.querySelector('#btn-go-list-ex-back').addEventListener('click', function () {
+  document.querySelector('#listExercise').className = 'right';
    document.querySelector('[data-position="current"]').className = 'current';
 });
 
 
-document.querySelector('#btn-go-upd-seq-back').addEventListener('click', function () {
-   document.querySelector('#updSeq').className = 'right';
-   document.querySelector('[data-position="current"]').className = 'current';
+document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
+    document.querySelector('#updExercise').className = 'right';
+    document.querySelector('#listExercise').className = 'current';
+    // document.querySelector('[data-position="current"]').className = 'current';
 });
 
 
-document.querySelector('#btn-go-params-seq-back').addEventListener('click', function () {
+document.querySelector('#btn-go-params-ex-back').addEventListener('click', function () {
    document.querySelector('#pnl_parameters').className = 'right';
    document.querySelector('[data-position="current"]').className = 'current';
 });
 
 // Display the panel Parameters.
-document.querySelector('#btn-go-param-seq').addEventListener('click', function () {
+document.querySelector('#btn-go-param-ex').addEventListener('click', function () {
     document.querySelector('#pnl_parameters').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateSequence();
+    displayListUpdateExercise();
 });
 
 // Display the panel About.
-document.querySelector('#btn-go-about-seq').addEventListener('click', function () {
+document.querySelector('#btn-go-about-ex').addEventListener('click', function () {
     document.querySelector('#pnl_about').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateSequence();
+    displayListUpdateExercise();
 });
 
 // Hide panel About
-document.querySelector('#btn-go-about-seq-back').addEventListener('click', function () {
+document.querySelector('#btn-go-about-ex-back').addEventListener('click', function () {
    document.querySelector('#pnl_about').className = 'right';
    document.querySelector('[data-position="current"]').className = 'current';
 });
@@ -108,9 +110,9 @@ document.querySelector('#btn-go-sessions-back').addEventListener('click', functi
 // Button Event.
 
 // Exercise
-document.querySelector('#btn-start-seq').addEventListener('click', startSeq);
-document.querySelector('#btn-pause-seq').addEventListener('click', pauseSeq);
-document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
+document.querySelector('#btn-start-ex').addEventListener('click', startEx);
+document.querySelector('#btn-pause-ex').addEventListener('click', pauseEx);
+document.querySelector('#btn-cancel-ex').addEventListener('click', cancelEx);
 
 // Session
 document.querySelector('#btn-start-ses').addEventListener('click', startSes);
@@ -118,17 +120,17 @@ document.querySelector('#btn-pause-ses').addEventListener('click', pauseSes);
 document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
 
 // Store new exercise.
-document.querySelector('#btn-add-seq').addEventListener('click', storeSeq);
+document.querySelector('#btn-add-ex').addEventListener('click', storeEx);
 
 // Update an exercise.
-document.querySelector('#btn-upd-seq').addEventListener('click', updateSeq);
+document.querySelector('#btn-upd-ex').addEventListener('click', updateEx);
 
-document.querySelector('#btn-del-seq').addEventListener('click', deleteSequences);
+document.querySelector('#btn-del-ex').addEventListener('click', deleteExercises);
 
 document.querySelector('#chk-sound').addEventListener('change', checkSoundHandler);
 
 
-var listItemSeq = document.getElementById('list-items-seq');
+var listItemEx = document.getElementById('list-items-ex');
 
 init();
 
@@ -141,21 +143,19 @@ function checkSoundHandler(event) {
     console.log("flagSound :" + flagSound);
 }
     
-listItemSeq.onclick = function(e) {
+listItemEx.onclick = function(e) {
     
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
-       console.log(collEnfants[i]); 
 
        if (collEnfants[i].tagName === 'A'){
-            console.log(collEnfants[i].id);  // Check if the element is a LI
 
             try {
-                document.querySelector('#updSeq').className = 'current';
+                document.querySelector('#updExercise').className = 'current';
                 document.querySelector('[data-position="current"]').className = 'left';
         
-                document.querySelector('#listSeq').className = 'left';
+                document.querySelector('#listExercise').className = 'left';
 
                 var transaction = db.transaction(["chronos"]);
                 var objectStore = transaction.objectStore("chronos", 'readonly');
@@ -170,8 +170,8 @@ listItemSeq.onclick = function(e) {
                 request.onsuccess = function(evt) {
                     
                     var value = evt.target.result;
-                    var name = document.getElementById('nameSeqUpd');
-                    var desc = document.getElementById('descSeqUpd');
+                    var name = document.getElementById('nameExUpd');
+                    var desc = document.getElementById('descExUpd');
                     var nbRetry = document.getElementById('nbRetryUpd');
                     var breakTime = document.getElementById('breakTimeUpd');
                     var duration = document.getElementById('durationUpd');
@@ -211,7 +211,7 @@ function init() {
         DBOpenRequest.onsuccess = function(event) {
             console.log ("Database initialised.");
             db = DBOpenRequest.result;
-            displayListSequence();
+            displayListExercise();
         };
 
         DBOpenRequest.onupgradeneeded = function(event) {
@@ -257,47 +257,47 @@ function cancelSes() {
 
 
 /**
- * Add a new Sequence.
+ * Add a new Exercise.
  */
-function storeSeq() {
+function storeEx() {
     try {
         var durationId = document.getElementById("duration");
         var breakTimeId = document.getElementById("breakTime");         
         var nbRetryId = document.getElementById("nbRetry");
-        var nameId = document.getElementById("nameSeq");
-        var descId = document.getElementById("descSeq");
+        var nameId = document.getElementById("nameEx");
+        var descId = document.getElementById("descEx");
         
         var duration = durationId.value;
         var breakTime = breakTimeId.value;
         var nbRetry = nbRetryId.value;
-        var nameSeq = nameId.value;
-        var descSeq = descId.value;
+        var nameEx = nameId.value;
+        var descEx = descId.value;
 
-        if (nameSeq.length == 0) {
+        if (nameEx.length == 0) {
             window.alert(navigator.mozL10n.get("idAlertNoName"));
             return;
         }
-        console.log("nameSeq:" + nameSeq)
+        console.log("nameEx:" + nameEx)
         
         var opt = document.createElement('option'); // create new option element
         // create text node to add to option element (opt)
-        opt.appendChild( document.createTextNode(nameSeq + " (" + duration + " -  " + breakTime + ")" + "*" + nbRetry) );
+        opt.appendChild( document.createTextNode(nameEx + " (" + duration + " -  " + breakTime + ")" + "*" + nbRetry) );
 
         opt.value = duration + "," + breakTime + "," + nbRetry; // set value property of opt
-        var listSeq = document.getElementById('list-seq');
+        var listEx = document.getElementById('list-ex');
 
-        listSeq.appendChild(opt);
+        listEx.appendChild(opt);
 
         var transaction = db.transaction(["chronos"],"readwrite");
         var store = transaction.objectStore("chronos");
         
         //Define a new chronosRecord
         var chronosRecord = {
-            name: nameSeq,
+            name: nameEx,
             duration: duration,
             breakTime: breakTime,
             nbRetry: nbRetry,
-            desc: descSeq,
+            desc: descEx,
             created:new Date()
         }
         
@@ -309,33 +309,33 @@ function storeSeq() {
         
         request.onsuccess = function(event) {
             console.log("sequence add");
-            displayListUpdateSequence();
+            displayListUpdateExercise();
         }
   
-        document.querySelector('#addSeq').className = 'right';
-        document.querySelector('#listSeq').className = 'current';
+        document.querySelector('#addExercise').className = 'right';
+        document.querySelector('#listExercise').className = 'current';
     } catch(e) {
         console.log(e);
     }
 }    
 
 /**
- * Update Sequence.
+ * Update Exercise.
  */
-function updateSeq() {
+function updateEx() {
     try {
-        var nameId = document.getElementById('nameSeqUpd');
+        var nameId = document.getElementById('nameExUpd');
         var nbRetryId = document.getElementById('nbRetryUpd');
         var breakTimeId = document.getElementById('breakTimeUpd');
         var durationId = document.getElementById('durationUpd');
         var idUpd = document.getElementById('idUpd');
-        var descIdUpd = document.getElementById("descSeqUpd");
+        var descIdUpd = document.getElementById("descExUpd");
         
         var duration = durationId.value;
         var breakTime = breakTimeId.value;
         var nbRetry = nbRetryId.value;
-        var nameSeq = nameId.value;
-        var descSeq = descIdUpd.value;
+        var nameEx = nameId.value;
+        var descEx = descIdUpd.value;
         var id = parseInt(idUpd.value);
 
         var transaction = db.transaction(["chronos"],"readwrite");
@@ -344,11 +344,11 @@ function updateSeq() {
         // Define a the sequence.
         var chronosRecord = {
             id: id,
-            name: nameSeq,
+            name: nameEx,
             duration: duration,
             breakTime: breakTime,
             nbRetry: nbRetry,
-            desc: descSeq,
+            desc: descEx,
             created:new Date()
         }
         
@@ -359,12 +359,15 @@ function updateSeq() {
         }
         
         request.onsuccess = function(event) {
-           console.log("updateSeq ok id:" + id);
-           displayListSequence();
+           console.log("updateEx ok id:" + id);
+            displayListExercise();
+            displayListUpdateExercise();
         }
   
-        document.querySelector('#updSeq').className = 'right';
-        document.querySelector('[data-position="current"]').className = 'current';
+        document.querySelector('#updExercise').className = 'right';
+        document.querySelector('#listExercise').className = 'current';
+        // document.querySelector('[data-position="current"]').className = 'current';
+
     } catch(e) {
         console.log(e);
     }
@@ -373,17 +376,17 @@ function updateSeq() {
 /**
 * Initialize the list of sequences.
 */
-function displayListSequence() {
+function displayListExercise() {
     loadParameters(1);
  
     try {
         var objectStore = db.transaction("chronos").objectStore("chronos");
         var index = objectStore.index("by_name");
-        var listSeq = document.getElementById("list-seq");
+        var listEx = document.getElementById("list-ex");
         
         // remove all element in the list.
-	    while (listSeq.firstChild) {
-            listSeq.removeChild(listSeq.firstChild);
+	    while (listEx.firstChild) {
+            listEx.removeChild(listEx.firstChild);
         }
         
         // var request = index.openCursor(IDBKeyRange.only(name));
@@ -405,7 +408,7 @@ function displayListSequence() {
                 opt.value = cursor.value.duration
                     + "," + cursor.value.breakTime
                     + "," + cursor.value.nbRetry;
-                listSeq.appendChild(opt);
+                listEx.appendChild(opt);
                 
                 cursor.continue();
             }
@@ -418,55 +421,22 @@ function displayListSequence() {
     }
 }
 
-function displayListUpdateSequence() {
+/**
+ * Display the list of exercises for update.
+*/
+function displayListUpdateExercise() {
     var objectStore = db.transaction("chronos").objectStore("chronos");
-    var listSeq = document.getElementById("list-items-seq");
+    var listEx = document.getElementById("list-items-ex");
     
     // remove all element in the list.
-	while (listSeq.firstChild) {
-        listSeq.removeChild(listSeq.firstChild);
+	while (listEx.firstChild) {
+        listEx.removeChild(listEx.firstChild);
     }
 
     objectStore.openCursor().onsuccess = function(event) {
         var cursor = event.target.result;
         if (cursor) {
-            var li = document.createElement("li");
-
-            var a = document.createElement("a");
-            a.setAttribute("id", cursor.value.id);
-            a.text = cursor.value.name
-                + " (" + cursor.value.duration
-                + " -  " + cursor.value.breakTime + ")"
-                + "*" + cursor.value.nbRetry;
-            a.href = "#";
-            
-            var checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.name = "checkBoxSeq";
-            checkbox.value = cursor.value.id;
-            checkbox.id = "checkBoxSeq";
-
-            var spanl = document.createElement("span");
-            var spanr = document.createElement("span");
-            
-            var label = document.createElement("label");
-            label.className = "pack-checkbox";
-            label.appendChild(checkbox);
-            var spanlbl = document.createElement("span");
-            label.appendChild(spanlbl);
-            
-            spanl.className = "leftCheckbox";
-            spanr.className = "right";
-            
-            spanl.appendChild(a);
-            // a.appendChild(checkbox);
-            spanr.appendChild(label);
-            
-            li.appendChild(spanl);
-            li.appendChild(spanr);
-            
-       		listSeq.appendChild(li);
-
+            addExercise(listEx, cursor);
             cursor.continue();
         }
         else {
@@ -475,12 +445,53 @@ function displayListUpdateSequence() {
     };
 }
 
-function pauseSeq() {
+/**
+ * Add an exercise to the list.
+*/ 
+function addExercise(list, cursor) {
+    var li = document.createElement("li");
+    
+    var a = document.createElement("a");
+    a.setAttribute("id", cursor.value.id);
+    a.text = cursor.value.name
+        + " (" + cursor.value.duration
+        + " -  " + cursor.value.breakTime + ")"
+        + "*" + cursor.value.nbRetry;
+    a.href = "#";
+    
+    var checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    checkbox.name = "checkBoxEx";
+    checkbox.value = cursor.value.id;
+    checkbox.id = "checkBoxEx";
+    
+    var spanl = document.createElement("span");
+    var spanr = document.createElement("span");
+    
+    var label = document.createElement("label");
+    label.className = "pack-checkbox";3
+    label.appendChild(checkbox);
+    var spanlbl = document.createElement("span");
+    label.appendChild(spanlbl);
+    
+    spanl.className = "leftCheckbox";
+    spanr.className = "right";
+    
+    spanl.appendChild(a);
+    spanr.appendChild(label);
+    
+            li.appendChild(spanl);
+    li.appendChild(spanr);
+    
+    list.appendChild(li);    
+}
+
+function pauseEx() {
 
     if (flagStart) {
-        if ( typeCounter == 1 || typeCounter == 2) {
+        if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
             typeCounterPause = typeCounter;
-            typeCounter = PAUSE;
+            typeCounter = STATE_EX_PAUSE;
             timer = window.clearInterval(timer);
         } else  {
             timer = window.setInterval(display, 1000);
@@ -489,27 +500,27 @@ function pauseSeq() {
     }
 }
 
-function startSeq() {
+function startEx() {
 
     if (!flagStart) {
         durationCounter =  0;
         breakTimeCounter = 0;
         nbRetryCounter = 1;
-        typeCounter = 1;
+        typeCounter = STATE_EX_EFFORT;
         
-        var listSeq = document.getElementById('list-seq');
-        listSeq.selectedIndex;
+        var listEx = document.getElementById('list-ex');
+        listEx.selectedIndex;
         
-        var x = listSeq.selectedIndex;
-        var y = listSeq.options[0];
+        var x = listEx.selectedIndex;
+        var y = listEx.options[0];
         var sequence;
-        sequence = listSeq.options[x].value;
+        sequence = listEx.options[x].value;
         
         var res = sequence.split(",");
         
-        durationSeq = parseInt(res[0]) + 1;
-        breakTimeSeq = parseInt(res[1]);
-        nbRetrySeq = parseInt(res[2]);
+        durationEx = parseInt(res[0]) + 1;
+        breakTimeEx = parseInt(res[1]);
+        nbRetryEx = parseInt(res[2]);
         
         var effortDiv = document.getElementById('effortDiv');
         effortDiv.style.backgroundColor = 'black';
@@ -517,7 +528,7 @@ function startSeq() {
         timer = window.setInterval(display, 1000);
         flagStart = true;
     } else {
-        if (typeCounter == PAUSE) {
+        if (typeCounter == STATE_EX_PAUSE) {
             timer = window.setInterval(display, 1000);
             typeCounter = typeCounterPause;
         }
@@ -537,7 +548,7 @@ function playSound(sound) {
 
 function display() {
   
-    if (nbRetryCounter > nbRetrySeq) {
+    if (nbRetryCounter > nbRetryEx) {
         playSound('finalSound');
 
         endExercise();
@@ -552,8 +563,8 @@ function display() {
     }
     
     // Duration
-    if (typeCounter == 1) {
-        nbRetryDisplay.textContent = nbRetryCounter + "/" +nbRetrySeq;
+    if (typeCounter == STATE_EX_EFFORT) {
+        nbRetryDisplay.textContent = nbRetryCounter + "/" +nbRetryEx;
         durationCounter++;
         
         if (durationCounter == 1) {
@@ -562,38 +573,38 @@ function display() {
             playSound('beepBeginSound');
         }
 
-        if ((durationSeq - durationCounter) == 10) {
+        if ((durationEx - durationCounter) == 10) {
             var effortDiv = document.getElementById('effortDiv');
             effortDiv.style.backgroundColor = 'red';
         }
         
-        if (durationCounter >= durationSeq) {
+        if (durationCounter >= durationEx) {
             playSound('beepEndSound');
 
             breakTimeCounter = 0;
-            typeCounter = 2;
+            typeCounter = STATE_EX_RECOVERY;
         }
-        var nbSec = durationSeq - durationCounter;
+        var nbSec = durationEx - durationCounter;
         displaySecond(chronoDisplay, nbSec);
     }
 
     // Recovery
-    if (typeCounter == 2) {
+    if (typeCounter == STATE_EX_RECOVERY) {
         breakTimeCounter++;
-        if (breakTimeCounter >= breakTimeSeq) {       
+        if (breakTimeCounter >= breakTimeEx) {       
             nbRetryCounter++;
-            if (nbRetryCounter <= nbRetrySeq) {
-                nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetrySeq;
+            if (nbRetryCounter <= nbRetryEx) {
+                nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
             }
-            typeCounter = 1;
+            typeCounter = STATE_EX_EFFORT;
             durationCounter = 0;
             displaySecond(breakTimeDisplay, 0);
         } else {
-            var nbSec =  breakTimeSeq - breakTimeCounter;
+            var nbSec =  breakTimeEx - breakTimeCounter;
             displaySecond(breakTimeDisplay, nbSec);
         }
         
-        if ((breakTimeSeq - breakTimeCounter) == 5) {
+        if ((breakTimeEx - breakTimeCounter) == 5) {
             // 
             playSound('5SecSound');
         }
@@ -621,16 +632,11 @@ function displaySecond(display, nbSec) {
 
 function endExercise() {
     flagStart = false;
-    // var btnStart = document.getElementById('btn-start-seq');
-    // btnStart.textContent = navigator.mozL10n.get("idStart");
 }
 
-function cancelSeq() {
+function cancelEx() {
     timer = window.clearInterval(timer);
 
-    // var btn = document.getElementById('btn-start-seq');
-    // btn.textContent ="Retry";
-    
     chronoDisplay.textContent = "00:00";
     breakTimeDisplay.textContent = "00:00";
     nbRetryDisplay.textContent = "0/0";
@@ -640,10 +646,10 @@ function cancelSeq() {
 
 
 /**
-* Delete sequences.
+* Delete exercises.
 */
-function deleteSequences() {
-    var list = document.getElementById('list-items-seq');
+function deleteExercises() {
+    var list = document.getElementById('list-items-ex');
     var chk = list.getElementsByTagName('input');
     
     var transaction = db.transaction(["chronos"],"readwrite");
@@ -655,8 +661,8 @@ function deleteSequences() {
         }
     }
   
-    displayListUpdateSequence();
-    displayListSequence();
+    displayListUpdateExercise();
+    displayListExercise();
 }
 
 function saveParameters(dbObj, id, value) {

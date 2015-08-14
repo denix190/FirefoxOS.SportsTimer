@@ -235,10 +235,10 @@
       </audio>
       <nav>
         <ul>
-          <li><a id="btn-go-param-seq" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>
-          <li><a id="btn-go-list-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExercises">Exercises</a></li>
+          <li><a id="btn-go-param-ex" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>
+          <li><a id="btn-go-list-ex" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExercises">Exercises</a></li>
           <li><a id="btn-go-sessions" href="#" data-click="nav" data-click-location="open" data-l10n-id="idSessions">Sessions</a></li>
-          <li><a id="btn-go-about-seq" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
+          <li><a id="btn-go-about-ex" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
         </ul>
       </nav>
 
@@ -253,10 +253,10 @@
         <h1>Sports Timer</h1>
       </header>
       <article class="scrollable header">
-        <div data-type="list">
+        <div>
 
           <div data-type="list">
-            <select id="list-seq">
+            <select id="list-ex">
             </select>
           </div>
         
@@ -277,13 +277,13 @@
               <table width=98%>
                 <th>
                   <td style="text-align:center;">
-                    <button class="media-icon media-play icon_button" id="btn-start-seq" class="recommend"></button>
+                    <button class="media-icon media-play icon_button" id="btn-start-ex" class="recommend"></button>
                   </td>
                   <td style="text-align:center;">
-                    <button class="media-icon media-pause icon_button" id="btn-pause-seq" class="danger"></button>
+                    <button class="media-icon media-pause icon_button" id="btn-pause-ex" class="danger"></button>
                   </td>
                   <td style="text-align:center;">
-                    <button class="action-icon cancel icon_button" id="btn-cancel-seq" class="danger"></button>
+                    <button class="action-icon cancel icon_button" id="btn-cancel-ex" class="danger"></button>
                   </td>
                 </th>
               </table>
@@ -312,11 +312,11 @@
 
   
   <!--·························· add Exercise ··························-->
-  <section role="region" id="addSeq" data-position="right">
+  <section role="region" id="addExercise" data-position="right">
     <header class="fixed">
-      <a id="btn-go-add-seq-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-add-ex-back" href="#"><span class="icon icon-close">back</span></a>
        <menu type="toolbar">
-         <button id="btn-add-seq" data-l10n-id="idAddExercise">Save</button>
+         <button id="btn-add-ex" data-l10n-id="idAddExercise">Save</button>
        </menu>
       
       <h1 data-l10n-id="idExercise">Exercise</h1>
@@ -370,21 +370,25 @@
 
         <p width="100%">
           <span data-l10n-id="idNameExercise">Name</span>
-          <input id="nameSeq" type="text" maxlength="20" required>
+          <input id="nameEx" type="text" maxlength="20" required>
         </p>
 
         <p width="100%">
           <span data-l10n-id="idDescExercise">Description</span>
-          <textarea id="descSeq"></textarea>
+          <textarea id="descEx"></textarea>
         </p>
 
     </article>
   </section>
 
   <!--·························· update Exercise ··························-->
-  <section role="region" id="updSeq" data-position="right">
+  <section role="region" id="updExercise" data-position="right">
     <header class="fixed">
-      <a id="btn-go-upd-seq-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-upd-ex-back" href="#"><span class="icon icon-close">back</span></a>
+       <menu type="toolbar">
+         <button id="btn-upd-ex" data-l10n-id="idBtnUpdExercise">Save</button>
+       </menu>
+      
       <h1 data-l10n-id="idUpdExercise">Update Exercise</h1>
     </header>
     <article class="content scrollable header">
@@ -432,43 +436,40 @@
 
         <p>
           <span data-l10n-id="idNameExercise">Name:</span>
-          <input id="nameSeqUpd" type="text" maxlength="20" required>
+          <input id="nameExUpd" type="text" maxlength="20" required>
         </p>
 
        <p width="100%">
           <span data-l10n-id="idDescExercise">Description</span>
-          <textarea id="descSeqUpd"></textarea>
+          <textarea id="descExUpd"></textarea>
         </p>
         
          <div>
            <input type="hidden" id="idUpd" value="">
-           <button id="btn-upd-seq" data-l10n-id="idUpdateExercise" class="recommend">Update Exercise</button>
+           <!-- <button id="btn-upd-ex" data-l10n-id="idUpdateExercise" class="recommend">Update Exercise</button> -->
          </div>
 
     </article>
   </section> 
 
     <!--·························· List Exercises ··························-->
-  <section role="region" id="listSeq" data-position="right">
+  <section role="region" id="listExercise" data-position="right">
     <header class="fixed">
-      <a id="btn-go-list-seq-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-list-ex-back" href="#"><span class="icon icon-close">back</span></a>
 
- <!-- <li><a id="btn-go-add-seq" href="#" data-click="nav" data-click-location="add" data-l10n-id="idNewExercise">New exercise</a></li> -->
-      
-      
       <menu type="toolbar">
-        <a href="#" id="btn-go-add-seq"><span class="icon icon-add" >add</span></a>
+        <a href="#" id="btn-go-add-ex"><span class="icon icon-add" >add</span></a>
       </menu>
       <h1 data-l10n-id="idListExercises">List Exercises</h1>
     </header>
     <article class="scrollable header">
         <div data-type="list">
-          <ul id="list-items-seq">
+          <ul id="list-items-ex">
           </ul>         
         </div>
 
         <div>
-           <button id="btn-del-seq" class="recommend" data-l10n-id="idDeleteExercises">Delete Exercises</button>
+           <button id="btn-del-ex" class="danger" data-l10n-id="idDeleteExercises">Delete Exercises</button>
          </div>
       </article>
         
@@ -497,7 +498,7 @@
     <!--·························· Parameters ··························-->
   <section role="region" id="pnl_parameters" data-position="right">
     <header class="fixed">
-      <a id="btn-go-params-seq-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-params-ex-back" href="#"><span class="icon icon-close">back</span></a>
       <h1 data-l10n-id="idParameters">Parameters</h1>
     </header>
     <article class="scrollable header">
@@ -516,7 +517,7 @@
   <!--·························· About ··························-->
   <section role="region" id="pnl_about" data-position="right">
     <header class="fixed">
-      <a id="btn-go-about-seq-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-about-ex-back" href="#"><span class="icon icon-close">back</span></a>
       <h1 data-l10n-id="idAbout">About</h1>
     </header>
     <article class="scrollable header">
