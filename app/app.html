@@ -323,6 +323,11 @@
     </header>
     <article class="content scrollable header">
       <p width="100%">
+        <span data-l10n-id="idNameExercise">Name</span>
+        <input id="nameEx" type="text" maxlength="20" required>
+      </p>
+
+      <p width="100%">
           <span data-l10n-id="idEffortTime">Effort time</span>
           <select name="duration" id="duration">
             <option value="15">15 sec</option>
@@ -369,11 +374,6 @@
         </p>
 
         <p width="100%">
-          <span data-l10n-id="idNameExercise">Name</span>
-          <input id="nameEx" type="text" maxlength="20" required>
-        </p>
-
-        <p width="100%">
           <span data-l10n-id="idDescExercise">Description</span>
           <textarea id="descEx"></textarea>
         </p>
@@ -392,30 +392,36 @@
       <h1 data-l10n-id="idUpdExercise">Update Exercise</h1>
     </header>
     <article class="content scrollable header">
-        <p>
-         <span data-l10n-id="idEffortTime">Effort time</span> 
-         <select name="duration" id="durationUpd">
-           <option value="15">15 sec</option>
-           <option value="30">30 sec</option> 
-           <option value="60" selected>1 min</option>
-           <option value="90">1 min 30 sec</option>
-           <option value="120">2 min</option>
-           <option value="150">2 min 30 sec</option>
-           <option value="180">3 min</option>
-           <option value="210">3 min 30 sec</option>
-           <option value="240">4 min</option>
-           <option value="270">4 min 30 sec</option>
-           <option value="300">5 min</option>
-           <option value="330">6 min 30 sec</option>
-         </select>
-        </p>
+      <p>
+        <span data-l10n-id="idNameExercise">Name:</span>
+        <input id="nameExUpd" type="text" maxlength="20" required>
+      </p>
+      <p>
+        <span data-l10n-id="idEffortTime">Effort time</span> 
+        <select name="duration" id="durationUpd">
+          <option value="15">15 sec</option>
+          <option value="30">30 sec</option> 
+          <option value="45">45 sec</option>
+          <option value="60" selected>1 min</option>
+          <option value="90">1 min 30 sec</option>
+          <option value="120">2 min</option>
+          <option value="150">2 min 30 sec</option>
+          <option value="180">3 min</option>
+          <option value="210">3 min 30 sec</option>
+          <option value="240">4 min</option>
+          <option value="270">4 min 30 sec</option>
+          <option value="300">5 min</option>
+          <option value="330">6 min 30 sec</option>
+        </select>
+      </p>
 
         <p>
           <span data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTimeUpd">
           <option value="0">None</option>
             <option value="15">15 sec</option>
-           <option value="30">30 sec</option> 
+           <option value="30">30 sec</option>
+            <option value="45">45 sec</option>
            <option value="60" selected>1 min</option>
            <option value="90">1 min 30 sec</option>
            <option value="120">2 min</option>
@@ -432,11 +438,6 @@
         <p>
           <span data-l10n-id="idRounds">Rounds:</span>
           <input id="nbRetryUpd" type="number" placeholder="1" required min="1" max="10" value="1" />
-        </p>
-
-        <p>
-          <span data-l10n-id="idNameExercise">Name:</span>
-          <input id="nameExUpd" type="text" maxlength="20" required>
         </p>
 
        <p width="100%">

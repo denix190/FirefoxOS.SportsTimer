@@ -649,20 +649,22 @@ function cancelEx() {
 * Delete exercises.
 */
 function deleteExercises() {
-    var list = document.getElementById('list-items-ex');
-    var chk = list.getElementsByTagName('input');
-    
-    var transaction = db.transaction(["chronos"],"readwrite");
-    var store = transaction.objectStore("chronos");
-    
-    for (var i = 0; i  < chk.length;i++) {
-        if (chk[i].checked == true) {
-            var request = store.delete(parseInt(chk[i].value)); 
+    if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) { 
+        var list = document.getElementById('list-items-ex');
+        var chk = list.getElementsByTagName('input');
+        
+        var transaction = db.transaction(["chronos"],"readwrite");
+        var store = transaction.objectStore("chronos");
+        
+        for (var i = 0; i  < chk.length;i++) {
+            if (chk[i].checked == true) {
+                var request = store.delete(parseInt(chk[i].value)); 
+            }
         }
+        
+        displayListUpdateExercise();
+        displayListExercise();
     }
-  
-    displayListUpdateExercise();
-    displayListExercise();
 }
 
 function saveParameters(dbObj, id, value) {
