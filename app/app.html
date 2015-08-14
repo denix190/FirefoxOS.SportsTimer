@@ -274,12 +274,19 @@
             </div>
             <div/>
             <div style="padding-top: 5px; padding-left: 5px; padding-rigth: 5px;">
-              <div style="width:48%; float:left;">
-                <button data-l10n-id="idStart" id="btn-start-seq" class="recommend">Start</button>
-              </div>
-              <div style="width:48%; float:right;">
-                <button data-l10n-id="idCancel" id="btn-cancel-seq" class="danger">Cancel</button>
-              </div>
+              <table width=98%>
+                <th>
+                  <td style="text-align:center;">
+                    <button class="media-icon media-play icon_button" id="btn-start-seq" class="recommend"></button>
+                  </td>
+                  <td style="text-align:center;">
+                    <button class="media-icon media-pause icon_button" id="btn-pause-seq" class="danger"></button>
+                  </td>
+                  <td style="text-align:center;">
+                    <button class="action-icon cancel icon_button" id="btn-cancel-seq" class="danger"></button>
+                  </td>
+                </th>
+              </table>
               <div class="footer">
                 <div width="100%">
                   <div style="width:40%;float:left;">
@@ -292,8 +299,7 @@
                     <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
                   </div>
                 </div>
-                <!-- <div style="width:100%; float:right;"> -->
-                <!-- </div> -->
+
            </div>
             
           </div>
@@ -310,8 +316,6 @@
     <header class="fixed">
       <a id="btn-go-add-seq-back" href="#"><span class="icon icon-close">back</span></a>
        <menu type="toolbar">
-      <!-- a href="#"><span class="icon icon-edit">edit</span></a -->
-      <!-- a href="#"><span class="icon icon-add">add</span></a-->
          <button id="btn-add-seq" data-l10n-id="idAddExercise">Save</button>
        </menu>
       
@@ -373,10 +377,6 @@
           <span data-l10n-id="idDescExercise">Description</span>
           <textarea id="descSeq"></textarea>
         </p>
-        
-         <!--div>
-           <button id="btn-add-seq" class="recommend" data-l10n-id="idAddExercise">Add Exercise</button>
-         </div -->
 
     </article>
   </section>

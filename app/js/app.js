@@ -1,5 +1,9 @@
 'use strict';
 
+
+const PAUSE = 3;
+const RECOVERY = 2;
+
 var dbName = "chronosData";
 var dbVersion = 11;
 
@@ -105,6 +109,7 @@ document.querySelector('#btn-go-sessions-back').addEventListener('click', functi
 
 // Exercise
 document.querySelector('#btn-start-seq').addEventListener('click', startSeq);
+document.querySelector('#btn-pause-seq').addEventListener('click', pauseSeq);
 document.querySelector('#btn-cancel-seq').addEventListener('click', cancelSeq);
 
 // Session
@@ -470,24 +475,23 @@ function displayListUpdateSequence() {
     };
 }
 
-function startSeq() {
-    var btnStart = document.getElementById('btn-start-seq');
-    
+function pauseSeq() {
+
     if (flagStart) {
-        
-        btnStart.textContent = navigator.mozL10n.get("idStart");
         if ( typeCounter == 1 || typeCounter == 2) {
             typeCounterPause = typeCounter;
-            typeCounter = 3;
+            typeCounter = PAUSE;
             timer = window.clearInterval(timer);
         } else  {
-            //var btn = document.getElementById('btn-pause-seq')
-            // btn.textContent ="Pause";
             timer = window.setInterval(display, 1000);
             typeCounter = typeCounterPause;
         }
-    } else {
-        btnStart.textContent = navigator.mozL10n.get("idPause");
+    }
+}
+
+function startSeq() {
+
+    if (!flagStart) {
         durationCounter =  0;
         breakTimeCounter = 0;
         nbRetryCounter = 1;
@@ -512,9 +516,14 @@ function startSeq() {
         
         timer = window.setInterval(display, 1000);
         flagStart = true;
+    } else {
+        if (typeCounter == PAUSE) {
+            timer = window.setInterval(display, 1000);
+            typeCounter = typeCounterPause;
+        }
     }
-    
 }
+
 
 /**
  *
@@ -585,6 +594,7 @@ function display() {
         }
         
         if ((breakTimeSeq - breakTimeCounter) == 5) {
+            // 
             playSound('5SecSound');
         }
     }
@@ -611,15 +621,15 @@ function displaySecond(display, nbSec) {
 
 function endExercise() {
     flagStart = false;
-    var btnStart = document.getElementById('btn-start-seq');
-    btnStart.textContent = navigator.mozL10n.get("idStart");
+    // var btnStart = document.getElementById('btn-start-seq');
+    // btnStart.textContent = navigator.mozL10n.get("idStart");
 }
 
 function cancelSeq() {
     timer = window.clearInterval(timer);
 
-    var btn = document.getElementById('btn-start-seq');
-    btn.textContent ="Retry";
+    // var btn = document.getElementById('btn-start-seq');
+    // btn.textContent ="Retry";
     
     chronoDisplay.textContent = "00:00";
     breakTimeDisplay.textContent = "00:00";
