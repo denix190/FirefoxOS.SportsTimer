@@ -46,6 +46,7 @@ section[role="region"] > header.fixed:first-child {
 .scrollable.header {
   height: calc(100% - 5rem);
   top: 5rem;
+  background-color: rgb(227,227, 227);
 }
 
 /* Setting proper paddings and margins */
@@ -240,7 +241,7 @@ button.icon_button {
     width:40px;
     padding:0px 0px 0px 0px;
     border-radius: 20px;
-    background-color: grey;
+    background-color: #9f9f9f;
 }
 
 .magneto {
