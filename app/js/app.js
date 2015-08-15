@@ -281,7 +281,7 @@ function storeEx() {
         
         var opt = document.createElement('option'); // create new option element
         // create text node to add to option element (opt)
-        opt.appendChild( document.createTextNode(nameEx + " (" + duration + " -  " + breakTime + ")" + "*" + nbRetry) );
+        opt.appendChild( document.createTextNode(nameEx + " (" + duration + " -  " + breakTime + ")" + "x" + nbRetry) );
 
         opt.value = duration + "," + breakTime + "," + nbRetry; // set value property of opt
         var listEx = document.getElementById('list-ex');
@@ -456,7 +456,7 @@ function addExercise(list, cursor) {
     a.text = cursor.value.name
         + " (" + cursor.value.duration
         + " -  " + cursor.value.breakTime + ")"
-        + "*" + cursor.value.nbRetry;
+        + "x" + cursor.value.nbRetry;
     a.href = "#";
     
     var checkbox = document.createElement('input');
@@ -523,7 +523,8 @@ function startEx() {
         nbRetryEx = parseInt(res[2]);
         
         var effortDiv = document.getElementById('effortDiv');
-        effortDiv.style.backgroundColor = 'black';
+        // effortDiv.style.backgroundColor = 'black';
+        effortDiv.style.color = '#F97C17';
         
         timer = window.setInterval(display, 1000);
         flagStart = true;
@@ -569,13 +570,13 @@ function display() {
         
         if (durationCounter == 1) {
             var effortDiv = document.getElementById('effortDiv');
-            effortDiv.style.backgroundColor = 'black';
+            effortDiv.style.color = '#F97C17';
             playSound('beepBeginSound');
         }
 
         if ((durationEx - durationCounter) == 10) {
             var effortDiv = document.getElementById('effortDiv');
-            effortDiv.style.backgroundColor = 'red';
+            effortDiv.style.color = 'red';
         }
         
         if (durationCounter >= durationEx) {

@@ -252,7 +252,7 @@
         <a href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
         <h1>Sports Timer</h1>
       </header>
-      <article class="scrollable header">
+      <article class="scrollable header" style="background-color: rgb(227,227, 227);">
         <div>
 
           <div data-type="list">
@@ -262,7 +262,7 @@
         
           <div>
             <div class="chronosAction" id="effortDiv">              
-             <span id="chronoDisplay" >00:00</span>
+              <span id="chronoDisplay" >00:00</span>
             </div>
             <div class="chronosRecovery">
               <span data-l10n-id="idRecovery" class="left">Recovery:</span>
@@ -272,8 +272,7 @@
               <span data-l10n-id="idRounds" class="left">Rounds:</span>
               <span id="nbRetryDisplay" class="right">0/0</span>
             </div>
-            <div/>
-            <div style="padding-top: 5px; padding-left: 5px; padding-rigth: 5px;">
+            <div class="magneto">
               <table width=98%>
                 <th>
                   <td style="text-align:center;">
@@ -287,26 +286,26 @@
                   </td>
                 </th>
               </table>
-              <div class="footer">
-                <div width="100%">
-                  <div style="width:40%;float:left;">
-                    <span style="font-size:2rem;text-align:center;">Session</span>
-                    <span>TOTAL&nbsp;</span><span id="chronoSession">00:00</span>
-                  </div>
-                  <div style="width:60%; float:right;">
-                    <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
-                    <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
-                    <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
-                  </div>
-                </div>
+            </div>
 
-           </div>
-            
+          </div>
+         
+          <div class="footer">
+            <div class="magneto">
+              <div style="width:45%;float:left;">
+                <span style="font-size:1.5rem;text-align:center; color:white;">Session</span>
+                <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;">00:00</span>
+              </div>
+              <div style="width:55%; float:right;">
+                <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
+                <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
+                <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
+              </div>
+            </div>
           </div>
         </div>
-   
       </article>
-     
+
     </section> <!-- end drawer -->
   </section> <!-- end index -->
 

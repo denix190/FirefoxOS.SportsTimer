@@ -5,6 +5,8 @@
   <article class="scrollable header">
 */
 
+/* @divBgColor = rgba(110, 110, 110, 0.58);  */
+
 html {
   height: 100%;
   font-size: 62.5%; /* Setting base font to 10px and define all your units in rem. 1rem = 10px */
@@ -152,20 +154,21 @@ ul, ol, li {
 }
 
 .chronosAction {
-    background-color: #E00018;
-    color: white;
+    background-color: rgba(110, 110, 110, 0.58);
+  /*  background: linear-gradient(to bottom, #E00018, white); */
+   color: #F97C17 /*#E00018 */;
   text-align: center;
   font-size: 6.0rem; 
   margin: 10px 10px 0px 5px;
   border-width: 1px;
-  border-style: dotted;
+  border-style: none;
   border-radius: 10px;
   height: 7.0rem;
 }
 
 .chronosRecovery {
-  background-color: #14FF15;
-  color: black;
+  background-color: rgba(110, 110, 110, 0.58);
+  color: white /* #14FF15 */;
   text-align: center; 
   font-size: 3rem; 
   margin: 10px 10px 0px 5px;
@@ -177,8 +180,8 @@ ul, ol, li {
 }
 
 .chronosRound {
-  background-color: #64A0E3;
-  color: black;
+  background-color: rgba(110, 110, 110, 0.58);
+  color: white; /* #64A0E3 */
   text-align: ext-align: center;
   font-size: 3rem; 
   margin: 10px 10px 0px 5px; 
@@ -237,5 +240,18 @@ button.icon_button {
     width:40px;
     padding:0px 0px 0px 0px;
     border-radius: 20px;
-    background-color:black;
+    background-color: grey;
+}
+
+.magneto {
+  background-color: rgba(110, 110, 110, 0.58);
+  color: black;
+  text-align: ext-align: center;
+  font-size: 3rem; 
+  margin: 10px 10px 0px 5px; 
+  border-width: 0px;
+  border-style: none;
+  border-radius: 10px;
+  height: 4.5rem; 
+  /* float:right; */
 }
