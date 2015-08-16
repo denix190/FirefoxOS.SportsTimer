@@ -46,7 +46,7 @@ section[role="region"] > header.fixed:first-child {
 .scrollable.header {
   height: calc(100% - 5rem);
   top: 5rem;
-  background-color: rgb(227,227, 227);
+  background-color: #F4F7F8;
 }
 
 /* Setting proper paddings and margins */
@@ -155,7 +155,7 @@ ul, ol, li {
 }
 
 .chronosAction {
-    background-color: rgba(110, 110, 110, 0.58);
+    background-color: rgba(110, 110, 110, 1.0);
   /*  background: linear-gradient(to bottom, #E00018, white); */
    color: #F97C17 /*#E00018 */;
   text-align: center;
@@ -168,7 +168,7 @@ ul, ol, li {
 }
 
 .chronosRecovery {
-  background-color: rgba(110, 110, 110, 0.58);
+  background-color: rgba(110, 110, 110, 1.0);
   color: white /* #14FF15 */;
   text-align: center; 
   font-size: 3rem; 
@@ -181,7 +181,7 @@ ul, ol, li {
 }
 
 .chronosRound {
-  background-color: rgba(110, 110, 110, 0.58);
+  background-color: rgba(110, 110, 110, 1.0);
   color: white; /* #64A0E3 */
   text-align: ext-align: center;
   font-size: 3rem; 
@@ -241,11 +241,11 @@ button.icon_button {
     width:40px;
     padding:0px 0px 0px 0px;
     border-radius: 20px;
-    background-color: #9f9f9f;
+    background-color: #6E6E6E;
 }
 
 .magneto {
-  background-color: rgba(110, 110, 110, 0.58);
+  background-color: rgba(110, 110, 110, 1.0);
   color: black;
   text-align: ext-align: center;
   font-size: 3rem; 
