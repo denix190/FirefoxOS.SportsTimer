@@ -1,18 +1,16 @@
 'use strict';
 
+// Constantes.
 const STATE_EX_EFFORT = 1;
 const STATE_EX_RECOVERY = 2;
 const STATE_EX_PAUSE = 3;
-
-
-var dbName = "chronosData";
-var dbVersion = 11;
+const dbName = "chronosData";
+const dbVersion = 11;
 
 var note = null;
 
 var db;
 var timer;
-
 
 var durationCounter;
 var breakTimeCounter;
@@ -27,11 +25,9 @@ var typeCounterPause;
 var flagSound = true;
 var flagStart = false;
 
-
 var chronoDisplay = document.getElementById('chronoDisplay');
 var breakTimeDisplay = document.getElementById('breakTimeDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
-
 
 var session = new Session();
 
@@ -40,7 +36,6 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
     document.querySelector('#addExercise').className = 'current';
     document.querySelector('#listExercise').className = 'right';
 });
-
 
 document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
     document.querySelector('#addExercise').className = 'right';
@@ -70,6 +65,18 @@ document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function
 document.querySelector('#btn-go-params-ex-back').addEventListener('click', function () {
    document.querySelector('#pnl_parameters').className = 'right';
    document.querySelector('[data-position="current"]').className = 'current';
+});
+
+
+// Display the panel updating a Session.
+document.querySelector('#btn-go-add-session').addEventListener('click', function () {
+    document.querySelector('#updSession').className = 'current';
+    document.querySelector('#listSessions').className = 'right';
+});
+
+document.querySelector('#btn-go-upd-session-back').addEventListener('click', function () {
+    document.querySelector('#updSession').className = 'right';
+    document.querySelector('#listSessions').className = 'current';
 });
 
 // Display the panel Parameters.
@@ -128,6 +135,9 @@ document.querySelector('#btn-upd-ex').addEventListener('click', updateEx);
 document.querySelector('#btn-del-ex').addEventListener('click', deleteExercises);
 
 document.querySelector('#chk-sound').addEventListener('change', checkSoundHandler);
+
+// Update an Session.
+document.querySelector('#btn-upd-session').addEventListener('click', updateSession);
 
 
 var listItemEx = document.getElementById('list-items-ex');
@@ -223,20 +233,20 @@ function init() {
             };
 
             console.log ("chronos");
-            if (thisDB.objectStoreNames.contains("chronos")) {
-                thisDB.deleteObjectStore("chronos");
+            if (!thisDB.objectStoreNames.contains("chronos")) {
+                var objectStore = thisDB.createObjectStore("chronos", { keyPath : "id",   autoIncrement: true });
+                var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
             }
+
+            if (!thisDB.objectStoreNames.contains("sessions")) {
+                var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession"} ); 
+            }
+            
             console.log ("parameters");
-            if (thisDB.objectStoreNames.contains("parameters")) {
-                thisDB.deleteObjectStore("parameters");
-            } 
-
-            var objectStore = thisDB.createObjectStore("chronos", { keyPath : "id",   autoIncrement: true });
-            var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
-
-            var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );
-
-            saveParameters( thisDB, 1, true);
+            if (!thisDB.objectStoreNames.contains("parameters")) {
+                var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
+                saveParameters( thisDB, 1, true);
+            }
         };
     } catch(e) {
        console.log(e);
@@ -784,3 +794,64 @@ function displaySession() {
     session.addSessionSec();
     displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
 }
+
+
+function updateSession() {
+    try {
+        var durationId = document.getElementById("duration");
+        var breakTimeId = document.getElementById("breakTime");         
+        var nbRetryId = document.getElementById("nbRetry");
+        var nameId = document.getElementById("nameEx");
+        var descId = document.getElementById("descEx");
+        
+        var duration = durationId.value;
+        var breakTime = breakTimeId.value;
+        var nbRetry = nbRetryId.value;
+        var nameEx = nameId.value;
+        var descEx = descId.value;
+
+        if (nameEx.length == 0) {
+            window.alert(navigator.mozL10n.get("idAlertNoName"));
+            return;
+        }
+        console.log("nameEx:" + nameEx)
+        
+        var opt = document.createElement('option'); // create new option element
+        // create text node to add to option element (opt)
+        opt.appendChild( document.createTextNode(nameEx + " (" + duration + " -  " + breakTime + ")" + "x" + nbRetry) );
+
+        opt.value = duration + "," + breakTime + "," + nbRetry; // set value property of opt
+        var listEx = document.getElementById('list-ex');
+
+        listEx.appendChild(opt);
+
+        var transaction = db.transaction(["chronos"],"readwrite");
+        var store = transaction.objectStore("chronos");
+        
+        //Define a new chronosRecord
+        var chronosRecord = {
+            name: nameEx,
+            duration: duration,
+            breakTime: breakTime,
+            nbRetry: nbRetry,
+            desc: descEx,
+            created:new Date()
+        }
+        
+        var request = store.add(chronosRecord);
+ 
+        request.onerror = function(e) {
+            console.log("Error chronos", e.target.error.name);
+        }
+        
+        request.onsuccess = function(event) {
+            console.log("sequence add");
+            displayListUpdateExercise();
+        }
+  
+        document.querySelector('#addExercise').className = 'right';
+        document.querySelector('#listExercise').className = 'current';
+    } catch(e) {
+        console.log(e);
+    }
+} 
