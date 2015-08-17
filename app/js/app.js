@@ -4,8 +4,8 @@
 const STATE_EX_EFFORT = 1;
 const STATE_EX_RECOVERY = 2;
 const STATE_EX_PAUSE = 3;
-const dbName = "chronosData";
-const dbVersion = 11;
+const dbName = "exerciceData";
+const dbVersion = 20;
 
 var note = null;
 
@@ -44,14 +44,15 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
 
 // Display the panel updating Exercises.
 document.querySelector('#btn-go-list-ex').addEventListener('click', function () {
+
     document.querySelector('#listExercise').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateExercise();
+    displayListUpdateExercise(1);
 });
 
 document.querySelector('#btn-go-list-ex-back').addEventListener('click', function () {
   document.querySelector('#listExercise').className = 'right';
-   document.querySelector('[data-position="current"]').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'current';
 });
 
 
@@ -70,6 +71,8 @@ document.querySelector('#btn-go-params-ex-back').addEventListener('click', funct
 
 // Display the panel updating a Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
+    var idSession = document.getElementById('idSession');
+    idSession.value = "-1";
     document.querySelector('#updSession').className = 'current';
     document.querySelector('#listSessions').className = 'right';
 });
@@ -83,14 +86,14 @@ document.querySelector('#btn-go-upd-session-back').addEventListener('click', fun
 document.querySelector('#btn-go-param-ex').addEventListener('click', function () {
     document.querySelector('#pnl_parameters').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateExercise();
+    displayListUpdateExercise(1);
 });
 
 // Display the panel About.
 document.querySelector('#btn-go-about-ex').addEventListener('click', function () {
     document.querySelector('#pnl_about').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateExercise();
+    displayListUpdateExercise(1);
 });
 
 // Hide panel About
@@ -104,7 +107,7 @@ document.querySelector('#btn-go-about-ex-back').addEventListener('click', functi
 document.querySelector('#btn-go-sessions').addEventListener('click', function () {
     document.querySelector('#listSessions').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-
+    displayListSessions();
 });
 
 // Hide panel List sessions.
@@ -139,8 +142,14 @@ document.querySelector('#chk-sound').addEventListener('change', checkSoundHandle
 // Update an Session.
 document.querySelector('#btn-upd-session').addEventListener('click', updateSession);
 
+// Configuration Exercises to Session
+document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesToSession);
 
+// List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
+
+// List Session.
+var listItemSes = document.getElementById('list-items-ses');
 
 init();
 
@@ -167,8 +176,8 @@ listItemEx.onclick = function(e) {
         
                 document.querySelector('#listExercise').className = 'left';
 
-                var transaction = db.transaction(["chronos"]);
-                var objectStore = transaction.objectStore("chronos", 'readonly');
+                var transaction = db.transaction(["exercice"]);
+                var objectStore = transaction.objectStore("exercice", 'readonly');
                 
                 var id = parseInt(collEnfants[i].id);
                 var request = objectStore.get(id);
@@ -194,6 +203,51 @@ listItemEx.onclick = function(e) {
                     desc.value = request.result.desc;
                     
                     idUpd.value = id;
+                };
+            } catch (ex) {
+                console.log(ex);
+            }
+        }
+    }
+}
+
+listItemSes.onclick = function(e) {
+    
+    var collEnfants = e.target.parentNode.childNodes;
+    var i = 0;
+    for (i = 0; i < collEnfants.length; i++)  {
+
+       if (collEnfants[i].tagName === 'A'){
+
+            try {
+                document.querySelector('#updSession').className = 'current';
+                document.querySelector('[data-position="current"]').className = 'left';
+        
+                document.querySelector('#listSessions').className = 'left';
+
+                var transaction = db.transaction(["sessions"]);
+                var objectStore = transaction.objectStore("sessions", 'readonly');
+                
+                var id = parseInt(collEnfants[i].id);
+                var request = objectStore.get(id);
+
+                request.onerror = function(event) {
+                    console.log("Not found for Id: " + id);
+                };
+
+                request.onsuccess = function(evt) {
+                    
+                    var value = evt.target.result;
+                    var name = document.getElementById('nameSession');
+                    var desc = document.getElementById('descSession');
+                    var nbRetry = document.getElementById('nbRetryUpd');
+                    var breakTime = document.getElementById('breakTimeUpd');
+                    var duration = document.getElementById('durationUpd');
+                    var idSession = document.getElementById('idSession');
+                    
+                    name.value = request.result.name;
+                    desc.value = request.result.desc;                    
+                    idSession.value = id;
                 };
             } catch (ex) {
                 console.log(ex);
@@ -232,17 +286,21 @@ function init() {
                 console.log("Error loading database" + event);
             };
 
-            console.log ("chronos");
-            if (!thisDB.objectStoreNames.contains("chronos")) {
-                var objectStore = thisDB.createObjectStore("chronos", { keyPath : "id",   autoIncrement: true });
-                var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
-            }
-
-            if (!thisDB.objectStoreNames.contains("sessions")) {
-                var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession"} ); 
+            console.log ("exercice");
+            if (thisDB.objectStoreNames.contains("exercice")) {
+                 thisDB.deleteObjectStore("exercice");
             }
             
-            console.log ("parameters");
+            var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
+            var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
+            var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
+            
+
+            if (!thisDB.objectStoreNames.contains("sessions")) {
+                var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
+            }
+            
+        console.log ("parameters");
             if (!thisDB.objectStoreNames.contains("parameters")) {
                 var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
                 saveParameters( thisDB, 1, true);
@@ -276,6 +334,7 @@ function storeEx() {
         var nbRetryId = document.getElementById("nbRetry");
         var nameId = document.getElementById("nameEx");
         var descId = document.getElementById("descEx");
+        var idSession = document.getElementById('idSession');
         
         var duration = durationId.value;
         var breakTime = breakTimeId.value;
@@ -287,7 +346,7 @@ function storeEx() {
             window.alert(navigator.mozL10n.get("idAlertNoName"));
             return;
         }
-        console.log("nameEx:" + nameEx)
+        console.log("nameEx:" + nameEx +  " idSession " + idSession.value)
         
         var opt = document.createElement('option'); // create new option element
         // create text node to add to option element (opt)
@@ -298,28 +357,30 @@ function storeEx() {
 
         listEx.appendChild(opt);
 
-        var transaction = db.transaction(["chronos"],"readwrite");
-        var store = transaction.objectStore("chronos");
+        var transaction = db.transaction(["exercice"],"readwrite");
+        var store = transaction.objectStore("exercice");
         
-        //Define a new chronosRecord
-        var chronosRecord = {
+        //Define a new exerciceRecord
+        var exerciceRecord = {
             name: nameEx,
             duration: duration,
             breakTime: breakTime,
             nbRetry: nbRetry,
             desc: descEx,
+            idSession : parseInt(idSession.value),
             created:new Date()
         }
-        
-        var request = store.add(chronosRecord);
+
+        /* */
+        var request = store.add(exerciceRecord);
  
         request.onerror = function(e) {
-            console.log("Error chronos", e.target.error.name);
+            console.log("Error exercice", e.target.error.name);
         }
         
         request.onsuccess = function(event) {
             console.log("sequence add");
-            displayListUpdateExercise();
+            displayListUpdateExercise(parseInt(idSession.value));
         }
   
         document.querySelector('#addExercise').className = 'right';
@@ -340,6 +401,7 @@ function updateEx() {
         var durationId = document.getElementById('durationUpd');
         var idUpd = document.getElementById('idUpd');
         var descIdUpd = document.getElementById("descExUpd");
+        var idSession = document.getElementById('idSession');
         
         var duration = durationId.value;
         var breakTime = breakTimeId.value;
@@ -348,30 +410,31 @@ function updateEx() {
         var descEx = descIdUpd.value;
         var id = parseInt(idUpd.value);
 
-        var transaction = db.transaction(["chronos"],"readwrite");
-        var store = transaction.objectStore("chronos");
+        var transaction = db.transaction(["exercice"],"readwrite");
+        var store = transaction.objectStore("exercice");
         
         // Define a the sequence.
-        var chronosRecord = {
+        var exerciceRecord = {
             id: id,
             name: nameEx,
             duration: duration,
             breakTime: breakTime,
             nbRetry: nbRetry,
             desc: descEx,
+            idSession :parseInt(idSession.value),
             created:new Date()
         }
         
-        var request = store.put(chronosRecord);
+        var request = store.put(exerciceRecord);
  
         request.onerror = function(e) {
-            console.log("Error chronos", e.target.error.name);
+            console.log("Error exercice", e.target.error.name);
         }
         
         request.onsuccess = function(event) {
            console.log("updateEx ok id:" + id);
             displayListExercise();
-            displayListUpdateExercise();
+            displayListUpdateExercise(1);
         }
   
         document.querySelector('#updExercise').className = 'right';
@@ -390,7 +453,7 @@ function displayListExercise() {
     loadParameters(1);
  
     try {
-        var objectStore = db.transaction("chronos").objectStore("chronos");
+        var objectStore = db.transaction("exercice").objectStore("exercice");
         var index = objectStore.index("by_name");
         var listEx = document.getElementById("list-ex");
         
@@ -434,8 +497,9 @@ function displayListExercise() {
 /**
  * Display the list of exercises for update.
 */
-function displayListUpdateExercise() {
-    var objectStore = db.transaction("chronos").objectStore("chronos");
+function displayListUpdateExercise(idSession) {
+    console.log("displayListUpdateExercise idSession: " + idSession);
+    var objectStore = db.transaction("exercice").objectStore("exercice");
     var listEx = document.getElementById("list-items-ex");
     
     // remove all element in the list.
@@ -443,7 +507,10 @@ function displayListUpdateExercise() {
         listEx.removeChild(listEx.firstChild);
     }
 
-    objectStore.openCursor().onsuccess = function(event) {
+    var index = objectStore.index("BySession");
+    var request = index.openCursor(IDBKeyRange.only(idSession));
+    
+    request.onsuccess = function(event) {
         var cursor = event.target.result;
         if (cursor) {
             addExercise(listEx, cursor);
@@ -453,6 +520,10 @@ function displayListUpdateExercise() {
             // alert("No more entries!");
         }
     };
+
+    request.onerror = function(e) {
+        console.log("listExercise ", e);
+    }
 }
 
 /**
@@ -479,7 +550,7 @@ function addExercise(list, cursor) {
     var spanr = document.createElement("span");
     
     var label = document.createElement("label");
-    label.className = "pack-checkbox";3
+    label.className = "pack-checkbox";
     label.appendChild(checkbox);
     var spanlbl = document.createElement("span");
     label.appendChild(spanlbl);
@@ -490,7 +561,7 @@ function addExercise(list, cursor) {
     spanl.appendChild(a);
     spanr.appendChild(label);
     
-            li.appendChild(spanl);
+    li.appendChild(spanl);
     li.appendChild(spanr);
     
     list.appendChild(li);    
@@ -664,8 +735,8 @@ function deleteExercises() {
         var list = document.getElementById('list-items-ex');
         var chk = list.getElementsByTagName('input');
         
-        var transaction = db.transaction(["chronos"],"readwrite");
-        var store = transaction.objectStore("chronos");
+        var transaction = db.transaction(["exercice"],"readwrite");
+        var store = transaction.objectStore("exercice");
         
         for (var i = 0; i  < chk.length;i++) {
             if (chk[i].checked == true) {
@@ -673,7 +744,7 @@ function deleteExercises() {
             }
         }
         
-        displayListUpdateExercise();
+        displayListUpdateExercise(1);
         displayListExercise();
     }
 }
@@ -683,7 +754,7 @@ function saveParameters(dbObj, id, value) {
         var transaction = dbObj.transaction(["parameters"],"readwrite");
         var store = transaction.objectStore("parameters");
         
-        //Define a new chronosRecord
+        //Define a new exerciceRecord
         var parametersRecord = {
             id: id, 
             value: value,
@@ -798,60 +869,133 @@ function displaySession() {
 
 function updateSession() {
     try {
-        var durationId = document.getElementById("duration");
-        var breakTimeId = document.getElementById("breakTime");         
-        var nbRetryId = document.getElementById("nbRetry");
-        var nameId = document.getElementById("nameEx");
-        var descId = document.getElementById("descEx");
-        
-        var duration = durationId.value;
-        var breakTime = breakTimeId.value;
-        var nbRetry = nbRetryId.value;
-        var nameEx = nameId.value;
-        var descEx = descId.value;
 
-        if (nameEx.length == 0) {
+        var nameId = document.getElementById("nameSession");
+        var descId = document.getElementById("descSession");
+        var idSession = document.getElementById('idSession');
+        
+        var nameSes = nameId.value;
+        var descSes = descId.value;
+        var id = parseInt(idSession.value);
+
+        if (nameSes.length == 0) {
             window.alert(navigator.mozL10n.get("idAlertNoName"));
             return;
         }
-        console.log("nameEx:" + nameEx)
-        
-        var opt = document.createElement('option'); // create new option element
-        // create text node to add to option element (opt)
-        opt.appendChild( document.createTextNode(nameEx + " (" + duration + " -  " + breakTime + ")" + "x" + nbRetry) );
 
-        opt.value = duration + "," + breakTime + "," + nbRetry; // set value property of opt
-        var listEx = document.getElementById('list-ex');
+        var transaction = db.transaction(["sessions"],"readwrite");
+        var store = transaction.objectStore("sessions");
 
-        listEx.appendChild(opt);
-
-        var transaction = db.transaction(["chronos"],"readwrite");
-        var store = transaction.objectStore("chronos");
-        
-        //Define a new chronosRecord
-        var chronosRecord = {
-            name: nameEx,
-            duration: duration,
-            breakTime: breakTime,
-            nbRetry: nbRetry,
-            desc: descEx,
-            created:new Date()
+        if (id == -1) {
+            //Define a new sessionRecord
+            var sessionRecord = {
+                name: nameSes,
+                desc: descSes,
+                created:new Date()
+            }
+            
+            var request = store.add(sessionRecord);
+            
+            request.onerror = function(e) {
+                console.log("Error SportsTimer", e.target.error.name);
+            }
+            
+            request.onsuccess = function(event) {
+                displayListSessions();
+            }
+        } else {
+            var sessionRecord = {
+                name: nameSes,
+                desc: descSes,
+                created:new Date(),
+                idSession : id
+            }
+            
+            var request = store.put(sessionRecord);
+            
+            request.onerror = function(e) {
+                console.log("Error SportsTimer", e.target.error.name);
+            }
+            
+            request.onsuccess = function(event) {
+                displayListSessions();
+            }
         }
-        
-        var request = store.add(chronosRecord);
- 
-        request.onerror = function(e) {
-            console.log("Error chronos", e.target.error.name);
-        }
-        
-        request.onsuccess = function(event) {
-            console.log("sequence add");
-            displayListUpdateExercise();
-        }
-  
-        document.querySelector('#addExercise').className = 'right';
-        document.querySelector('#listExercise').className = 'current';
+        document.querySelector('#updSession').className = 'right';
+        document.querySelector('#listSessions').className = 'current';
     } catch(e) {
         console.log(e);
     }
 } 
+
+/**
+ * Display the list of Sessions.
+*/
+function displayListSessions() {
+    var objectStore = db.transaction("sessions").objectStore("sessions");
+    var listSes = document.getElementById("list-items-ses");
+    
+    // remove all element in the list.
+	while (listSes.firstChild) {
+        listSes.removeChild(listSes.firstChild);
+    }
+
+    objectStore.openCursor().onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+            addSession(listSes, cursor);
+            cursor.continue();
+        }
+        else {
+            // alert("No more entries!");
+        }
+    };
+}
+
+/**
+ * Add an Session to the list.
+*/ 
+function addSession(list, cursor) {
+    var li = document.createElement("li");
+    
+    var a = document.createElement("a");
+    a.setAttribute("id", cursor.value.idSession);
+    a.text = cursor.value.name;
+    a.href = "#";
+    
+    var checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    checkbox.name = "checkBoxEx";
+    checkbox.value = cursor.value.idSession;
+    checkbox.id = "checkBoxEx";
+    
+    var spanl = document.createElement("span");
+    var spanr = document.createElement("span");
+    
+    var label = document.createElement("label");
+    label.className = "pack-checkbox";
+    label.appendChild(checkbox);
+    var spanlbl = document.createElement("span");
+    label.appendChild(spanlbl);
+    
+    spanl.className = "leftCheckbox";
+    spanr.className = "right";
+    
+    spanl.appendChild(a);
+    spanr.appendChild(label);
+    
+    li.appendChild(spanl);
+    li.appendChild(spanr);
+    
+    list.appendChild(li);    
+}
+
+// Add Exercises to Session.
+function addExercisesToSession() {
+    document.querySelector('#listExercise').className = 'current';
+    document.querySelector('#updSession').className = 'right';
+
+    var idSession = document.getElementById('idSession');
+    console.log("addExercisesToSession " + idSession.value);
+    displayListUpdateExercise(idSession.value);
+}

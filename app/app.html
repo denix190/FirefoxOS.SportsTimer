@@ -446,7 +446,6 @@
         
          <div>
            <input type="hidden" id="idUpd" value="">
-           <!-- <button id="btn-upd-ex" data-l10n-id="idUpdateExercise" class="recommend">Update Exercise</button> -->
          </div>
 
     </article>
@@ -492,13 +491,13 @@
         </div>
 
         <div>
-           <button id="btn-del-ses" class="recommend" data-l10n-id="idDeleteSessions">Delete Sessions</button>
+           <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteSessions">Delete Sessions</button>
          </div>
       </article>
         
   </section>
 
-  <!-- Add Session -->
+  <!-- Add/Update Session -->
 
   <section role="region" id="updSession" data-position="right">
     <header class="fixed">
@@ -513,12 +512,17 @@
       <p width="100%">
         <span data-l10n-id="idNameSession">Name</span>
         <input id="nameSession" type="text" maxlength="20" required>
+        <input type="hidden" id="idSession" value="">
       </p>
 
       <p width="100%">
         <span data-l10n-id="idDescSession">Description</span>
         <textarea id="descSession"></textarea>
       </p>
+
+      <div>
+        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises">Add Exercises</button>
+      </div>
       
     </article>
   </section>
