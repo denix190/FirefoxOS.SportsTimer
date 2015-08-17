@@ -256,11 +256,13 @@
         <div>
 
           <div data-type="list">
-            <select id="list-ex">
+            <select id="list-session" onchange="changeSessionEx(event)">
             </select>
           </div>
         
           <div>
+              <select id="list-session-ex" >
+              </select>
             <div class="chronosAction" id="effortDiv">              
               <span id="chronoDisplay" >00:00</span>
             </div>
@@ -521,7 +523,7 @@
       </p>
 
       <div>
-        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises">Add Exercises</button>
+        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises">Exercises</button>
       </div>
       
     </article>

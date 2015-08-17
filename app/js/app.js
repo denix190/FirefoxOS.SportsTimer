@@ -275,7 +275,8 @@ function init() {
         DBOpenRequest.onsuccess = function(event) {
             console.log ("Database initialised.");
             db = DBOpenRequest.result;
-            displayListExercise();
+            // displayListExercise();
+            listSessions();
         };
 
         DBOpenRequest.onupgradeneeded = function(event) {
@@ -347,15 +348,6 @@ function storeEx() {
             return;
         }
         console.log("nameEx:" + nameEx +  " idSession " + idSession.value)
-        
-        var opt = document.createElement('option'); // create new option element
-        // create text node to add to option element (opt)
-        opt.appendChild( document.createTextNode(nameEx + " (" + duration + " -  " + breakTime + ")" + "x" + nbRetry) );
-
-        opt.value = duration + "," + breakTime + "," + nbRetry; // set value property of opt
-        var listEx = document.getElementById('list-ex');
-
-        listEx.appendChild(opt);
 
         var transaction = db.transaction(["exercice"],"readwrite");
         var store = transaction.objectStore("exercice");
@@ -433,8 +425,8 @@ function updateEx() {
         
         request.onsuccess = function(event) {
            console.log("updateEx ok id:" + id);
-            displayListExercise();
-            displayListUpdateExercise(1);
+            // displayListExercise();
+            displayListUpdateExercise(parseInt(idSession.value));
         }
   
         document.querySelector('#updExercise').className = 'right';
@@ -447,7 +439,7 @@ function updateEx() {
 }    
 
 /**
-* Initialize the list of sequences.
+* Initialize the list of Exercises.
 */
 function displayListExercise() {
     loadParameters(1);
@@ -482,7 +474,7 @@ function displayListExercise() {
                     + "," + cursor.value.breakTime
                     + "," + cursor.value.nbRetry;
                 listEx.appendChild(opt);
-                
+                console.log("id " + cursor.value.id + " idSession " + cursor.value.idSession);
                 cursor.continue();
             }
             else {
@@ -508,16 +500,22 @@ function displayListUpdateExercise(idSession) {
     }
 
     var index = objectStore.index("BySession");
-    var request = index.openCursor(IDBKeyRange.only(idSession));
+    var id = parseInt(idSession);
+    var request = index.openCursor(IDBKeyRange.only(id));
     
     request.onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-            addExercise(listEx, cursor);
-            cursor.continue();
-        }
-        else {
-            // alert("No more entries!");
+        try {
+            var cursor = event.target.result;
+            if (cursor) {
+                console.log("=> addExercise");
+                addExercise(listEx, cursor);
+                cursor.continue();
+            }
+            else {
+                // alert("No more entries!");
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
 
@@ -589,9 +587,8 @@ function startEx() {
         nbRetryCounter = 1;
         typeCounter = STATE_EX_EFFORT;
         
-        var listEx = document.getElementById('list-ex');
-        listEx.selectedIndex;
-        
+        var listEx = document.getElementById('list-session-ex');
+
         var x = listEx.selectedIndex;
         var y = listEx.options[0];
         var sequence;
@@ -927,6 +924,98 @@ function updateSession() {
         console.log(e);
     }
 } 
+
+function listSessions() {
+    var objectStore = db.transaction("sessions").objectStore("sessions");
+    var listSes = document.getElementById("list-session");
+    
+    // remove all element in the list.
+	while (listSes.firstChild) {
+        listSes.removeChild(listSes.firstChild);
+    }
+
+    objectStore.openCursor().onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            var opt = document.createElement('option');
+                
+            opt.appendChild(
+                document.createTextNode(cursor.value.name));
+                
+            opt.value = cursor.value.idSession;
+            
+            listSes.appendChild(opt);
+            console.log("id " + cursor.value.id + " idSession " + cursor.value.idSession);
+            cursor.continue();
+        }
+        else {
+            // alert("No more entries!");
+        }
+    };
+}
+
+function changeSessionEx(event) {
+    console.log(event);
+    var listEx = document.getElementById('list-session');
+    var x = listEx.selectedIndex;
+    var y = listEx.options[0];
+    var sequence;
+    sequence = listEx.options[x].value;
+    console.log("sequence" + sequence);
+    listSessionEx(sequence);
+}
+
+function listSessionEx(idSession) {
+    
+    console.log("listSessionEx idSession: " + idSession);
+    var objectStore = db.transaction("exercice").objectStore("exercice");
+    var listEx = document.getElementById("list-session-ex");
+    
+    // remove all element in the list.
+	while (listEx.firstChild) {
+        listEx.removeChild(listEx.firstChild);
+    }
+
+    var index = objectStore.index("BySession");
+    var id = parseInt(idSession);
+    var request = index.openCursor(IDBKeyRange.only(id));
+    
+    request.onsuccess = function(event) {
+        try {
+            var cursor = event.target.result;
+            if (cursor) {
+                console.log("=> addExercise");
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+                var opt = document.createElement('option');
+                
+                opt.appendChild(
+                    document.createTextNode(cursor.value.name
+                                            + " (" + cursor.value.duration
+                                            + " -  " + cursor.value.breakTime + ")"
+                                            + "*" + cursor.value.nbRetry) );
+                
+                opt.value = cursor.value.duration
+                    + "," + cursor.value.breakTime
+                    + "," + cursor.value.nbRetry;
+                listEx.appendChild(opt);
+                console.log("id " + cursor.value.id + " idSession " + cursor.value.idSession);
+                cursor.continue();
+            }
+            else {
+                // alert("No more entries!");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    request.onerror = function(e) {
+        console.log("listExercise ", e);
+    }
+}
 
 /**
  * Display the list of Sessions.
