@@ -369,6 +369,7 @@ function storeEx() {
         request.onsuccess = function(event) {
             console.log("sequence add");
             displayListUpdateExercise(parseInt(idSession.value));
+            // dataChange(parseInt(idSession.value));
         }
   
         document.querySelector('#addExercise').className = 'right';
@@ -916,7 +917,9 @@ function displaySession() {
     displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
 }
 
-
+/**
+ * Update session.
+ */
 function updateSession() {
     try {
 
@@ -952,6 +955,7 @@ function updateSession() {
             
             request.onsuccess = function(event) {
                 displayListSessions();
+                listSessions();
             }
         } else {
             var sessionRecord = {
@@ -1212,4 +1216,14 @@ function dataChange(idSession) {
     listSessions();
     displayListUpdateExercise(idSession);
     displayListSessions();
+
+    var listEx = document.getElementById('list-session');
+    var x = listEx.selectedIndex;
+    var y = listEx.options[0];
+    var sequence;
+    sequence = listEx.options[x].value;
+
+    if (idSession == sequence) {
+        listSessionEx(sequence);
+    }
 }
