@@ -42,24 +42,15 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
     document.querySelector('#listExercise').className = 'current';
 });
 
-// Display the panel updating Exercises.
-document.querySelector('#btn-go-list-ex').addEventListener('click', function () {
-
-    document.querySelector('#listExercise').className = 'current';
-    document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateExercise(1);
-});
-
 document.querySelector('#btn-go-list-ex-back').addEventListener('click', function () {
-  document.querySelector('#listExercise').className = 'right';
-  document.querySelector('[data-position="current"]').className = 'current';
+    document.querySelector('#listExercise').className = 'right';
+    document.querySelector('#updSession').className = 'current';
 });
 
 
 document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
     document.querySelector('#updExercise').className = 'right';
     document.querySelector('#listExercise').className = 'current';
-    // document.querySelector('[data-position="current"]').className = 'current';
 });
 
 
@@ -86,14 +77,14 @@ document.querySelector('#btn-go-upd-session-back').addEventListener('click', fun
 document.querySelector('#btn-go-param-ex').addEventListener('click', function () {
     document.querySelector('#pnl_parameters').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateExercise(1);
+    // displayListUpdateExercise(1);
 });
 
 // Display the panel About.
 document.querySelector('#btn-go-about-ex').addEventListener('click', function () {
     document.querySelector('#pnl_about').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    displayListUpdateExercise(1);
+    // displayListUpdateExercise(1);
 });
 
 // Hide panel About
@@ -120,6 +111,8 @@ document.querySelector('#btn-go-sessions-back').addEventListener('click', functi
 // Button Event.
 
 // Exercise
+document.querySelector('#btn-previous-ex').addEventListener('click', previousEx);
+document.querySelector('#btn-next-ex').addEventListener('click', nextEx);
 document.querySelector('#btn-start-ex').addEventListener('click', startEx);
 document.querySelector('#btn-pause-ex').addEventListener('click', pauseEx);
 document.querySelector('#btn-cancel-ex').addEventListener('click', cancelEx);
@@ -144,6 +137,8 @@ document.querySelector('#btn-upd-session').addEventListener('click', updateSessi
 
 // Configuration Exercises to Session
 document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesToSession);
+
+document.querySelector('#btn-del-ses').addEventListener('click', deleteSessions);
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
@@ -424,14 +419,11 @@ function updateEx() {
         }
         
         request.onsuccess = function(event) {
-           console.log("updateEx ok id:" + id);
-            // displayListExercise();
             displayListUpdateExercise(parseInt(idSession.value));
         }
   
         document.querySelector('#updExercise').className = 'right';
         document.querySelector('#listExercise').className = 'current';
-        // document.querySelector('[data-position="current"]').className = 'current';
 
     } catch(e) {
         console.log(e);
@@ -453,10 +445,9 @@ function displayListExercise() {
 	    while (listEx.firstChild) {
             listEx.removeChild(listEx.firstChild);
         }
-        
-        // var request = index.openCursor(IDBKeyRange.only(name));
+
         var request = index.openCursor(null, 'next');
-        // objectStore.openCursor().onsuccess = function(event) {
+
         request.onsuccess = function(event) {
             var cursor = event.target.result;
             if (cursor) {
@@ -507,7 +498,6 @@ function displayListUpdateExercise(idSession) {
         try {
             var cursor = event.target.result;
             if (cursor) {
-                console.log("=> addExercise");
                 addExercise(listEx, cursor);
                 cursor.continue();
             }
@@ -577,6 +567,26 @@ function pauseEx() {
             typeCounter = typeCounterPause;
         }
     }
+}
+
+function previousEx() {
+    var listEx = document.getElementById('list-session-ex');
+    var x = listEx.selectedIndex;
+
+    if (x > 0 ) {
+        listEx.selectedIndex = x - 1;
+    }
+}
+
+function nextEx() {
+    var listEx = document.getElementById('list-session-ex');
+    
+    var x = listEx.selectedIndex;
+
+    if ((x+1) < listEx.childElementCount ) {
+        listEx.selectedIndex = x + 1;
+    }
+
 }
 
 function startEx() {
@@ -740,9 +750,10 @@ function deleteExercises() {
                 var request = store.delete(parseInt(chk[i].value)); 
             }
         }
+        listSessions();
+        var idSession = document.getElementById('idSession');
         
-        displayListUpdateExercise(1);
-        displayListExercise();
+        displayListUpdateExercise(parseInt(idSession.value));
     }
 }
 
@@ -925,6 +936,9 @@ function updateSession() {
     }
 } 
 
+/**
+ * Load the list of sessions for the main page.
+ */ 
 function listSessions() {
     var objectStore = db.transaction("sessions").objectStore("sessions");
     var listSes = document.getElementById("list-session");
@@ -947,26 +961,30 @@ function listSessions() {
             opt.value = cursor.value.idSession;
             
             listSes.appendChild(opt);
-            console.log("id " + cursor.value.id + " idSession " + cursor.value.idSession);
+            console.log("idSession " + cursor.value.idSession);
             cursor.continue();
         }
         else {
-            // alert("No more entries!");
+            // Initialize the list of Exercises for the first Session.
+            changeSessionEx(null);
         }
     };
 }
 
 function changeSessionEx(event) {
-    console.log(event);
+
     var listEx = document.getElementById('list-session');
     var x = listEx.selectedIndex;
     var y = listEx.options[0];
     var sequence;
     sequence = listEx.options[x].value;
-    console.log("sequence" + sequence);
     listSessionEx(sequence);
 }
 
+
+/** 
+ * Load the list of exercise for a Session 
+*/ 
 function listSessionEx(idSession) {
     
     console.log("listSessionEx idSession: " + idSession);
@@ -986,7 +1004,6 @@ function listSessionEx(idSession) {
         try {
             var cursor = event.target.result;
             if (cursor) {
-                console.log("=> addExercise");
                 var li = document.createElement("li");
                 var a = document.createElement("a");
                 var opt = document.createElement('option');
@@ -995,13 +1012,12 @@ function listSessionEx(idSession) {
                     document.createTextNode(cursor.value.name
                                             + " (" + cursor.value.duration
                                             + " -  " + cursor.value.breakTime + ")"
-                                            + "*" + cursor.value.nbRetry) );
+                                            + "x" + cursor.value.nbRetry) );
                 
                 opt.value = cursor.value.duration
                     + "," + cursor.value.breakTime
                     + "," + cursor.value.nbRetry;
                 listEx.appendChild(opt);
-                console.log("id " + cursor.value.id + " idSession " + cursor.value.idSession);
                 cursor.continue();
             }
             else {
@@ -1087,4 +1103,60 @@ function addExercisesToSession() {
     var idSession = document.getElementById('idSession');
     console.log("addExercisesToSession " + idSession.value);
     displayListUpdateExercise(idSession.value);
+}
+
+function deleteSessions() {
+    if (window.confirm(navigator.mozL10n.get("confirmDeleteSession"))) { 
+        var list = document.getElementById('list-items-ses');
+        var chk = list.getElementsByTagName('input');
+
+        // Delete exercices for the session.
+        for (var i = 0; i  < chk.length;i++) {
+            if (chk[i].checked == true) {
+                deleteExercisesBySession(parseInt(chk[i].value));
+            }
+        }
+        
+        var transaction = db.transaction(["sessions"],"readwrite");
+        var store = transaction.objectStore("sessions");
+        try {
+            for (var i = 0; i  < chk.length;i++) {
+                if (chk[i].checked == true) {
+                    console.log("Delete session " + parseInt(chk[i].value));
+                    var request = store.delete(parseInt(chk[i].value)); 
+                }
+            }
+        } catch(e) {
+            console.log("Delete Error" + e); 
+        }
+        listSessions();
+        displayListSessions();
+    }
+}
+
+function deleteExercisesBySession(idSession) {
+    var objectStore = db.transaction("exercice","readwrite").objectStore("exercice");    
+    console.debug("Delete idSession" + idSession);
+
+    var index = objectStore.index("BySession");
+    var pItem = index.openCursor(IDBKeyRange.only(idSession)); 
+    
+    pItem.onsuccess = function() {
+        try {
+            var cursor = pItem.result;
+            if (cursor) {
+                console.log(cursor.value.items);
+                cursor.delete();
+                cursor.continue();
+            } else {
+               // deleteRss(url);
+            }
+        }  catch (e) {
+                console.log(e);
+            }
+    }
+
+    pItem.onerror = function() {
+        console.lg("Deletion Exercice");
+    }
 }
