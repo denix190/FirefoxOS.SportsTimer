@@ -8,9 +8,10 @@ const dbName = "exerciceData";
 const dbVersion = 20;
 
 var note = null;
+var lock = null;
 
 var db;
-var timer;
+// var timer;
 
 var durationCounter;
 var breakTimeCounter;
@@ -30,6 +31,7 @@ var breakTimeDisplay = document.getElementById('breakTimeDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
 var session = new Session();
+var chronos = new Chronos();
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -270,7 +272,6 @@ function init() {
         DBOpenRequest.onsuccess = function(event) {
             console.log ("Database initialised.");
             db = DBOpenRequest.result;
-            // displayListExercise();
             listSessions();
         };
 
@@ -555,15 +556,22 @@ function addExercise(list, cursor) {
     list.appendChild(li);    
 }
 
+
+
+
 function pauseEx() {
 
     if (flagStart) {
         if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
             typeCounterPause = typeCounter;
             typeCounter = STATE_EX_PAUSE;
-            timer = window.clearInterval(timer);
+            chronos.stop();
+            // timer = window.clearInterval(timer);
+            // lock.unlock();
         } else  {
-            timer = window.setInterval(display, 1000);
+            chronos.start();
+            // timer = window.setInterval(display, 1000);
+            // lock = window.navigator.requestWakeLock("screen");
             typeCounter = typeCounterPause;
         }
     }
@@ -611,14 +619,17 @@ function startEx() {
         nbRetryEx = parseInt(res[2]);
         
         var effortDiv = document.getElementById('effortDiv');
-        // effortDiv.style.backgroundColor = 'black';
         effortDiv.style.color = '#F97C17';
         
-        timer = window.setInterval(display, 1000);
+        // timer = window.setInterval(display, 1000);
+        // lock = window.navigator.requestWakeLock('screen');
+        chronos.start();
         flagStart = true;
     } else {
         if (typeCounter == STATE_EX_PAUSE) {
-            timer = window.setInterval(display, 1000);
+            chronos.start();
+            // timer = window.setInterval(display, 1000);
+            // lock = window.navigator.requestWakeLock('screen');
             typeCounter = typeCounterPause;
         }
     }
@@ -641,8 +652,10 @@ function display() {
         playSound('finalSound');
 
         endExercise();
-        timer = window.clearInterval(timer);
-
+        chronos.stop();
+        
+        // timer = window.clearInterval(timer);
+        // lock.unlock();
         try {   
             window.navigator.vibrate(1000);
         } catch(e) {
@@ -724,8 +737,10 @@ function endExercise() {
 }
 
 function cancelEx() {
-    timer = window.clearInterval(timer);
-
+    // timer = window.clearInterval(timer);
+    // lock.unlock();
+    chronos.stop();
+    
     chronoDisplay.textContent = "00:00";
     breakTimeDisplay.textContent = "00:00";
     nbRetryDisplay.textContent = "0/0";
@@ -750,10 +765,11 @@ function deleteExercises() {
                 var request = store.delete(parseInt(chk[i].value)); 
             }
         }
-        listSessions();
         var idSession = document.getElementById('idSession');
         
-        displayListUpdateExercise(parseInt(idSession.value));
+        dataChange(parseInt(idSession.value));
+        // listSessions();
+        // displayListUpdateExercise(parseInt(idSession.value));
     }
 }
 
@@ -809,6 +825,32 @@ function loadParameters(id) {
         }
 
     } catch(e) {
+        console.log(e);
+    }
+}
+
+/**
+ * 
+*/
+function Chronos() {
+    this.timer;
+    this.lock;
+}
+
+Chronos.prototype.start = function() {
+    this.timer = window.setInterval(display, 1000);
+    this.lock = window.navigator.requestWakeLock("screen");
+}
+
+Chronos.prototype.stop = function() {
+    this.timer = window.clearInterval(this.timer);
+    try {
+        if (this.lock !== null && this.lock !== undefined ) {
+            this.lock.unlock();
+        }
+    } catch (e) {
+        //TODO To delete.
+        alert(e);
         console.log(e);
     }
 }
@@ -926,7 +968,9 @@ function updateSession() {
             }
             
             request.onsuccess = function(event) {
-                displayListSessions();
+                // displayListSessions();
+                //listSessions();
+                dataChange(id);
             }
         }
         document.querySelector('#updSession').className = 'right';
@@ -1091,7 +1135,7 @@ function addSession(list, cursor) {
     
     li.appendChild(spanl);
     li.appendChild(spanr);
-    
+
     list.appendChild(li);    
 }
 
@@ -1149,14 +1193,23 @@ function deleteExercisesBySession(idSession) {
                 cursor.delete();
                 cursor.continue();
             } else {
-               // deleteRss(url);
+               // 
             }
         }  catch (e) {
                 console.log(e);
-            }
+        }
     }
 
     pItem.onerror = function() {
         console.lg("Deletion Exercice");
     }
+}
+
+/**
+ * 
+*/
+function dataChange(idSession) {
+    listSessions();
+    displayListUpdateExercise(idSession);
+    displayListSessions();
 }
