@@ -11,7 +11,6 @@ var note = null;
 var lock = null;
 
 var db;
-// var timer;
 
 var durationCounter;
 var breakTimeCounter;
@@ -35,6 +34,13 @@ var chronos = new Chronos();
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
+
+    document.getElementById('nameEx').value = "";
+    document.getElementById('nbRetry').value = "1";
+    document.getElementById('descEx').value = "";
+    document.getElementById('duration').value = "60";
+    document.getElementById('breakTime').value = "60";
+    
     document.querySelector('#addExercise').className = 'current';
     document.querySelector('#listExercise').className = 'right';
 });
@@ -66,6 +72,14 @@ document.querySelector('#btn-go-params-ex-back').addEventListener('click', funct
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
     var idSession = document.getElementById('idSession');
     idSession.value = "-1";
+
+    // Desactivate the button "AddExercises"
+    var btnAddExercises = document.getElementById('btn-add-sesEx');
+    btnAddExercises.disabled = true;
+
+    document.getElementById('nameSession').value = "";
+    document.getElementById('descSession').value = "";
+    
     document.querySelector('#updSession').className = 'current';
     document.querySelector('#listSessions').className = 'right';
 });
@@ -79,14 +93,12 @@ document.querySelector('#btn-go-upd-session-back').addEventListener('click', fun
 document.querySelector('#btn-go-param-ex').addEventListener('click', function () {
     document.querySelector('#pnl_parameters').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    // displayListUpdateExercise(1);
 });
 
 // Display the panel About.
 document.querySelector('#btn-go-about-ex').addEventListener('click', function () {
     document.querySelector('#pnl_about').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
-    // displayListUpdateExercise(1);
 });
 
 // Hide panel About
@@ -160,7 +172,6 @@ function checkSoundHandler(event) {
 }
     
 listItemEx.onclick = function(e) {
-    
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
@@ -208,8 +219,11 @@ listItemEx.onclick = function(e) {
     }
 }
 
+/**
+ * Select a session and display.
+ */
 listItemSes.onclick = function(e) {
-    
+    document.getElementById('btn-add-sesEx').disabled = false;
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
@@ -368,8 +382,8 @@ function storeEx() {
         
         request.onsuccess = function(event) {
             console.log("sequence add");
-            displayListUpdateExercise(parseInt(idSession.value));
-            // dataChange(parseInt(idSession.value));
+            // displayListUpdateExercise(parseInt(idSession.value));
+            dataChange(parseInt(idSession.value));
         }
   
         document.querySelector('#addExercise').className = 'right';
@@ -609,23 +623,24 @@ function startEx() {
         var listEx = document.getElementById('list-session-ex');
 
         var x = listEx.selectedIndex;
-        var y = listEx.options[0];
-        var sequence;
-        sequence = listEx.options[x].value;
+        if (x != -1) {
+            var sequence;
+            sequence = listEx.options[x].value;
         
-        var res = sequence.split(",");
+            var res = sequence.split(",");
         
-        durationEx = parseInt(res[0]) + 1;
-        breakTimeEx = parseInt(res[1]);
-        nbRetryEx = parseInt(res[2]);
-        
-        var effortDiv = document.getElementById('effortDiv');
-        effortDiv.style.color = '#F97C17';
-        
-        // timer = window.setInterval(display, 1000);
-        // lock = window.navigator.requestWakeLock('screen');
-        chronos.start();
-        flagStart = true;
+            durationEx = parseInt(res[0]) + 1;
+            breakTimeEx = parseInt(res[1]);
+            nbRetryEx = parseInt(res[2]);
+            
+            var effortDiv = document.getElementById('effortDiv');
+            effortDiv.style.color = '#F97C17';
+            
+            // timer = window.setInterval(display, 1000);
+            // lock = window.navigator.requestWakeLock('screen');
+            chronos.start();
+            flagStart = true;
+        }
     } else {
         if (typeCounter == STATE_EX_PAUSE) {
             chronos.start();
@@ -954,6 +969,10 @@ function updateSession() {
             }
             
             request.onsuccess = function(event) {
+                document.getElementById('idSession').value = event.target.result;
+
+                document.getElementById('btn-add-sesEx').disabled = false;
+
                 displayListSessions();
                 listSessions();
             }
@@ -976,9 +995,10 @@ function updateSession() {
                 //listSessions();
                 dataChange(id);
             }
+            document.querySelector('#updSession').className = 'right';
+            document.querySelector('#listSessions').className = 'current';
         }
-        document.querySelector('#updSession').className = 'right';
-        document.querySelector('#listSessions').className = 'current';
+    
     } catch(e) {
         console.log(e);
     }
@@ -1023,10 +1043,9 @@ function changeSessionEx(event) {
 
     var listEx = document.getElementById('list-session');
     var x = listEx.selectedIndex;
-    var y = listEx.options[0];
-    var sequence;
-    sequence = listEx.options[x].value;
-    listSessionEx(sequence);
+    if (x != -1) {
+        listSessionEx(listEx.options[x].value);
+    }
 }
 
 
@@ -1219,11 +1238,12 @@ function dataChange(idSession) {
 
     var listEx = document.getElementById('list-session');
     var x = listEx.selectedIndex;
-    var y = listEx.options[0];
-    var sequence;
-    sequence = listEx.options[x].value;
-
-    if (idSession == sequence) {
-        listSessionEx(sequence);
+    if (x != -1) { 
+        var sequence;
+        sequence = listEx.options[x].value;
+        
+        if (idSession == sequence) {
+            listSessionEx(sequence);
+        }
     }
 }

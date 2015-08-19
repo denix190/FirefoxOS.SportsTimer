@@ -197,9 +197,9 @@ ul, ol, li {
 
 div.footer {
   align-content: center;
-  width:98%;
+  width:100%;
   position: absolute;
-  bottom: 0; 
+  /* bottom: 0;  */
 }
 
 .pack-switch, .denix {
@@ -214,7 +214,8 @@ div.footer {
 .leftCheckbox {
     float: left;
     margin-left: 5px;
-   margin-top:6px;
+    margin-top:6px;
+    width:75%
 }
 
 .left {
