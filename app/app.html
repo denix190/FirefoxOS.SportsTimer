@@ -301,7 +301,7 @@
             <div class="magneto">
               <div style="width:45%;float:left;">
                 <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
-                <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;">00:00</span>
+                <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
               </div>
               <div style="width:55%; float:right;">
                 <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
@@ -329,8 +329,7 @@
     </header>
     <article class="content scrollable header">
       <p width="100%">
-        <span data-l10n-id="idNameExercise">Name</span>
-        <input id="nameEx" type="text" maxlength="20" required>
+        <input id="nameEx" type="text" maxlength="20" data-l10n-id="nameEx-id"  placeholder="Name" required>
       </p>
 
       <p width="100%">
@@ -380,8 +379,7 @@
         </p>
 
         <p width="100%">
-          <span data-l10n-id="idDescExercise">Description</span>
-          <textarea id="descEx"></textarea>
+          <textarea id="descEx" data-l10n-id="descEx-id"></textarea>
         </p>
 
     </article>
@@ -399,8 +397,7 @@
     </header>
     <article class="content scrollable header">
       <p>
-        <span data-l10n-id="idNameExercise">Name:</span>
-        <input id="nameExUpd" type="text" maxlength="20" required>
+        <input id="nameExUpd" type="text" maxlength="20" data-l10n-id="nameEx-id"  placeholder="Name" required>
       </p>
       <p>
         <span data-l10n-id="idEffortTime">Effort time</span> 
@@ -447,8 +444,7 @@
         </p>
 
        <p width="100%">
-          <span data-l10n-id="idDescExercise">Description</span>
-          <textarea id="descExUpd"></textarea>
+          <textarea id="descExUpd" data-l10n-id="descEx-id"></textarea>
         </p>
         
          <div>
@@ -520,18 +516,16 @@
     </header>
     <article class="content scrollable header">
       <p width="100%">
-        <span data-l10n-id="idNameSession">Name</span>
-        <input id="nameSession" type="text" maxlength="20" required>
+        <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required>
         <input type="hidden" id="idSession" value="">
       </p>
 
       <p width="100%">
-        <span data-l10n-id="idDescSession">Description</span>
-        <textarea id="descSession"></textarea>
+        <textarea id="descSession" data-l10n-id="idDescSession" placeholder=""></textarea>
       </p>
 
       <div>
-        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises">Exercises</button>
+        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises" >Exercises</button>
       </div>
       
     </article>
