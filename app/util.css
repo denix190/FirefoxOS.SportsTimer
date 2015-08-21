@@ -211,8 +211,8 @@ div.footer {
      font-size: 2rem;
 }
 
-.leftCheckbox {
-    float: left;
+.rightCheckbox {
+    float: right;
     margin-left: 5px;
     margin-top:6px;
     width:75%
