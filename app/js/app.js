@@ -559,11 +559,11 @@ function addExercise(list, cursor) {
     var spanlbl = document.createElement("span");
     label.appendChild(spanlbl);
     
-    spanl.className = "leftCheckbox";
-    spanr.className = "right";
+    spanr.className = "rightCheckbox";
+    spanl.className = "left";
     
-    spanl.appendChild(a);
-    spanr.appendChild(label);
+    spanl.appendChild(label);
+    spanr.appendChild(a);
     
     li.appendChild(spanl);
     li.appendChild(spanr);
@@ -1150,8 +1150,8 @@ function addSession(list, cursor) {
     var spanlbl = document.createElement("span");
     label.appendChild(spanlbl);
     
-    spanl.className = "leftCheckbox";
-    spanr.className = "right";
+    spanl.className = "rightCheckbox";
+    spanr.className = "left";
     
     spanl.appendChild(a);
     spanr.appendChild(label);
