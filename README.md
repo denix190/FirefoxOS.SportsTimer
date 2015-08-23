@@ -3,7 +3,7 @@ Sports Timer is a application for Workout Timer / Training Timer for Firefox OS.
 
 ## Screenshots
     
-![screenshot1](http://denix190.github.io/FirefoxOS.SportsTimer/main.png "First screen")
+![screenshot1](http://denix190.github.io/FirefoxOS.SportsTimer/v1.1/main.png "First screen")
 
 localization
 ------------
@@ -13,6 +13,7 @@ translators are as follows:
 
 * English - denix190
 - French - denix190
+- Spain - Marc
 
 If you are interested in contributing to the localization of Sports Timer, have a
 look at the localizable strings in `lang/sportstimer.en-US.properties` and feel
