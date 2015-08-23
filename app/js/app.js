@@ -851,23 +851,27 @@ function loadParameters(id) {
 function Chronos() {
     this.timer;
     this.lock;
+    this.isLock;
 }
 
 Chronos.prototype.start = function() {
     this.timer = window.setInterval(display, 1000);
     this.lock = window.navigator.requestWakeLock("screen");
+    this.isLock = true;
 }
 
 Chronos.prototype.stop = function() {
     this.timer = window.clearInterval(this.timer);
     try {
-        if (this.lock !== null && this.lock !== undefined ) {
+        if (this.lock !== null && this.lock !== undefined && this.isLock == true) {
             this.lock.unlock();
+            this.isLock = false;
         }
     } catch (e) {
-        //TODO To delete.
-        alert(e);
-        console.log(e);
+        if (e.result =! 2152923147) {
+            alert(e);
+            console.log(e);
+        }
     }
 }
 
