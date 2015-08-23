@@ -168,7 +168,6 @@ init();
 function checkSoundHandler(event) {
     flagSound = event.originalTarget.checked;
     saveParameters(db, 1, flagSound);
-    console.log("flagSound :" + flagSound);
 }
     
 listItemEx.onclick = function(e) {
@@ -274,7 +273,6 @@ function init() {
         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
         window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
         // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
-        console.log("DBOpenRequest");
         // Let us open our database
         var DBOpenRequest = window.indexedDB.open(dbName, dbVersion);
 
@@ -290,14 +288,12 @@ function init() {
         };
 
         DBOpenRequest.onupgradeneeded = function(event) {
-            console.log("onupgradeneeded");
             var thisDB = event.target.result;
 
             thisDB.onerror = function(event) {
                 console.log("Error loading database" + event);
             };
 
-            console.log ("exercice");
             if (thisDB.objectStoreNames.contains("exercice")) {
                  thisDB.deleteObjectStore("exercice");
             }
@@ -310,8 +306,7 @@ function init() {
             if (!thisDB.objectStoreNames.contains("sessions")) {
                 var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
             }
-            
-        console.log ("parameters");
+ 
             if (!thisDB.objectStoreNames.contains("parameters")) {
                 var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
                 saveParameters( thisDB, 1, true);
@@ -357,7 +352,6 @@ function storeEx() {
             window.alert(navigator.mozL10n.get("idAlertNoName"));
             return;
         }
-        console.log("nameEx:" + nameEx +  " idSession " + idSession.value)
 
         var transaction = db.transaction(["exercice"],"readwrite");
         var store = transaction.objectStore("exercice");
@@ -381,8 +375,6 @@ function storeEx() {
         }
         
         request.onsuccess = function(event) {
-            console.log("sequence add");
-            // displayListUpdateExercise(parseInt(idSession.value));
             dataChange(parseInt(idSession.value));
         }
   
@@ -481,7 +473,6 @@ function displayListExercise() {
                     + "," + cursor.value.breakTime
                     + "," + cursor.value.nbRetry;
                 listEx.appendChild(opt);
-                console.log("id " + cursor.value.id + " idSession " + cursor.value.idSession);
                 cursor.continue();
             }
             else {
@@ -497,7 +488,6 @@ function displayListExercise() {
  * Display the list of exercises for update.
 */
 function displayListUpdateExercise(idSession) {
-    console.log("displayListUpdateExercise idSession: " + idSession);
     var objectStore = db.transaction("exercice").objectStore("exercice");
     var listEx = document.getElementById("list-items-ex");
     
@@ -644,8 +634,6 @@ function startEx() {
     } else {
         if (typeCounter == STATE_EX_PAUSE) {
             chronos.start();
-            // timer = window.setInterval(display, 1000);
-            // lock = window.navigator.requestWakeLock('screen');
             typeCounter = typeCounterPause;
         }
     }
@@ -669,9 +657,7 @@ function display() {
 
         endExercise();
         chronos.stop();
-        
-        // timer = window.clearInterval(timer);
-        // lock.unlock();
+
         try {   
             window.navigator.vibrate(1000);
         } catch(e) {
@@ -753,8 +739,6 @@ function endExercise() {
 }
 
 function cancelEx() {
-    // timer = window.clearInterval(timer);
-    // lock.unlock();
     chronos.stop();
     
     chronoDisplay.textContent = "00:00";
@@ -832,8 +816,6 @@ function loadParameters(id) {
                 console.log("parameters value: " + request.result.value);
                 flagSound = request.result.value;
                 var chk = document.getElementById("chk-sound");
-                console.log("chk: " + chk.checked);
-                
                 chk.checked = flagSound;
             } catch(e) {
                 console.log(e);
@@ -1033,7 +1015,6 @@ function listSessions() {
             opt.value = cursor.value.idSession;
             
             listSes.appendChild(opt);
-            console.log("idSession " + cursor.value.idSession);
             cursor.continue();
         }
         else {
@@ -1057,8 +1038,6 @@ function changeSessionEx(event) {
  * Load the list of exercise for a Session 
 */ 
 function listSessionEx(idSession) {
-    
-    console.log("listSessionEx idSession: " + idSession);
     var objectStore = db.transaction("exercice").objectStore("exercice");
     var listEx = document.getElementById("list-session-ex");
     
@@ -1172,7 +1151,6 @@ function addExercisesToSession() {
     document.querySelector('#updSession').className = 'right';
 
     var idSession = document.getElementById('idSession');
-    console.log("addExercisesToSession " + idSession.value);
     displayListUpdateExercise(idSession.value);
 }
 
@@ -1193,7 +1171,6 @@ function deleteSessions() {
         try {
             for (var i = 0; i  < chk.length;i++) {
                 if (chk[i].checked == true) {
-                    console.log("Delete session " + parseInt(chk[i].value));
                     var request = store.delete(parseInt(chk[i].value)); 
                 }
             }
@@ -1206,9 +1183,7 @@ function deleteSessions() {
 }
 
 function deleteExercisesBySession(idSession) {
-    var objectStore = db.transaction("exercice","readwrite").objectStore("exercice");    
-    console.debug("Delete idSession" + idSession);
-
+    var objectStore = db.transaction("exercice","readwrite").objectStore("exercice");
     var index = objectStore.index("BySession");
     var pItem = index.openCursor(IDBKeyRange.only(idSession)); 
     
@@ -1216,7 +1191,6 @@ function deleteExercisesBySession(idSession) {
         try {
             var cursor = pItem.result;
             if (cursor) {
-                console.log(cursor.value.items);
                 cursor.delete();
                 cursor.continue();
             } else {
