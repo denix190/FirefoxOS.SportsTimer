@@ -1237,22 +1237,19 @@ function exportSessions() {
 
                 var idSession = cursor.value.idSession;
                 console.log("cursor " + idSession);
+                var session = cursor.value;
+                session["exercices"] = new Array();
+                
                 sessions.push(cursor.value);
 
+                // sessions["exercices"] = exercices;                
                 cursor.continue();
             }
             else {
                 // End of session.
-
-                var i = 0;
-                for (i = 0; i < sessions.length; i++) {
-                    var session = sessions[i];
-                    session["exercice"] = "450";
-                }
-                var sessionJson = JSON.stringify(sessions);
-                console.log(sessionJson);
-                
-                writeSessions(sessionJson)
+                console.log("End of session");
+                exportExercise(sessions);
+                              
             }
         } catch (e) {
             console.log(e);
@@ -1265,54 +1262,48 @@ function exportSessions() {
 
 }
 
-
-
-function exportExercice(sessions) {
-
+function exportExercise(sessions) {
+    console.log("exportExercise" );
     var objectStore = db.transaction("exercice").objectStore("exercice");
    
-    var index = objectStore.index("BySession");
-    var id = parseInt(idSession);
-    var request = index.openCursor(IDBKeyRange.only(id));
-    
-    request.onsuccess = function(event) {
+    // var index = objectStore.index("BySession");
+    // var id = parseInt(idSession);
+    // var request = index.openCursor(IDBKeyRange.only(id));
+    // console.log(id);
+    // var exercices = new Array();
+
+    objectStore.openCursor().onsuccess = function(event) {
+    // request.onsuccess = function(event) {
         try {
             var cursor = event.target.result;
             if (cursor) {
-                var li = document.createElement("li");
-                var a = document.createElement("a");
-                var opt = document.createElement('option');
-                
-                opt.appendChild(
-                    document.createTextNode(cursor.value.name
-                                            + " (" + cursor.value.duration
-                                            + " -  " + cursor.value.breakTime + ")"
-                                            + "x" + cursor.value.nbRetry) );
-                
-                opt.value = cursor.value.duration
-                    + "," + cursor.value.breakTime
-                    + "," + cursor.value.nbRetry;
-                listEx.appendChild(opt);
+                console.log("cursor push");
+                // exercices.push(cursor.value);
+
                 cursor.continue();
             }
             else {
-                // alert("No more entries!");
+                var sessionJson = JSON.stringify(sessions);
+                writeSessions(sessionJson);
+
+                
+                console.log("noCursor");
+                console.log(exercices);
+                // sessions["exercices"] = exercices;
+                console.log(sessions);
             }
         } catch (e) {
             console.log(e);
         }
     };
 
-    request.onerror = function(e) {
-        console.log("listExercise ", e);
-    }
+    // request.onerror = function(e) {
+    //     console.log("listExercise ", e);
+    // }
 }
-    
-}
-
 
 function writeSessions(sessions) {
-
+    console.log("writeSessions");
     var date = new Date(Date.now());
 
     var sdcard = navigator.getDeviceStorage("sdcard");
