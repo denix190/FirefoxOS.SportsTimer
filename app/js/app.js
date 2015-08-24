@@ -154,6 +154,8 @@ document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesT
 
 document.querySelector('#btn-del-ses').addEventListener('click', deleteSessions);
 
+document.querySelector('#btn-go-export').addEventListener('click', exportSessions);
+
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
 
@@ -768,8 +770,6 @@ function deleteExercises() {
         var idSession = document.getElementById('idSession');
         
         dataChange(parseInt(idSession.value));
-        // listSessions();
-        // displayListUpdateExercise(parseInt(idSession.value));
     }
 }
 
@@ -1224,4 +1224,140 @@ function dataChange(idSession) {
             listSessionEx(sequence);
         }
     }
+}
+
+function exportSessions() {
+    var objectStore = db.transaction("sessions").objectStore("sessions");
+    var sessions = new Array();
+    
+    objectStore.openCursor().onsuccess = function(event) {
+        try {
+            var cursor = event.target.result;
+            if (cursor) {
+
+                var idSession = cursor.value.idSession;
+                console.log("cursor " + idSession);
+                sessions.push(cursor.value);
+
+                cursor.continue();
+            }
+            else {
+                // End of session.
+
+                var i = 0;
+                for (i = 0; i < sessions.length; i++) {
+                    var session = sessions[i];
+                    session["exercice"] = "450";
+                }
+                var sessionJson = JSON.stringify(sessions);
+                console.log(sessionJson);
+                
+                writeSessions(sessionJson)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    objectStore.openCursor().onerror = function() {
+        console.lg("exportSessions Error");
+    }
+
+}
+
+
+
+function exportExercice(sessions) {
+
+    var objectStore = db.transaction("exercice").objectStore("exercice");
+   
+    var index = objectStore.index("BySession");
+    var id = parseInt(idSession);
+    var request = index.openCursor(IDBKeyRange.only(id));
+    
+    request.onsuccess = function(event) {
+        try {
+            var cursor = event.target.result;
+            if (cursor) {
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+                var opt = document.createElement('option');
+                
+                opt.appendChild(
+                    document.createTextNode(cursor.value.name
+                                            + " (" + cursor.value.duration
+                                            + " -  " + cursor.value.breakTime + ")"
+                                            + "x" + cursor.value.nbRetry) );
+                
+                opt.value = cursor.value.duration
+                    + "," + cursor.value.breakTime
+                    + "," + cursor.value.nbRetry;
+                listEx.appendChild(opt);
+                cursor.continue();
+            }
+            else {
+                // alert("No more entries!");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    request.onerror = function(e) {
+        console.log("listExercise ", e);
+    }
+}
+    
+}
+
+
+function writeSessions(sessions) {
+
+    var date = new Date(Date.now());
+
+    var sdcard = navigator.getDeviceStorage("sdcard");
+    var file   = new Blob([sessions], {type: "text/plain"});
+    
+    var request = sdcard.addNamed(file, "sportstimer-" + date.toISOString() + ".txt");
+
+    request.onsuccess = function () {
+        var name = this.result;
+        window.alert('File "' + name + '" successfully wrote on the sdcard storage area');
+        console.log('File "' + name + '" successfully wrote on the sdcard storage area');
+    }
+    
+    // An error typically occur if a file with the same name already exist
+    request.onerror = function () {
+        console.warn('Unable to write the file: ' + this.error);
+        window.alert('Unable to write the file: ' + this.error);
+    }
+    
+    // listContents('sdcard');
+}
+
+function listContents(storagename) {
+
+    var done = false;
+	//Clear up the list first
+	// $('#results').html("");
+	var files = navigator.getDeviceStorage(storagename);
+    
+	var cursor = files.enumerate();
+    
+	cursor.onsuccess = function () {
+
+		var file = this.result;
+		if (file != null) {
+			console.log( window.URL.createObjectURL(file)
+			             + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
+			done = false;
+		}
+		else {
+			done = true;
+		}
+        
+		if (!done) {
+			cursor.continue();
+		}
+	}
 }

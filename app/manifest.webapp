@@ -6,11 +6,13 @@
     "128": "/images/app_timer_128.png",
     "60": "/images/app_timer_60.png"
   },
-  "version": "1.1",
+  "version": "1.2",
   "developer": {
     "name": "Denis Minier",
-    "url": "http://denix190.github.io/FirefoxOS.SportsTimer"
+    "url": "http://ta152-h1-hp"
   },
  
   "default_locale": "en"
+
+  
 }
