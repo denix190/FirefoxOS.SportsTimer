@@ -1,16 +1,7 @@
 'use strict';
 
-// Constantes.
-const STATE_EX_EFFORT = 1;
-const STATE_EX_RECOVERY = 2;
-const STATE_EX_PAUSE = 3;
-const dbName = "exerciceData";
-const dbVersion = 20;
-
 var note = null;
 var lock = null;
-
-var db;
 
 var durationCounter;
 var breakTimeCounter;
@@ -62,11 +53,6 @@ document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function
 });
 
 
-document.querySelector('#btn-go-params-ex-back').addEventListener('click', function () {
-   document.querySelector('#pnl_parameters').className = 'right';
-   document.querySelector('[data-position="current"]').className = 'current';
-});
-
 
 // Display the panel updating a Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
@@ -93,6 +79,34 @@ document.querySelector('#btn-go-upd-session-back').addEventListener('click', fun
 document.querySelector('#btn-go-param-ex').addEventListener('click', function () {
     document.querySelector('#pnl_parameters').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#btn-go-params-ex-back').addEventListener('click', function () {
+   document.querySelector('#pnl_parameters').className = 'right';
+   document.querySelector('[data-position="current"]').className = 'current';
+});
+
+// Export
+document.querySelector('#btn-go-export').addEventListener('click', function () {
+    document.querySelector('#pnl_export').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#btn-go-export-back').addEventListener('click', function () {
+   document.querySelector('#pnl_export').className = 'right';
+   document.querySelector('[data-position="current"]').className = 'current';
+});
+
+// Import
+document.querySelector('#btn-go-import').addEventListener('click', function () {
+    listContents('sdcard'); 
+    document.querySelector('#pnl_import').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#btn-go-import-back').addEventListener('click', function () {
+   document.querySelector('#pnl_import').className = 'right';
+   document.querySelector('[data-position="current"]').className = 'current';
 });
 
 // Display the panel About.
@@ -154,7 +168,9 @@ document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesT
 
 document.querySelector('#btn-del-ses').addEventListener('click', deleteSessions);
 
-document.querySelector('#btn-go-export').addEventListener('click', exportSessions);
+document.querySelector('#btn-export').addEventListener('click', exportSessions);
+
+document.querySelector('#btn-import').addEventListener('click', importSessions);
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
@@ -162,7 +178,7 @@ var listItemEx = document.getElementById('list-items-ex');
 // List Session.
 var listItemSes = document.getElementById('list-items-ses');
 
-init();
+// init();
 
 /**
  * Activate the sound.
@@ -270,54 +286,54 @@ listItemSes.onclick = function(e) {
 
 
 // Initialize
-function init() {
-    try {
-        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-        // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
-        // Let us open our database
-        var DBOpenRequest = window.indexedDB.open(dbName, dbVersion);
+// function init() {
+//     try {
+//         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+//         window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+//         // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
+//         // Let us open our database
+//         var DBOpenRequest = window.indexedDB.open(dbName, dbVersion);
 
-        // these two event handlers act on the database being opened successfully, or not
-        DBOpenRequest.onerror = function(event) {
-            console.log(event);
-        };
+//         // these two event handlers act on the database being opened successfully, or not
+//         DBOpenRequest.onerror = function(event) {
+//             console.log(event);
+//         };
 
-        DBOpenRequest.onsuccess = function(event) {
-            console.log ("Database initialised.");
-            db = DBOpenRequest.result;
-            listSessions();
-        };
+//         DBOpenRequest.onsuccess = function(event) {
+//             console.log ("Database initialised.");
+//             db = DBOpenRequest.result;
+//             listSessions();
+//         };
 
-        DBOpenRequest.onupgradeneeded = function(event) {
-            var thisDB = event.target.result;
+//         DBOpenRequest.onupgradeneeded = function(event) {
+//             var thisDB = event.target.result;
 
-            thisDB.onerror = function(event) {
-                console.log("Error loading database" + event);
-            };
+//             thisDB.onerror = function(event) {
+//                 console.log("Error loading database" + event);
+//             };
 
-            if (thisDB.objectStoreNames.contains("exercice")) {
-                 thisDB.deleteObjectStore("exercice");
-            }
+//             if (thisDB.objectStoreNames.contains("exercice")) {
+//                  thisDB.deleteObjectStore("exercice");
+//             }
             
-            var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
-            var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
-            var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
+//             var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
+//             var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
+//             var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
             
 
-            if (!thisDB.objectStoreNames.contains("sessions")) {
-                var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
-            }
+//             if (!thisDB.objectStoreNames.contains("sessions")) {
+//                 var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
+//             }
  
-            if (!thisDB.objectStoreNames.contains("parameters")) {
-                var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
-                saveParameters( thisDB, 1, true);
-            }
-        };
-    } catch(e) {
-       console.log(e);
-    }
-}
+//             if (!thisDB.objectStoreNames.contains("parameters")) {
+//                 var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
+//                 saveParameters( thisDB, 1, true);
+//             }
+//         };
+//     } catch(e) {
+//        console.log(e);
+//     }
+// }
 
 function startSes() {
     session.startSes();
@@ -1159,55 +1175,25 @@ function deleteSessions() {
         var list = document.getElementById('list-items-ses');
         var chk = list.getElementsByTagName('input');
 
+        var listSession = new Array();
         // Delete exercices for the session.
         for (var i = 0; i  < chk.length;i++) {
             if (chk[i].checked == true) {
-                deleteExercisesBySession(parseInt(chk[i].value));
+                listSession.push(parseInt(chk[i].value));
             }
         }
+
+        dbDeleteSession(listSession);
         
-        var transaction = db.transaction(["sessions"],"readwrite");
-        var store = transaction.objectStore("sessions");
-        try {
-            for (var i = 0; i  < chk.length;i++) {
-                if (chk[i].checked == true) {
-                    var request = store.delete(parseInt(chk[i].value)); 
-                }
-            }
-        } catch(e) {
-            console.log("Delete Error" + e); 
-        }
         listSessions();
         displayListSessions();
     }
 }
 
-function deleteExercisesBySession(idSession) {
-    var objectStore = db.transaction("exercice","readwrite").objectStore("exercice");
-    var index = objectStore.index("BySession");
-    var pItem = index.openCursor(IDBKeyRange.only(idSession)); 
-    
-    pItem.onsuccess = function() {
-        try {
-            var cursor = pItem.result;
-            if (cursor) {
-                cursor.delete();
-                cursor.continue();
-            } else {
-               // 
-            }
-        }  catch (e) {
-                console.log(e);
-        }
-    }
 
-    pItem.onerror = function() {
-        console.lg("Deletion Exercice");
-    }
-}
 
 /**
- * 
+ * Actualize the list, after modification of session/exercice.
 */
 function dataChange(idSession) {
     listSessions();
@@ -1226,119 +1212,33 @@ function dataChange(idSession) {
     }
 }
 
-function exportSessions() {
-    var objectStore = db.transaction("sessions").objectStore("sessions");
-    var sessions = new Array();
-    
-    objectStore.openCursor().onsuccess = function(event) {
-        try {
-            var cursor = event.target.result;
-            if (cursor) {
-
-                var idSession = cursor.value.idSession;
-                console.log("cursor " + idSession);
-                var session = cursor.value;
-                session["exercices"] = new Array();
-                
-                sessions.push(cursor.value);
-
-                // sessions["exercices"] = exercices;                
-                cursor.continue();
-            }
-            else {
-                // End of session.
-                console.log("End of session");
-                exportExercise(sessions);
-                              
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
-    objectStore.openCursor().onerror = function() {
-        console.lg("exportSessions Error");
-    }
-
-}
-
-function exportExercise(sessions) {
-    console.log("exportExercise" );
-    var objectStore = db.transaction("exercice").objectStore("exercice");
-   
-    // var index = objectStore.index("BySession");
-    // var id = parseInt(idSession);
-    // var request = index.openCursor(IDBKeyRange.only(id));
-    // console.log(id);
-    // var exercices = new Array();
-
-    objectStore.openCursor().onsuccess = function(event) {
-    // request.onsuccess = function(event) {
-        try {
-            var cursor = event.target.result;
-            if (cursor) {
-                console.log("cursor push");
-                // exercices.push(cursor.value);
-
-                cursor.continue();
-            }
-            else {
-                var sessionJson = JSON.stringify(sessions);
-                writeSessions(sessionJson);
-
-                
-                console.log("noCursor");
-                console.log(exercices);
-                // sessions["exercices"] = exercices;
-                console.log(sessions);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
-    // request.onerror = function(e) {
-    //     console.log("listExercise ", e);
-    // }
-}
-
-function writeSessions(sessions) {
-    console.log("writeSessions");
-    var date = new Date(Date.now());
-
-    var sdcard = navigator.getDeviceStorage("sdcard");
-    var file   = new Blob([sessions], {type: "text/plain"});
-    
-    var request = sdcard.addNamed(file, "sportstimer-" + date.toISOString() + ".txt");
-
-    request.onsuccess = function () {
-        var name = this.result;
-        window.alert('File "' + name + '" successfully wrote on the sdcard storage area');
-        console.log('File "' + name + '" successfully wrote on the sdcard storage area');
-    }
-    
-    // An error typically occur if a file with the same name already exist
-    request.onerror = function () {
-        console.warn('Unable to write the file: ' + this.error);
-        window.alert('Unable to write the file: ' + this.error);
-    }
-    
-    // listContents('sdcard');
-}
-
 function listContents(storagename) {
 
     var done = false;
-	//Clear up the list first
-	// $('#results').html("");
 	var files = navigator.getDeviceStorage(storagename);
-    
 	var cursor = files.enumerate();
+    var listFiles = document.getElementById('list-files');
+
     
 	cursor.onsuccess = function () {
-
 		var file = this.result;
 		if (file != null) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.setAttribute("id", file.name);
+            a.href = "#";
+            
+            var p0 = document.createElement("p");
+            p0.innerHTML = file.name;
+            a.appendChild(p0);
+                
+            var p1 = document.createElement("p");
+            p1.innerHTML = "(" + file.lastModifiedDate + ")";
+            a.appendChild(p1);
+            
+            li.appendChild(a);
+			listFiles.appendChild(li);
+
 			console.log( window.URL.createObjectURL(file)
 			             + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
 			done = false;
@@ -1352,3 +1252,21 @@ function listContents(storagename) {
 		}
 	}
 }
+
+function exportSessions() {
+    var chkSessionExport = document.getElementById('chk-sessionExport');
+    //  var chkDataExport = document.getElementById('chk-dataExport');
+
+    if (chkSessionExport.checked ) {
+        dbExportSessions();
+        // window.alert(navigator.mozL10n.get("alertExportNoCheck"));
+        // return;
+    }
+}
+
+function importSessions() {
+
+ //   listContents('sdcard'); 
+}
+
+

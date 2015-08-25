@@ -203,6 +203,7 @@ div.footer {
 }
 
 .pack-switch, .denix {
+  float:right;
   padding-left: 50px;
 }
 
@@ -257,4 +258,13 @@ button.icon_button {
   border-radius: 10px;
   height: 4.5rem; 
   /* float:right; */
+}
+
+.files {
+    height: calc(100% - 5rem);
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
 }

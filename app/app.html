@@ -537,7 +537,6 @@
     </article>
   </section>
 
-  
   <!--·························· Parameters ··························-->
   <section role="region" id="pnl_parameters" data-position="right">
     <header class="fixed">
@@ -553,6 +552,56 @@
         </label>
        
       </div>
+    </article>
+        
+  </section>
+
+  <!--·························· Export ··························-->
+  <section role="region" id="pnl_export" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-export-back" href="#"><span class="icon icon-close">back</span></a>
+      <h1 data-l10n-id="idExport">Export</h1>
+    </header>
+    <article class="scrollable header">
+      <div style="height:5rem;">
+         <label data-l10n-id="idSession" class="parameters">Session:</label>
+         <label class="pack-switch">
+          <input type="checkbox" checked class="denix" id="chk-sessionExport">
+          <span></span>
+        </label>
+      </div>
+      <!-- <div style="height:5rem;"> -->
+      <!--    <label data-l10n-id="idData" class="parameters">Data</label> -->
+      <!--    <label class="pack-switch"> -->
+      <!--     <input type="checkbox" checked class="denix" id="chk-dataExport"> -->
+      <!--     <span></span> -->
+      <!--   </label> -->
+      <!-- </div> -->
+      <div>
+        <button id="btn-export" class="recommend" data-l10n-id="idExport" >Export</button>
+      </div>
+         
+      </div>
+    </article>
+        
+  </section>
+
+  <!--·························· Import ··························-->
+  <section role="region" id="pnl_import" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-import-back" href="#"><span class="icon icon-close">back</span></a>
+      <h1 data-l10n-id="idImport">import</h1>
+    </header>
+    <article class="scrollable header">
+      <div data-type="list" class="files">
+        <ul id="list-files" style="height:100%">
+        </ul>
+      </div>
+
+      <div class="footer">
+        <button id="btn-import" class="recommend" data-l10n-id="idImport" >Import</button>
+      </div>
+         
     </article>
         
   </section>
@@ -573,7 +622,7 @@
             Sports Timer
           </div>
           <div>
-            Version: 1.1
+            Version: 1.2
           </div>
           <div>
             written by Denis Minier
@@ -589,7 +638,9 @@
     </article>
         
   </section>
-  
+
+  <script type="text/javascript" defer src="js/const.js"></script>
+  <script type="text/javascript" defer src="js/db.js"></script>
   <script type="text/javascript" defer src="js/app.js"></script>
   <script type="text/javascript" defer src="js/l10n.js" charset="utf-8"></script>
 
