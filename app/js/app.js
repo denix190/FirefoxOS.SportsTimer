@@ -99,7 +99,7 @@ document.querySelector('#btn-go-export-back').addEventListener('click', function
 
 // Import
 document.querySelector('#btn-go-import').addEventListener('click', function () {
-    listContents('sdcard'); 
+    loadListFiles('sdcard'); 
     document.querySelector('#pnl_import').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
 });
@@ -178,6 +178,9 @@ var listItemEx = document.getElementById('list-items-ex');
 // List Session.
 var listItemSes = document.getElementById('list-items-ses');
 
+// List Files.
+var listFiles = document.getElementById('list-files');
+
 // init();
 
 /**
@@ -187,7 +190,14 @@ function checkSoundHandler(event) {
     flagSound = event.originalTarget.checked;
     saveParameters(db, 1, flagSound);
 }
-    
+
+listFiles.onclick = function(e) {
+
+    var parent = e.target.innerHTML;
+    console.log(parent);
+}
+
+
 listItemEx.onclick = function(e) {
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
@@ -283,57 +293,6 @@ listItemSes.onclick = function(e) {
         }
     }
 }
-
-
-// Initialize
-// function init() {
-//     try {
-//         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-//         window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-//         // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
-//         // Let us open our database
-//         var DBOpenRequest = window.indexedDB.open(dbName, dbVersion);
-
-//         // these two event handlers act on the database being opened successfully, or not
-//         DBOpenRequest.onerror = function(event) {
-//             console.log(event);
-//         };
-
-//         DBOpenRequest.onsuccess = function(event) {
-//             console.log ("Database initialised.");
-//             db = DBOpenRequest.result;
-//             listSessions();
-//         };
-
-//         DBOpenRequest.onupgradeneeded = function(event) {
-//             var thisDB = event.target.result;
-
-//             thisDB.onerror = function(event) {
-//                 console.log("Error loading database" + event);
-//             };
-
-//             if (thisDB.objectStoreNames.contains("exercice")) {
-//                  thisDB.deleteObjectStore("exercice");
-//             }
-            
-//             var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
-//             var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
-//             var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
-            
-
-//             if (!thisDB.objectStoreNames.contains("sessions")) {
-//                 var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
-//             }
- 
-//             if (!thisDB.objectStoreNames.contains("parameters")) {
-//                 var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
-//                 saveParameters( thisDB, 1, true);
-//             }
-//         };
-//     } catch(e) {
-//        console.log(e);
-//     }
-// }
 
 function startSes() {
     session.startSes();
@@ -1212,14 +1171,13 @@ function dataChange(idSession) {
     }
 }
 
-function listContents(storagename) {
+function loadListFiles(storagename) {
 
     var done = false;
 	var files = navigator.getDeviceStorage(storagename);
 	var cursor = files.enumerate();
     var listFiles = document.getElementById('list-files');
 
-    
 	cursor.onsuccess = function () {
 		var file = this.result;
 		if (file != null) {
@@ -1239,8 +1197,8 @@ function listContents(storagename) {
             li.appendChild(a);
 			listFiles.appendChild(li);
 
-			console.log( window.URL.createObjectURL(file)
-			             + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
+			// console.log( window.URL.createObjectURL(file)
+			//              + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
 			done = false;
 		}
 		else {
