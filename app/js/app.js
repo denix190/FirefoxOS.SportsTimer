@@ -195,6 +195,22 @@ listFiles.onclick = function(e) {
 
     var parent = e.target.innerHTML;
     console.log(parent);
+
+    var sdcard = navigator.getDeviceStorage('sdcard');
+
+    var request = sdcard.get(parent);
+
+    request.onsuccess = function () {
+        var file = this.result;
+        console.log("Get the file: " + file.name);
+        var data = file.getAsText("utf-8");
+        console.log(data);
+    }
+
+    request.onerror = function () {
+        console.warn("Unable to get the file: " + this.error);
+    }
+
 }
 
 
@@ -1180,26 +1196,34 @@ function loadListFiles(storagename) {
 
 	cursor.onsuccess = function () {
 		var file = this.result;
-		if (file != null) {
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            a.setAttribute("id", file.name);
-            a.href = "#";
-            
-            var p0 = document.createElement("p");
-            p0.innerHTML = file.name;
-            a.appendChild(p0);
-                
-            var p1 = document.createElement("p");
-            p1.innerHTML = "(" + file.lastModifiedDate + ")";
-            a.appendChild(p1);
-            
-            li.appendChild(a);
-			listFiles.appendChild(li);
+		if (file != null ) {
+            try {
+                var fileName = file.name;
 
-			// console.log( window.URL.createObjectURL(file)
-			//              + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
-			done = false;
+                if (fileName.startsWith("st")) {
+                    var li = document.createElement("li");
+                    var a = document.createElement("a");
+                    a.setAttribute("id", file.name);
+                    a.href = "#";
+                    
+                    var p0 = document.createElement("p");
+                    p0.innerHTML = file.name;
+                    a.appendChild(p0);
+                    
+                    // var p1 = document.createElement("p");
+                    // p1.innerHTML = "(" + file.size + ")";
+                    // a.appendChild(p1);
+                    
+                    li.appendChild(a);
+			        listFiles.appendChild(li);
+
+			        // console.log( window.URL.createObjectURL(file)
+			        //              + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
+			        done = false;
+                }
+            } catch(e) {
+                console.log(e);
+            }
 		}
 		else {
 			done = true;

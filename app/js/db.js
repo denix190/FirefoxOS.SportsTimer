@@ -181,7 +181,7 @@ function writeSessions(sessions) {
     var sdcard = navigator.getDeviceStorage("sdcard");
     var file   = new Blob([sessions], {type: "text/plain"});
     
-    var request = sdcard.addNamed(file, "sportstimer-" + date.toISOString() + ".txt");
+    var request = sdcard.addNamed(file, "st-" + date.toShortString() + ".txt");
 
     request.onsuccess = function () {
         var name = this.result;
@@ -195,3 +195,26 @@ function writeSessions(sessions) {
     
 
 }
+
+if ( !Date.prototype.toShortString ) {
+  ( function() {
+    
+    function pad(number) {
+      if ( number < 10 ) {
+        return '0' + number;
+      }
+      return number;
+    }
+ 
+    Date.prototype.toShortString = function() {
+      return this.getUTCFullYear() +
+        '-' + pad( this.getUTCMonth() + 1 ) +
+        '-' + pad( this.getUTCDate() ) +
+        'T' + pad( this.getUTCHours() ) +
+        ':' + pad( this.getUTCMinutes() ) +
+        ':' + pad( this.getUTCSeconds() );
+    };
+  
+  }() );
+}
+
