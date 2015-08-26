@@ -218,3 +218,6 @@ if ( !Date.prototype.toShortString ) {
   }() );
 }
 
+function loadSession(sessions) {
+
+}

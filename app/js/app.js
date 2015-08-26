@@ -197,18 +197,34 @@ listFiles.onclick = function(e) {
     console.log(parent);
 
     var sdcard = navigator.getDeviceStorage('sdcard');
-
     var request = sdcard.get(parent);
 
     request.onsuccess = function () {
         var file = this.result;
         console.log("Get the file: " + file.name);
-        var data = file.getAsText("utf-8");
-        console.log(data);
+
+        try {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                console.log("reader");
+                var text = reader.result;
+                console.log(text);
+                var sessions = JSON.parse(text);
+
+                // Write
+                loadSessions(sessions);
+                console.log(obj);
+            }
+            
+            reader.readAsText(file, 'utf-8');
+        }  catch (e){
+            console.log(e);
+        }
     }
 
     request.onerror = function () {
-        console.warn("Unable to get the file: " + this.error);
+        console.warn( this.error);
     }
 
 }
