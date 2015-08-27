@@ -113,25 +113,3 @@ Export.prototype.getFullName = function() {
     return "st-" + this.fileName + ".json";
     
 }
-
-if ( !Date.prototype.toShortString ) {
-  ( function() {
-    
-    function pad(number) {
-      if ( number < 10 ) {
-        return '0' + number;
-      }
-      return number;
-    }
- 
-    Date.prototype.toShortString = function() {
-      return this.getUTCFullYear() +
-        '-' + pad( this.getUTCMonth() + 1 ) +
-        '-' + pad( this.getUTCDate() ) +
-        'T' + pad( this.getUTCHours() ) +
-        ':' + pad( this.getUTCMinutes() ) +
-        ':' + pad( this.getUTCSeconds() );
-    };
-  
-  }() );
-}
