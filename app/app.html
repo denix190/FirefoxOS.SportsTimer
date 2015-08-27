@@ -322,7 +322,7 @@
   <!--·························· add Exercise ··························-->
   <section role="region" id="addExercise" data-position="right">
     <header class="fixed">
-      <a id="btn-go-add-ex-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-add-ex-back" href="#"><span class="icon icon-back">back</span></a>
        <menu type="toolbar">
          <button id="btn-add-ex" data-l10n-id="idAddExercise">Save</button>
        </menu>
@@ -390,7 +390,7 @@
   <!--·························· update Exercise ··························-->
   <section role="region" id="updExercise" data-position="right">
     <header class="fixed">
-      <a id="btn-go-upd-ex-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-upd-ex-back" href="#"><span class="icon icon-back">back</span></a>
        <menu type="toolbar">
          <button id="btn-upd-ex" data-l10n-id="idBtnUpdExercise">Save</button>
        </menu>
@@ -459,7 +459,7 @@
     <!--·························· List Exercises ··························-->
   <section role="region" id="listExercise" data-position="right">
     <header class="fixed">
-      <a id="btn-go-list-ex-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-list-ex-back" href="#"><span class="icon icon-back">back</span></a>
 
       <menu type="toolbar">
         <button class="icon icon-add" id="btn-go-add-ex">
@@ -487,7 +487,7 @@
     <!--·························· List Sessions ··························-->
   <section role="region" id="listSessions" data-position="right">
     <header class="fixed">
-      <a id="btn-go-sessions-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-sessions-back" href="#"><span class="icon icon-back">back</span></a>
      <menu type="toolbar">
        <button class="icon icon-add" id="btn-go-add-session">
          <span>add</span>
@@ -513,7 +513,7 @@
 
   <section role="region" id="updSession" data-position="right">
     <header class="fixed">
-      <a id="btn-go-upd-session-back" href="#"><span class="icon icon-close">back</span></a>
+      <a id="btn-go-upd-session-back" href="#"><span class="icon icon-back">back</span></a>
        <menu type="toolbar">
          <button id="btn-upd-session" data-l10n-id="idUpdSession">Save</button>
        </menu>
@@ -522,8 +522,8 @@
     </header>
     <article class="content scrollable header">
       <p width="100%">
-        <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required>
-        <input type="hidden" id="idSession" value="">
+        <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required/>
+        <input type="hidden" id="idSession" value=""/>
       </p>
 
       <p width="100%">
@@ -562,14 +562,21 @@
       <a id="btn-go-export-back" href="#"><span class="icon icon-close">back</span></a>
       <h1 data-l10n-id="idExport">Export</h1>
     </header>
-    <article class="scrollable header">
+    <article class="content scrollable header">
       <div style="height:5rem;">
          <label data-l10n-id="idSession" class="parameters">Session:</label>
          <label class="pack-switch">
           <input type="checkbox" checked class="denix" id="chk-sessionExport">
           <span></span>
-        </label>
+         </label>
       </div>
+      <p>
+        <span data-l10n-id="idFileName">File name</span>
+      </p>
+      <p width="100%">
+        <input id="fileName" type="text" maxlength="20" data-l10n-id="idFileName" placeholder="File Name" required/>
+      </p>
+     
       <!-- <div style="height:5rem;"> -->
       <!--    <label data-l10n-id="idData" class="parameters">Data</label> -->
       <!--    <label class="pack-switch"> -->
@@ -641,6 +648,8 @@
 
   <script type="text/javascript" defer src="js/const.js"></script>
   <script type="text/javascript" defer src="js/db.js"></script>
+  <script type="text/javascript" defer src="js/export.js"></script>
+  <script type="text/javascript" defer src="js/import.js"></script>
   <script type="text/javascript" defer src="js/app.js"></script>
   <script type="text/javascript" defer src="js/l10n.js" charset="utf-8"></script>
 

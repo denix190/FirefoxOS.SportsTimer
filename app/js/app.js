@@ -181,8 +181,6 @@ var listItemSes = document.getElementById('list-items-ses');
 // List Files.
 var listFiles = document.getElementById('list-files');
 
-// init();
-
 /**
  * Activate the sound.
  */
@@ -191,6 +189,9 @@ function checkSoundHandler(event) {
     saveParameters(db, 1, flagSound);
 }
 
+/*
+ * Import sessions from file.
+*/
 listFiles.onclick = function(e) {
 
     var parent = e.target.innerHTML;
@@ -207,14 +208,17 @@ listFiles.onclick = function(e) {
             var reader = new FileReader();
             
             reader.onload = function(e) {
-                console.log("reader");
                 var text = reader.result;
                 console.log(text);
                 var sessions = JSON.parse(text);
-
-                // Write
-                loadSessions(sessions);
-                console.log(obj);
+                console.log(sessions);
+                // Write sessions
+                if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) { 
+                    var importSession = new ImportSession(sessions, true);
+                    importSession.load();
+                    window.alert(navigator.mozL10n.get("ImportSessionFinish"));
+                    dataChange(0);
+                }
             }
             
             reader.readAsText(file, 'utf-8');
@@ -457,11 +461,8 @@ function displayListExercise() {
         var objectStore = db.transaction("exercice").objectStore("exercice");
         var index = objectStore.index("by_name");
         var listEx = document.getElementById("list-ex");
-        
-        // remove all element in the list.
-	    while (listEx.firstChild) {
-            listEx.removeChild(listEx.firstChild);
-        }
+
+        removeAllItems(listEx);
 
         var request = index.openCursor(null, 'next');
 
@@ -499,11 +500,8 @@ function displayListExercise() {
 function displayListUpdateExercise(idSession) {
     var objectStore = db.transaction("exercice").objectStore("exercice");
     var listEx = document.getElementById("list-items-ex");
-    
-    // remove all element in the list.
-	while (listEx.firstChild) {
-        listEx.removeChild(listEx.firstChild);
-    }
+
+    removeAllItems(listEx);
 
     var index = objectStore.index("BySession");
     var id = parseInt(idSession);
@@ -1004,10 +1002,7 @@ function listSessions() {
     var objectStore = db.transaction("sessions").objectStore("sessions");
     var listSes = document.getElementById("list-session");
     
-    // remove all element in the list.
-	while (listSes.firstChild) {
-        listSes.removeChild(listSes.firstChild);
-    }
+    removeAllItems(listSes);
 
     objectStore.openCursor().onsuccess = function(event) {
         var cursor = event.target.result;
@@ -1047,12 +1042,9 @@ function changeSessionEx(event) {
 function listSessionEx(idSession) {
     var objectStore = db.transaction("exercice").objectStore("exercice");
     var listEx = document.getElementById("list-session-ex");
-    
-    // remove all element in the list.
-	while (listEx.firstChild) {
-        listEx.removeChild(listEx.firstChild);
-    }
 
+    removeAllItems(listEx);
+ 
     var index = objectStore.index("BySession");
     var id = parseInt(idSession);
     var request = index.openCursor(IDBKeyRange.only(id));
@@ -1096,11 +1088,8 @@ function listSessionEx(idSession) {
 function displayListSessions() {
     var objectStore = db.transaction("sessions").objectStore("sessions");
     var listSes = document.getElementById("list-items-ses");
-    
-    // remove all element in the list.
-	while (listSes.firstChild) {
-        listSes.removeChild(listSes.firstChild);
-    }
+
+    removeAllItems(listSes);
 
     objectStore.openCursor().onsuccess = function(event) {
         var cursor = event.target.result;
@@ -1166,14 +1155,15 @@ function deleteSessions() {
         var list = document.getElementById('list-items-ses');
         var chk = list.getElementsByTagName('input');
 
+        // List of session to delete
         var listSession = new Array();
-        // Delete exercices for the session.
+
         for (var i = 0; i  < chk.length;i++) {
             if (chk[i].checked == true) {
                 listSession.push(parseInt(chk[i].value));
             }
         }
-
+        // Delete session and exercises.
         dbDeleteSession(listSession);
         
         listSessions();
@@ -1203,60 +1193,85 @@ function dataChange(idSession) {
     }
 }
 
+function removeAllItems(list) {
+    // remove all element in the list.
+	while (list.firstChild) {
+        list.removeChild(list.firstChild);
+    }
+}
+
 function loadListFiles(storagename) {
 
-    var done = false;
+    // Remove all elements.
+    removeAllItems(document.getElementById("list-files"));
+    
+    
 	var files = navigator.getDeviceStorage(storagename);
 	var cursor = files.enumerate();
     var listFiles = document.getElementById('list-files');
 
-	cursor.onsuccess = function () {
-		var file = this.result;
-		if (file != null ) {
-            try {
-                var fileName = file.name;
+    var importSession = new ImportSession();
+    importSession.loadListFiles('sdcard', listFiles);
 
-                if (fileName.startsWith("st")) {
-                    var li = document.createElement("li");
-                    var a = document.createElement("a");
-                    a.setAttribute("id", file.name);
-                    a.href = "#";
-                    
-                    var p0 = document.createElement("p");
-                    p0.innerHTML = file.name;
-                    a.appendChild(p0);
-                    
-                    // var p1 = document.createElement("p");
-                    // p1.innerHTML = "(" + file.size + ")";
-                    // a.appendChild(p1);
-                    
-                    li.appendChild(a);
-			        listFiles.appendChild(li);
+	// cursor.onsuccess = function () {
+	// 	var file = this.result;
+	// 	if (file != null ) {
+    //         try {
+    //             var fileName = file.name;
 
-			        // console.log( window.URL.createObjectURL(file)
-			        //              + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
-			        done = false;
-                }
-            } catch(e) {
-                console.log(e);
-            }
-		}
-		else {
-			done = true;
-		}
+    //             if (fileName.startsWith("st")) {
+    //                 var li = document.createElement("li");
+    //                 var a = document.createElement("a");
+    //                 a.setAttribute("id", file.name);
+    //                 a.href = "#";
+                    
+    //                 var p0 = document.createElement("p");
+    //                 p0.innerHTML = file.name;
+    //                 a.appendChild(p0);
+                    
+    //                 // var p1 = document.createElement("p");
+    //                 // p1.innerHTML = "(" + file.size + ")";
+    //                 // a.appendChild(p1);
+                    
+    //                 li.appendChild(a);
+	// 		        listFiles.appendChild(li);
+
+	// 		        // console.log( window.URL.createObjectURL(file)
+	// 		        //              + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
+	// 		        done = false;
+    //             }
+    //         } catch(e) {
+    //             console.log(e);
+    //         }
+	// 	}
+	// 	else {
+	// 		done = true;
+	// 	}
         
-		if (!done) {
-			cursor.continue();
-		}
-	}
+	// 	if (!done) {
+	// 		cursor.continue();
+	// 	}
+	// }
 }
 
 function exportSessions() {
+    
     var chkSessionExport = document.getElementById('chk-sessionExport');
     //  var chkDataExport = document.getElementById('chk-dataExport');
 
+    var fileName = document.getElementById('fileName');
+
+    if (fileName.value.length == 0) {
+        window.alert(navigator.mozL10n.get("idAlertNoFileName"));
+        return;
+    }
+
     if (chkSessionExport.checked ) {
-        dbExportSessions();
+        var backup = new Export(fileName.value);
+
+        backup.build();
+
+        // dbExportSessions(fileName.value);
         // window.alert(navigator.mozL10n.get("alertExportNoCheck"));
         // return;
     }

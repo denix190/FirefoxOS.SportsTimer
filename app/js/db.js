@@ -56,25 +56,24 @@ function init() {
 
 function dbDeleteSession(listSessions) {
     // Delete exercices for the session.
+    for (var i = 0; i  < listSessions.length;i++) {
+        deleteExercisesBySession(listSessions[i]);
+    }
+    
+    var transaction = db.transaction(["sessions"],"readwrite");
+    var store = transaction.objectStore("sessions");
+    try {
         for (var i = 0; i  < listSessions.length;i++) {
-            if (chk[i].checked == true) {
-                deleteExercisesBySession(listSessions[i]);
-            }
+            var request = store.delete(listSessions[i]); 
         }
-        
-        var transaction = db.transaction(["sessions"],"readwrite");
-        var store = transaction.objectStore("sessions");
-        try {
-            for (var i = 0; i  < listSessions.length;i++) {
-                if (chk[i].checked == true) {
-                    var request = store.delete(listSessions[i]); 
-                }
-            }
-        } catch(e) {
-            console.log("Delete Error" + e); 
-        }
+    } catch(e) {
+        console.log("Delete Error" + e); 
+    }
 }
 
+/**
+ * Delete exercices for one session.
+*/ 
 function deleteExercisesBySession(idSession) {
     var objectStore = db.transaction("exercice","readwrite").objectStore("exercice");
     var index = objectStore.index("BySession");
@@ -84,6 +83,7 @@ function deleteExercisesBySession(idSession) {
         try {
             var cursor = pItem.result;
             if (cursor) {
+                console.log("delete Exercice" + idSession);
                 cursor.delete();
                 cursor.continue();
             } else {
@@ -100,124 +100,133 @@ function deleteExercisesBySession(idSession) {
 }
 
 /**
- * Export all the sessions.
-*/ 
-function dbExportSessions(bSession, bData) {
-    var objectStore = db.transaction("sessions").objectStore("sessions");
-    var sessions = new Array();
-    
-    objectStore.openCursor().onsuccess = function(event) {
-        try {
-            var cursor = event.target.result;
-            if (cursor) {
-                // Add properties exercises to the session.
-                var session = cursor.value;
-                session["exercises"] = new Array();
+ * Add a new session.
+ */
+function dbAddSession(sessionData) {
+    try {
 
-                sessions.push(cursor.value);
-                cursor.continue();
-            }
-            else {
-                // End of session, adding exercise.
-                exportExercises(sessions);
-            }
-        } catch (e) {
-            console.log(e);
+        var transaction = db.transaction(["sessions"],"readwrite");
+        var store = transaction.objectStore("sessions");
+
+        //Define a new sessionRecord
+        var sessionRecord = {
+            name: sessionData.name,
+            desc: sessionData.desc,
+            created:new Date()
         }
-    };
-
-    objectStore.openCursor().onerror = function() {
-        console.lg("exportSessions Error");
+        
+        var request = store.add(sessionRecord);
+            
+        request.onerror = function(e) {
+            console.log("Error SportsTimer", e.target.error.name);
+        }
+        
+        request.onsuccess = function(event) {
+            // id of the sessions.
+            var idSession = event.target.result;
+            var j = 0;
+            var exercises = sessionData.exercises;
+            for(j = 0; j < exercises.length;j++) {
+                // Add exercices for the sessions.
+                dbAddExercise(exercises[j], idSession);
+            }
+        } 
+    } catch(e) {
+        console.log(e);
     }
+} 
 
+/**
+ * Update session.
+ */
+function dbUpdateSession(sessionData) {
+    try {
+
+        var transaction = db.transaction(["sessions"],"readwrite");
+        var store = transaction.objectStore("sessions");
+
+        var sessionRecord = {
+            name: sessionData.name,
+            desc: sessionData.desc,
+            created:new Date(),
+            idSession : sessionData.id
+        }
+        
+        var request = store.put(sessionRecord);
+        
+        request.onerror = function(e) {
+            console.log("Error SportsTimer", e.target.error.name);
+        }
+        
+        request.onsuccess = function(event) {
+            
+            dataChange(id);
+        }
+
+    } catch(e) {
+        console.log(e);
+    }
 }
 
 /**
- * Add all the exercises on the sessions.
- */ 
-function exportExercises(sessions) {
-    console.log("exportExercises" );
-    var objectStore = db.transaction("exercice").objectStore("exercice");
-
-    objectStore.openCursor().onsuccess = function(event) {
-        try {
-            var cursor = event.target.result;
-            if (cursor) {
-                console.log("cursor push idSession " + cursor.value.idSession);
-                var i = 0;
-                for ( i = 0; i < sessions.length;i++) {
-                    var session = sessions[i];
-                    if (session.idSession == cursor.value.idSession) {
-                        session.exercises.push(cursor.value);
-                        break;
-                    }
-                } 
- 
-                // exercices.push(cursor.value.idSession);
-                cursor.continue();
-            }
-            else {
-                var sessionJson = JSON.stringify(sessions);
-                writeSessions(sessionJson);
-
-                
-                console.log("noCursor");
-               
-                // sessions["exercices"] = exercices;
-                console.log(sessions);
-            }
-        } catch (e) {
-            console.log(e);
+ * Add a new Exercise.
+ */
+function dbAddExercise(exercice, idSession) {
+    try {
+       
+        var transaction = db.transaction(["exercice"],"readwrite");
+        var store = transaction.objectStore("exercice");
+        
+        //Define a new exerciceRecord
+        var exerciceRecord = {
+            name: exercice.name,
+            duration: exercice.duration,
+            breakTime: exercice.breakTime,
+            nbRetry: exercice.nbRetry,
+            desc: exercice.descEx,
+            idSession : idSession,
+            created:new Date()
         }
-    };
-}
 
-/**
- * Write all the sessions on the sdcard.
-*/
-function writeSessions(sessions) {
-    var date = new Date(Date.now());
-
-    var sdcard = navigator.getDeviceStorage("sdcard");
-    var file   = new Blob([sessions], {type: "text/plain"});
-    
-    var request = sdcard.addNamed(file, "st-" + date.toShortString() + ".txt");
-
-    request.onsuccess = function () {
-        var name = this.result;
-        window.alert('File "' + name + '" successfully wrote on the sdcard storage area');
-    }
-    
-    // An error typically occur if a file with the same name already exist
-    request.onerror = function () {
-        window.alert('Unable to write the file: ' + this.error);
-    }
-    
-
-}
-
-if ( !Date.prototype.toShortString ) {
-  ( function() {
-    
-    function pad(number) {
-      if ( number < 10 ) {
-        return '0' + number;
-      }
-      return number;
-    }
+        /* */
+        var request = store.add(exerciceRecord);
  
-    Date.prototype.toShortString = function() {
-      return this.getUTCFullYear() +
-        '-' + pad( this.getUTCMonth() + 1 ) +
-        '-' + pad( this.getUTCDate() ) +
-        'T' + pad( this.getUTCHours() ) +
-        ':' + pad( this.getUTCMinutes() ) +
-        ':' + pad( this.getUTCSeconds() );
-    };
+        request.onerror = function(e) {
+            console.log("Error Adding exercice", e.target.error.name);
+        }
+        
+        request.onsuccess = function(event) {
   
-  }() );
-}
+        }
+  
+    } catch(e) {
+        console.log(e);
+    }
+}    
+/**
+ * Delete all sessions.
+ */
 
-function loadSession(sessions) {
+function dbDeleteAllSessions() {
 
+    var objectStore = db.transaction(["sessions"],"readwrite").objectStore("sessions");
+    
+    try {
+        objectStore.openCursor().onsuccess =  function(event) {
+            try {
+                var cursor = event.target.result;
+            
+                if (cursor) {
+                    deleteExercisesBySession(cursor.value.idSession);
+                    console.log("idSession:" + cursor.value.idSession); 
+                    cursor.delete();
+                    cursor.continue();
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        };
+    } catch(e) {
+        console.log("Delete Error" + e); 
+    }
 }
