@@ -170,7 +170,7 @@ document.querySelector('#btn-del-ses').addEventListener('click', deleteSessions)
 
 document.querySelector('#btn-export').addEventListener('click', exportSessions);
 
-document.querySelector('#btn-import').addEventListener('click', importSessions);
+// document.querySelector('#btn-import').addEventListener('click', importSessions);
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');

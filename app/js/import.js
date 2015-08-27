@@ -16,17 +16,17 @@ function ImportSession(sessions, deleteAll) {
 ImportSession.prototype.load = function() {
     var i = 0;
     try {
-    // if (this.deleteAll) {
-    //     // Remove all session and exercises.
-    //     dbDeleteAllSessions();
-    // } else {
+    if (this.deleteAll) {
+         // Remove all session and exercises.
+         dbDeleteAllSessions();
+    } else {
         // Remove all session already present;
         var listSessions = new Array();
         for(i = 0; i < this.sessions.length;i++) {
             listSessions.push(this.sessions[i].name);
         }
         dbDeleteSessions(listSessions);
-    // }
+    }
    
     for(i = 0; i < this.sessions.length;i++) {
         // Delete all sessions.
