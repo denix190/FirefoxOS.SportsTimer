@@ -32,16 +32,16 @@ function init() {
             };
 
             if (thisDB.objectStoreNames.contains("exercice")) {
-                 thisDB.deleteObjectStore("exercice");
+                thisDB.deleteObjectStore("exercice");
+                var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
+                var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
+                var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
             }
-            
-            var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
-            var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
-            var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
-            
 
-            if (!thisDB.objectStoreNames.contains("sessions")) {
+            if (thisDB.objectStoreNames.contains("sessions")) {
+                thisDB.deleteObjectStore("sessions");
                 var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
+                var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
             }
  
             if (!thisDB.objectStoreNames.contains("parameters")) {
@@ -229,4 +229,40 @@ function dbDeleteAllSessions() {
     } catch(e) {
         console.log("Delete Error" + e); 
     }
+}
+
+function dbDeleteSessions(listSessions) {
+
+    var i = 0;
+    for (i =0; i < listSessions.length;i++) {
+        dbDeleteSessionByName(listSessions[i]);
+    }
+}
+
+function dbDeleteSessionByName(sessionName) {
+
+    var objectStore = db.transaction(["sessions"],"readwrite").objectStore("sessions");
+    var index = objectStore.index("by_name");
+    var pItem = index.openCursor(IDBKeyRange.only(sessionName)); 
+    
+    pItem.onsuccess = function() {
+        try {
+            var cursor = pItem.result;
+            if (cursor) {
+                deleteExercisesBySession(cursor.value.idSession);
+                console.log("delete Exercice" + cursor.value.idSession);
+                cursor.delete();
+                cursor.continue();
+            } else {
+               // 
+            }
+        }  catch (e) {
+            console.log(e);
+        }
+    }
+
+    pItem.onerror = function() {
+        console.lg("Deletion Exercice");
+    }
+
 }

@@ -15,18 +15,25 @@ function ImportSession(sessions, deleteAll) {
 */ 
 ImportSession.prototype.load = function() {
     var i = 0;
-
-    if (this.deleteAll) {
-        // Remove all session and exercises.
-        dbDeleteAllSessions();
-    } else {
+    try {
+    // if (this.deleteAll) {
+    //     // Remove all session and exercises.
+    //     dbDeleteAllSessions();
+    // } else {
         // Remove all session already present;
-    }
-    var listSession = new Array();
-
+        var listSessions = new Array();
+        for(i = 0; i < this.sessions.length;i++) {
+            listSessions.push(this.sessions[i].name);
+        }
+        dbDeleteSessions(listSessions);
+    // }
+   
     for(i = 0; i < this.sessions.length;i++) {
         // Delete all sessions.
         dbAddSession(this.sessions[i]);
+    }
+    } catch(e) {
+        console.log(e);
     }
 }
 

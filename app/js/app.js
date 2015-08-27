@@ -1212,46 +1212,6 @@ function loadListFiles(storagename) {
 
     var importSession = new ImportSession();
     importSession.loadListFiles('sdcard', listFiles);
-
-	// cursor.onsuccess = function () {
-	// 	var file = this.result;
-	// 	if (file != null ) {
-    //         try {
-    //             var fileName = file.name;
-
-    //             if (fileName.startsWith("st")) {
-    //                 var li = document.createElement("li");
-    //                 var a = document.createElement("a");
-    //                 a.setAttribute("id", file.name);
-    //                 a.href = "#";
-                    
-    //                 var p0 = document.createElement("p");
-    //                 p0.innerHTML = file.name;
-    //                 a.appendChild(p0);
-                    
-    //                 // var p1 = document.createElement("p");
-    //                 // p1.innerHTML = "(" + file.size + ")";
-    //                 // a.appendChild(p1);
-                    
-    //                 li.appendChild(a);
-	// 		        listFiles.appendChild(li);
-
-	// 		        // console.log( window.URL.createObjectURL(file)
-	// 		        //              + " file" + file.name + "," + file.lastModifiedDate + "," + file.type + "," + file.size );
-	// 		        done = false;
-    //             }
-    //         } catch(e) {
-    //             console.log(e);
-    //         }
-	// 	}
-	// 	else {
-	// 		done = true;
-	// 	}
-        
-	// 	if (!done) {
-	// 		cursor.continue();
-	// 	}
-	// }
 }
 
 function exportSessions() {
