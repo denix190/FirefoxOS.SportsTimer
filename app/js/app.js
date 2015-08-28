@@ -860,61 +860,6 @@ Chronos.prototype.stop = function() {
     }
 }
 
-/**
- * Class Session.
-*/ 
-
-function Session() {
-    this.flagStartSes = false;
-    this.timerSession;
-    this.chronoSession = document.getElementById('chronoSession');
-    this.sessionSec = 0;
-}
-
-/**
-* Start a new Session.
-* Change the text of the button
-*/ 
-Session.prototype.startSes = function() {
-
-    if (this.flagStartSes == false) {
-        this.timerSession = window.setInterval(displaySession, 1000);
-        this.flagStartSes = true;
-    }
-}
-
-/**
-* Pause Session.
-*/ 
-Session.prototype.pauseSes = function() {
-
-    if (this.flagStartSes) {
-        this.timerSession = window.clearInterval(this.timerSession);
-        this.flagStartSes = false;
-    }
-}
-
-/**
- * Cancel the current Session.
-*/
-Session.prototype.cancelSes = function() {
-    try {
-        this.timerSession = window.clearInterval(this.timerSession);
-        this.sessionSec = 0;
-        this.flagStartSes = false;
-        displaySecond(this.chronoSession, this.sessionSec);
-    } catch(e) {
-        console.log(e);
-    }
-}
-
-Session.prototype.getSessionSec = function () {
-    return this.sessionSec;
-}
-
-Session.prototype.addSessionSec = function () {
-    this.sessionSec++;
-}
 
 function displaySession() {
     session.addSessionSec();
