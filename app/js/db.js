@@ -83,7 +83,6 @@ function deleteExercisesBySession(idSession) {
         try {
             var cursor = pItem.result;
             if (cursor) {
-                console.log("delete Exercice" + idSession);
                 cursor.delete();
                 cursor.continue();
             } else {
@@ -218,7 +217,6 @@ function dbDeleteAllSessions() {
             
                 if (cursor) {
                     deleteExercisesBySession(cursor.value.idSession);
-                    console.log("idSession:" + cursor.value.idSession); 
                     cursor.delete();
                     cursor.continue();
                 }
@@ -250,7 +248,6 @@ function dbDeleteSessionByName(sessionName) {
             var cursor = pItem.result;
             if (cursor) {
                 deleteExercisesBySession(cursor.value.idSession);
-                console.log("delete Exercice" + cursor.value.idSession);
                 cursor.delete();
                 cursor.continue();
             } else {

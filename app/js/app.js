@@ -202,19 +202,17 @@ listFiles.onclick = function(e) {
 
     request.onsuccess = function () {
         var file = this.result;
-        console.log("Get the file: " + file.name);
 
         try {
             var reader = new FileReader();
             
             reader.onload = function(e) {
-                var text = reader.result;
-                console.log(text);
-                var sessions = JSON.parse(text);
-                console.log(sessions);
+                var sessions = JSON.parse(reader.result);
+
                 // Write sessions
-                if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) { 
-                    var importSession = new ImportSession(sessions, true);
+                if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) {
+                    var chkReplaceAll = document.getElementById('chk-replaceAll');
+                    var importSession = new ImportSession(sessions, chkReplaceAll.checked);
                     importSession.load();
                     window.alert(navigator.mozL10n.get("ImportSessionFinish"));
                     dataChange(0);
