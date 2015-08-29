@@ -613,6 +613,7 @@ function startEx() {
         durationCounter =  0;
         breakTimeCounter = 0;
         nbRetryCounter = 1;
+
         typeCounter = STATE_EX_EFFORT;
         
         var listEx = document.getElementById('list-session-ex');
@@ -621,7 +622,7 @@ function startEx() {
         if (x != -1) {
             var sequence;
             sequence = listEx.options[x].value;
-        
+            var name = listEx.options[x].text;
             var res = sequence.split(",");
         
             durationEx = parseInt(res[0]) + 1;
@@ -630,11 +631,15 @@ function startEx() {
             
             var effortDiv = document.getElementById('effortDiv');
             effortDiv.style.color = '#F97C17';
-            
-            // timer = window.setInterval(display, 1000);
-            // lock = window.navigator.requestWakeLock('screen');
+
             chronos.start();
             flagStart = true;
+            try {
+                var exercise = new Exercise(name, durationEx, breakTimeEx, nbRetryEx);
+                session.startExercise(exercise);
+            } catch(e) {
+                console.log(e);
+            }
         }
     } else {
         if (typeCounter == STATE_EX_PAUSE) {
@@ -659,7 +664,7 @@ function display() {
   
     if (nbRetryCounter > nbRetryEx) {
         playSound('finalSound');
-
+        session.stopExercise();
         endExercise();
         chronos.stop();
 

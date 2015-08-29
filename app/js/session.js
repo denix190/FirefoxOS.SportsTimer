@@ -10,6 +10,7 @@ function Session() {
     this.beginSession;
     this.endSession;
     this.self = this;
+    this.exercises = new Array();
 }
 
 /**
@@ -64,4 +65,54 @@ Session.prototype.addSessionSec = function () {
 Session.prototype.displaySession = function() {
     self.addSessionSec();
     displaySecond(document.getElementById('chronoSession'), self.getSessionSec());
+}
+
+/**
+* Start a new Exercise
+*
+*/ 
+Session.prototype.startExercise = function(exercise) {
+    try {
+        this.exercises.push(exercise);
+        console.log(this.exercises);
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+/**
+* Stop Exercise
+*
+*/ 
+Session.prototype.stopExercise = function() {
+    try {
+        console.log(this.exercises);
+        var exercise = this.exercises[this.exercises.length - 1];
+        console.log(this.exercises.length);
+        exercise.stop();
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+function Exercise(name, duration, breakTime, nbRetry) {
+    try {
+        this.name = name;
+        this.duration = duration;
+        this.breakTime = breakTime;
+        this.nbRetry = nbRetry;
+        this.beginExercise = new Date();
+        this.endExercise;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+Exercise.prototype.stop = function() {
+    try {
+        this.endExercise = new Date();
+
+    } catch(e) {
+        console.log(e);
+    }
 }
