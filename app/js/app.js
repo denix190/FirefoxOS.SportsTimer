@@ -130,8 +130,8 @@ document.querySelector('#btn-go-sessions').addEventListener('click', function ()
 });
 
 // Hide panel List sessions.
-document.querySelector('#btn-go-sessions-back').addEventListener('click', function () {
-   document.querySelector('#listSessions').className = 'right';
+document.querySelector('#btn-go-current-session-back').addEventListener('click', function () {
+   document.querySelector('#currentSession').className = 'right';
    document.querySelector('[data-position="current"]').className = 'current';
 });
 
@@ -284,43 +284,52 @@ listItemEx.onclick = function(e) {
  * Select a session and display.
  */
 listItemSes.onclick = function(e) {
+
     document.getElementById('btn-add-sesEx').disabled = false;
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
 
-       if (collEnfants[i].tagName === 'A'){
-
+       if (collEnfants[i].tagName === 'A') {
             try {
-                document.querySelector('#updSession').className = 'current';
+                document.querySelector('#currentSession').className = 'current';
                 document.querySelector('[data-position="current"]').className = 'left';
         
-                document.querySelector('#listSessions').className = 'left';
+                // document.querySelector('#listSessions').className = 'left';
 
-                var transaction = db.transaction(["sessions"]);
-                var objectStore = transaction.objectStore("sessions", 'readonly');
+                // var transaction = db.transaction(["sessions"]);
+                // var objectStore = transaction.objectStore("sessions", 'readonly');
                 
                 var id = parseInt(collEnfants[i].id);
-                var request = objectStore.get(id);
+                console.log("Not found for Id: " + id);
+                var title = document.getElementById('idTitleSession');
+                title.innerHTML = collEnfants[i].innerHTML;
+                listSessionEx(id);
+                // var request = objectStore.get(id);
 
-                request.onerror = function(event) {
-                    console.log("Not found for Id: " + id);
-                };
+                // request.onerror = function(event) {
+                //     console.log("Not found for Id: " + id);
+                // };
 
-                request.onsuccess = function(evt) {
+                // request.onsuccess = function(evt) {
                     
-                    var value = evt.target.result;
-                    var name = document.getElementById('nameSession');
-                    var desc = document.getElementById('descSession');
-                    var nbRetry = document.getElementById('nbRetryUpd');
-                    var breakTime = document.getElementById('breakTimeUpd');
-                    var duration = document.getElementById('durationUpd');
-                    var idSession = document.getElementById('idSession');
-                    
-                    name.value = request.result.name;
-                    desc.value = request.result.desc;                    
-                    idSession.value = id;
-                };
+                //     // var value = evt.target.result;
+                //     // var name = document.getElementById('nameSession');
+                //     // var desc = document.getElementById('descSession');
+                //     // var nbRetry = document.getElementById('nbRetryUpd');
+                //     // var breakTime = document.getElementById('breakTimeUpd');
+                //     // var duration = document.getElementById('durationUpd');
+                //     try {
+                //         var idSession = request.result.idSession;
+                //         console.log(idSession);
+          
+                //     } catch (e) {
+                //         console.log(e);
+                //     }
+                //     // name.value = request.result.name;
+                //     // desc.value = request.result.desc;                    
+                //     // idSession.value = id;
+                // };
             } catch (ex) {
                 console.log(ex);
             }
@@ -947,33 +956,33 @@ function updateSession() {
  * Load the list of sessions for the main page.
  */ 
 function listSessions() {
-    var objectStore = db.transaction("sessions").objectStore("sessions");
-    var listSes = document.getElementById("list-session");
+    // var objectStore = db.transaction("sessions").objectStore("sessions");
+    // var listSes = document.getElementById("list-session");
     
-    removeAllItems(listSes);
+    // removeAllItems(listSes);
 
-    objectStore.openCursor().onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            var opt = document.createElement('option');
+    // objectStore.openCursor().onsuccess = function(event) {
+    //     var cursor = event.target.result;
+    //     if (cursor) {
+    //         var li = document.createElement("li");
+    //         var a = document.createElement("a");
+    //         var opt = document.createElement('option');
                 
-            opt.appendChild(
-                document.createTextNode(cursor.value.name));
+    //         opt.appendChild(
+    //             document.createTextNode(cursor.value.name));
                 
-            opt.value = cursor.value.idSession;
+    //         opt.value = cursor.value.idSession;
             
-            listSes.appendChild(opt);
-            cursor.continue();
-        }
-        else {
-            // Initialize the list of Exercises for the first Session.
-            changeSessionEx(null);
-        }
-    };
+    //         listSes.appendChild(opt);
+    //         cursor.continue();
+    //     }
+    //     else {
+    //         // Initialize the list of Exercises for the first Session.
+    //         //changeSessionEx(null);
+    //     }
+    // };
 }
-
+/*
 function changeSessionEx(event) {
 
     var listEx = document.getElementById('list-session');
@@ -982,7 +991,7 @@ function changeSessionEx(event) {
         listSessionEx(listEx.options[x].value);
     }
 }
-
+*/
 
 /** 
  * Load the list of exercise for a Session 
@@ -1129,7 +1138,7 @@ function dataChange(idSession) {
     displayListUpdateExercise(idSession);
     displayListSessions();
 
-    var listEx = document.getElementById('list-session');
+    /*var listEx = document.getElementById('list-session');
     var x = listEx.selectedIndex;
     if (x != -1) { 
         var sequence;
@@ -1138,7 +1147,7 @@ function dataChange(idSession) {
         if (idSession == sequence) {
             listSessionEx(sequence);
         }
-    }
+    } */
 }
 
 function removeAllItems(list) {

@@ -251,70 +251,24 @@
       <header class="fixed">
         <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
         <a href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
+        <menu type="toolbar">
+       <button class="icon icon-add" id="btn-go-add-session">
+         <span>edit</span>
+       </button>
+      </menu>
         <h1>Sports Timer</h1>
       </header>
-      <article class="scrollable header">
-        <div>
-
-          <div data-type="list">
-            <select id="list-session" onchange="changeSessionEx(event)">
-            </select>
-          </div>
-        
-          <div>
-              <select id="list-session-ex" >
-              </select>
-            <div class="chronosAction" id="effortDiv">              
-              <span id="chronoDisplay" >00:00</span>
-            </div>
-            <div class="chronosRecovery">
-              <span data-l10n-id="idRecovery" class="left">Recovery:</span>
-              <span  id="breakTimeDisplay" class="right">00:00</span>
-            </div>
-            <div class="chronosRound">
-              <span data-l10n-id="idRounds" class="left">Rounds:</span>
-              <span id="nbRetryDisplay" class="right">0/0</span>
-            </div>
-            <div class="magneto">
-              <table width=98%>
-                <th>
-                  <td style="text-align:center;">
-                    <button class="media-icon media-skipbackwards icon_button" id="btn-previous-ex" class="recommend"></button>
-                  </td>
-                  <td style="text-align:center;">
-                    <button class="media-icon media-play icon_button" id="btn-start-ex" class="recommend"></button>
-                  </td>
-                  <td>
-                  <button class="media-icon media-skipforward icon_button" id="btn-next-ex" class="recommend"></button>
-                  </td>
-                  <td style="text-align:center;">
-                    <button class="media-icon media-pause icon_button" id="btn-pause-ex" class="danger"></button>
-                  </td>
-                  <td style="text-align:center;">
-                    <button class="action-icon cancel icon_button" id="btn-cancel-ex" class="danger"></button>
-                  </td>
-                </th>
-              </table>
-            </div>
-
-          </div>
-         
-          <div class="footer">
-            <div class="magneto">
-              <div style="width:45%;float:left;">
-                <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
-                <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
-              </div>
-              <div style="width:55%; float:right;">
-                <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
-                <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
-                <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
-              </div>
-            </div>
-          </div>
+      <!-- ICI -->
+    <article class="scrollable header">
+        <div data-type="list">
+          <ul id="list-items-ses">
+          </ul>         
         </div>
-      </article>
 
+        <div>
+           <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteSessions">Delete Sessions</button>
+         </div>
+      </article>
     </section> <!-- end drawer -->
   </section> <!-- end index -->
 
@@ -484,28 +438,83 @@
         
   </section>
 
-    <!--·························· List Sessions ··························-->
-  <section role="region" id="listSessions" data-position="right">
+    <!--·························· Current Session ··························-->
+  <section role="region" id="currentSession" data-position="right">
     <header class="fixed">
-      <a id="btn-go-sessions-back" href="#"><span class="icon icon-back">back</span></a>
+      <a id="btn-go-current-session-back" href="#"><span class="icon icon-back">back</span></a>
      <menu type="toolbar">
-       <button class="icon icon-add" id="btn-go-add-session">
-         <span>add</span>
+       <button class="icon icon-edit" id="btn-go-add-session">
+         <span>edit</span>
        </button>
       </menu>
 
-      <h1 data-l10n-id="idListSessions">List Sessions</h1>
+      <h1 id="idTitleSession">Sessions</h1>
     </header>
-    <article class="scrollable header">
-        <div data-type="list">
-          <ul id="list-items-ses">
-          </ul>         
-        </div>
 
+      <article class="scrollable header">
         <div>
-           <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteSessions">Delete Sessions</button>
-         </div>
+
+          <!--div data-type="list">
+            <select id="list-session" onchange="changeSessionEx(event)">
+            </select>
+          </div -->
+        
+          <div>
+              <select id="list-session-ex" >
+              </select>
+            <div class="chronosAction" id="effortDiv">              
+              <span id="chronoDisplay" >00:00</span>
+            </div>
+            <div class="chronosRecovery">
+              <span data-l10n-id="idRecovery" class="left">Recovery:</span>
+              <span  id="breakTimeDisplay" class="right">00:00</span>
+            </div>
+            <div class="chronosRound">
+              <span data-l10n-id="idRounds" class="left">Rounds:</span>
+              <span id="nbRetryDisplay" class="right">0/0</span>
+            </div>
+            <div class="magneto">
+              <table width=98%>
+                <th>
+                  <td style="text-align:center;">
+                    <button class="media-icon media-skipbackwards icon_button" id="btn-previous-ex" class="recommend"></button>
+                  </td>
+                  <td style="text-align:center;">
+                    <button class="media-icon media-play icon_button" id="btn-start-ex" class="recommend"></button>
+                  </td>
+                  <td>
+                  <button class="media-icon media-skipforward icon_button" id="btn-next-ex" class="recommend"></button>
+                  </td>
+                  <td style="text-align:center;">
+                    <button class="media-icon media-pause icon_button" id="btn-pause-ex" class="danger"></button>
+                  </td>
+                  <td style="text-align:center;">
+                    <button class="action-icon cancel icon_button" id="btn-cancel-ex" class="danger"></button>
+                  </td>
+                </th>
+              </table>
+            </div>
+
+          </div>
+         
+          <div class="footer">
+            <div class="magneto">
+              <div style="width:45%;float:left;">
+                <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
+                <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
+              </div>
+              <div style="width:55%; float:right;">
+                <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
+                <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
+                <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
+              </div>
+            </div>
+          </div>
+        </div>
       </article>
+
+    
+
         
   </section>
 

@@ -22,6 +22,7 @@ function init() {
             console.log ("Database initialised.");
             db = DBOpenRequest.result;
             listSessions();
+            displayListSessions();
         };
 
         DBOpenRequest.onupgradeneeded = function(event) {
@@ -36,17 +37,28 @@ function init() {
                 var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
                 var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
                 var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});
+            } else {
+                var objectStore = thisDB.createObjectStore("exercice", { keyPath : "id", autoIncrement: true });
+                var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
+                var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});                
             }
 
             if (thisDB.objectStoreNames.contains("sessions")) {
                 thisDB.deleteObjectStore("sessions");
                 var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
                 var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
+            } else {
+                var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
+                var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});                
             }
  
-            if (!thisDB.objectStoreNames.contains("parameters")) {
+            if (thisDB.objectStoreNames.contains("parameters")) {
+                thisDB.deleteObjectStore("parameters");
                 var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
                 saveParameters( thisDB, 1, true);
+            } else {
+                var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
+                saveParameters( thisDB, 1, true);                
             }
         };
     } catch(e) {
