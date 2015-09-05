@@ -61,8 +61,8 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
     idSession.value = "-1";
 
     // Desactivate the button "AddExercises"
-    var btnAddExercises = document.getElementById('btn-add-sesEx');
-    btnAddExercises.disabled = true;
+    document.getElementById('btn-add-sesEx').disabled = true;
+    document.getElementById('btn-del-ses').disabled = true;
 
     document.getElementById('nameSession').value = "";
     document.getElementById('descSession').value = "";
@@ -324,8 +324,6 @@ listItemSes.onclick = function(e) {
 
               var idSession = document.getElementById('idSession');
               idSession.value = id;
-
-                console.log("Not found for Id: " + id);
                 var title = document.getElementById('idTitleSession');
                 title.innerHTML = collEnfants[i].innerHTML;
                 listSessionEx(id);
@@ -387,9 +385,6 @@ function displaySession() {
     
     var idSession = document.getElementById('idSession');
     var id = idSession.value;
-
-    console.log("found for Id: " + id);
-
     var request = objectStore.get(parseInt(id));
 
     request.onerror = function(event) {
@@ -406,8 +401,6 @@ function displaySession() {
       var duration = document.getElementById('durationUpd');
       try {
         var idSession = request.result.idSession;
-        console.log(idSession);
-        
       } catch (e) {
         console.log(e);
       }
@@ -943,10 +936,10 @@ Chronos.prototype.stop = function() {
 }
 
 
-// function displaySession() {
-//     session.addSessionSec();
-//     displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
-// }
+function displaySessionSecond() {
+    session.addSessionSec();
+    displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+}
 
 /**
  * Update session.
@@ -1010,6 +1003,8 @@ function updateSession() {
             
             request.onsuccess = function(event) {
               dataChange(id);
+              var title = document.getElementById('idTitleSession');
+              title.innerHTML = nameSes;
               document.querySelector('#updSession').className = 'right';
               document.querySelector('#currentSession').className = 'current';
             }
@@ -1230,6 +1225,7 @@ function dataChange(idSession) {
     listSessions();
     displayListUpdateExercise(idSession);
     displayListSessions();
+    listSessionEx(idSession);
 
     /*var listEx = document.getElementById('list-session');
     var x = listEx.selectedIndex;

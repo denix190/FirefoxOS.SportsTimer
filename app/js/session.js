@@ -3,14 +3,19 @@
 */ 
 
 function Session() {
-    this.flagStartSes = false;
-    this.timerSession;
-    this.chronoSession = document.getElementById('chronoSession');
-    this.sessionSec = 0;
-    this.beginSession;
-    this.endSession;
-    this.self = this;
-    this.exercises = new Array();
+  this.flagStartSes = false;
+  this.timerSession;
+  this.chronoSession = document.getElementById('chronoSession');
+  this.sessionSec = 0;
+  this.beginSession;
+  this.endSession;
+  this.self = this;
+  this.exercises = new Array();
+
+  this.addSessionSec = function () {
+    this.sessionSec++;
+  }
+
 }
 
 /**
@@ -21,7 +26,7 @@ Session.prototype.startSes = function() {
     this.beginSession = new Date();
     try {
         if (this.flagStartSes == false) {
-            this.timerSession = window.setInterval(self.displaySession, 1000);
+            this.timerSession = window.setInterval(this.displaySessionx, 1000);
             this.flagStartSes = true;
         }
     } catch(e) {
@@ -48,7 +53,7 @@ Session.prototype.cancelSes = function() {
         this.timerSession = window.clearInterval(this.timerSession);
         this.sessionSec = 0;
         this.flagStartSes = false;
-        displaySecond(this.chronoSession, this.sessionSec);
+        self.displaySecondx(this.chronoSession, this.sessionSec);
     } catch(e) {
         console.log(e);
     }
@@ -58,13 +63,16 @@ Session.prototype.getSessionSec = function () {
     return this.sessionSec;
 }
 
-Session.prototype.addSessionSec = function () {
-    this.sessionSec++;
-}
 
-Session.prototype.displaySession = function() {
-    self.addSessionSec();
-    displaySecond(document.getElementById('chronoSession'), self.getSessionSec());
+
+Session.prototype.displaySessionx = function() {
+  try {
+    this.sessionSec++;
+    // this.addSessionSec();
+    displaySecond(document.getElementById('chronoSession'), this.sessionSec);
+  } catch(e) {
+      console.log(e);
+    }
 }
 
 /**
