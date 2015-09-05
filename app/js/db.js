@@ -66,7 +66,27 @@ function init() {
     }
 }
 
-function dbDeleteSession(listSessions) {
+/**
+ * Delete one session.
+ */
+function dbDeleteSession(idSession) {
+  // Delete exercices for the session.
+
+  deleteExercisesBySession(idSession);
+  
+  var transaction = db.transaction(["sessions"],"readwrite");
+  var store = transaction.objectStore("sessions");
+  try {
+    var request = store.delete(idSession); 
+  } catch(e) {
+    console.log("Delete Error" + e); 
+  }
+}
+
+/**
+ * Delete list of sessions.
+ */
+function dbDeleteSessions(listSessions) {
     // Delete exercices for the session.
     for (var i = 0; i  < listSessions.length;i++) {
         deleteExercisesBySession(listSessions[i]);

@@ -258,16 +258,16 @@
       </menu>
         <h1>Sports Timer</h1>
       </header>
-      <!-- ICI -->
+     
     <article class="scrollable header">
         <div data-type="list">
           <ul id="list-items-ses">
           </ul>         
         </div>
 
-        <div>
-           <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteSessions">Delete Sessions</button>
-         </div>
+        <!-- <div> -->
+        <!--    <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteSessions">Delete Sessions</button> -->
+        <!--  </div> -->
       </article>
     </section> <!-- end drawer -->
   </section> <!-- end index -->
@@ -291,6 +291,7 @@
       <p width="100%">
           <span data-l10n-id="idEffortTime">Effort time</span>
           <select name="duration" id="duration">
+            <option value="10">10 sec</option>
             <option value="15">15 sec</option>
             <option value="30">30 sec</option>
             <option value="45">45 sec</option> 
@@ -312,6 +313,7 @@
           <span data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTime">
             <option value="0">None</option>
+            <option value="10">10 sec</option>
             <option value="15">15 sec</option>
             <option value="30">30 sec</option>
             <option value="45">45 sec</option> 
@@ -358,6 +360,7 @@
       <p>
         <span data-l10n-id="idEffortTime">Effort time</span> 
         <select name="duration" id="durationUpd">
+          <option value="10">10 sec</option>
           <option value="15">15 sec</option>
           <option value="30">30 sec</option> 
           <option value="45">45 sec</option>
@@ -377,20 +380,21 @@
         <p>
           <span data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTimeUpd">
-          <option value="0">None</option>
+            <option value="0">None</option>
+            <option value="10">10 sec</option>
             <option value="15">15 sec</option>
-           <option value="30">30 sec</option>
+            <option value="30">30 sec</option>
             <option value="45">45 sec</option>
-           <option value="60" selected>1 min</option>
-           <option value="90">1 min 30 sec</option>
-           <option value="120">2 min</option>
-           <option value="150">2 min 30 sec</option>
-           <option value="180">3 min</option>
-           <option value="210">3 min 30 sec</option>
-           <option value="240">4 min</option>
-           <option value="270">4 min 30 sec</option>
-           <option value="300">5 min</option>
-           <option value="330">6 min 30 sec</option>
+            <option value="60" selected>1 min</option>
+            <option value="90">1 min 30 sec</option>
+            <option value="120">2 min</option>
+            <option value="150">2 min 30 sec</option>
+            <option value="180">3 min</option>
+            <option value="210">3 min 30 sec</option>
+            <option value="240">4 min</option>
+            <option value="270">4 min 30 sec</option>
+            <option value="300">5 min</option>
+            <option value="330">6 min 30 sec</option>
          </select>
         </p>
 
@@ -423,7 +427,7 @@
       <h1 data-l10n-id="idListExercises">List Exercises</h1>
     </header>
     <article class="scrollable header">
-        <div data-type="list">
+        <div data-type="list" class="files">
           <ul id="list-items-ex">
           </ul>
         </div>
@@ -443,7 +447,7 @@
     <header class="fixed">
       <a id="btn-go-current-session-back" href="#"><span class="icon icon-back">back</span></a>
      <menu type="toolbar">
-       <button class="icon icon-edit" id="btn-go-add-session">
+       <button class="icon icon-edit" id="btn-go-upd-session">
          <span>edit</span>
        </button>
       </menu>
@@ -454,11 +458,6 @@
       <article class="scrollable header">
         <div>
 
-          <!--div data-type="list">
-            <select id="list-session" onchange="changeSessionEx(event)">
-            </select>
-          </div -->
-        
           <div>
               <select id="list-session-ex" >
               </select>
@@ -497,25 +496,20 @@
 
           </div>
          
-          <div class="footer">
-            <div class="magneto">
-              <div style="width:45%;float:left;">
-                <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
-                <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
-              </div>
-              <div style="width:55%; float:right;">
-                <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
-                <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
-                <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
-              </div>
+          <div class="magneto">
+            <div style="width:45%;float:left;">
+              <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
+              <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
+            </div>
+            <div style="width:55%; float:right;">
+              <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
+              <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
+              <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
             </div>
           </div>
         </div>
       </article>
 
-    
-
-        
   </section>
 
   <!-- Add/Update Session -->
@@ -541,6 +535,10 @@
 
       <div>
         <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises" >Exercises</button>
+      </div>
+
+      <div>
+        <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteExercise" >Delete</button>
       </div>
       
     </article>

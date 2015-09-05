@@ -56,6 +56,7 @@ document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function
 
 // Display the panel updating a Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
+  try {
     var idSession = document.getElementById('idSession');
     idSession.value = "-1";
 
@@ -67,12 +68,26 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
     document.getElementById('descSession').value = "";
     
     document.querySelector('#updSession').className = 'current';
-    document.querySelector('#listSessions').className = 'right';
+    // document.querySelector('#listSessions').className = 'right';
+    document.querySelector('[data-position="current"]').className = 'left';
+  } catch(e) {
+    console.log(e);
+  }
 });
 
 document.querySelector('#btn-go-upd-session-back').addEventListener('click', function () {
+  var idSession = document.getElementById('idSession');
+
+  var id = parseInt(idSession.value);
+  if (id == -1) {
     document.querySelector('#updSession').className = 'right';
-    document.querySelector('#listSessions').className = 'current';
+    //document.querySelector('#listSessions').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'current';
+  } else {
+    document.querySelector('#updSession').className = 'right';
+    document.querySelector('#currentSession').className = 'current';
+  }
+
 });
 
 // Display the panel Parameters.
@@ -163,10 +178,13 @@ document.querySelector('#chk-sound').addEventListener('change', checkSoundHandle
 // Update an Session.
 document.querySelector('#btn-upd-session').addEventListener('click', updateSession);
 
+// Display an Session.
+document.querySelector('#btn-go-upd-session').addEventListener('click', displaySession);
+
 // Configuration Exercises to Session
 document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesToSession);
 
-document.querySelector('#btn-del-ses').addEventListener('click', deleteSessions);
+document.querySelector('#btn-del-ses').addEventListener('click', deleteSession);
 
 document.querySelector('#btn-export').addEventListener('click', exportSessions);
 
@@ -285,12 +303,14 @@ listItemEx.onclick = function(e) {
  */
 listItemSes.onclick = function(e) {
 
-    document.getElementById('btn-add-sesEx').disabled = false;
+  document.getElementById('btn-add-sesEx').disabled = false;
+  console.log(e.target.parentNode);
+
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
 
-       if (collEnfants[i].tagName === 'A') {
+       if (collEnfants[i].tagName === 'P') {
             try {
                 document.querySelector('#currentSession').className = 'current';
                 document.querySelector('[data-position="current"]').className = 'left';
@@ -300,7 +320,11 @@ listItemSes.onclick = function(e) {
                 // var transaction = db.transaction(["sessions"]);
                 // var objectStore = transaction.objectStore("sessions", 'readonly');
                 
-                var id = parseInt(collEnfants[i].id);
+                var id = parseInt(e.target.parentNode.id);
+
+              var idSession = document.getElementById('idSession');
+              idSession.value = id;
+
                 console.log("Not found for Id: " + id);
                 var title = document.getElementById('idTitleSession');
                 title.innerHTML = collEnfants[i].innerHTML;
@@ -330,6 +354,7 @@ listItemSes.onclick = function(e) {
                 //     // desc.value = request.result.desc;                    
                 //     // idSession.value = id;
                 // };
+              break;
             } catch (ex) {
                 console.log(ex);
             }
@@ -349,6 +374,53 @@ function cancelSes() {
     session.cancelSes();
 }
 
+/**
+ * Display 
+ */
+function displaySession() {
+  try {
+    document.querySelector('#currentSession').className = 'left';
+    document.querySelector('#updSession').className = 'current'; 
+ 
+    var transaction = db.transaction(["sessions"]);
+    var objectStore = transaction.objectStore("sessions", 'readonly');
+    
+    var idSession = document.getElementById('idSession');
+    var id = idSession.value;
+
+    console.log("found for Id: " + id);
+
+    var request = objectStore.get(parseInt(id));
+
+    request.onerror = function(event) {
+      console.log("Not found for Id: " + id);
+    };
+
+    request.onsuccess = function(evt) {
+                          
+      var value = evt.target.result;
+      var name = document.getElementById('nameSession');
+      var desc = document.getElementById('descSession');
+      var nbRetry = document.getElementById('nbRetryUpd');
+      var breakTime = document.getElementById('breakTimeUpd');
+      var duration = document.getElementById('durationUpd');
+      try {
+        var idSession = request.result.idSession;
+        console.log(idSession);
+        
+      } catch (e) {
+        console.log(e);
+      }
+      name.value = request.result.name;
+      desc.value = request.result.desc;                    
+      idSession.value = id;
+    };
+  } catch (ex) {
+    console.log(ex);
+  }
+
+
+}
 
 /**
  * Add a new Exercise.
@@ -585,12 +657,8 @@ function pauseEx() {
             typeCounterPause = typeCounter;
             typeCounter = STATE_EX_PAUSE;
             chronos.stop();
-            // timer = window.clearInterval(timer);
-            // lock.unlock();
         } else  {
             chronos.start();
-            // timer = window.setInterval(display, 1000);
-            // lock = window.navigator.requestWakeLock("screen");
             typeCounter = typeCounterPause;
         }
     }
@@ -875,10 +943,10 @@ Chronos.prototype.stop = function() {
 }
 
 
-function displaySession() {
-    session.addSessionSec();
-    displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
-}
+// function displaySession() {
+//     session.addSessionSec();
+//     displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+// }
 
 /**
  * Update session.
@@ -917,14 +985,16 @@ function updateSession() {
             }
             
             request.onsuccess = function(event) {
-                document.getElementById('idSession').value = event.target.result;
+              document.getElementById('idSession').value = event.target.result;
+              document.getElementById('btn-add-sesEx').disabled = false;
 
-                document.getElementById('btn-add-sesEx').disabled = false;
-
-                displayListSessions();
-                listSessions();
+              displayListSessions();
+              listSessions();
+              document.querySelector('#updSession').className = 'right';
+              document.querySelector('[data-position="current"]').className = 'current';
             }
         } else {
+          // Update session
             var sessionRecord = {
                 name: nameSes,
                 desc: descSes,
@@ -939,12 +1009,11 @@ function updateSession() {
             }
             
             request.onsuccess = function(event) {
-                // displayListSessions();
-                //listSessions();
-                dataChange(id);
+              dataChange(id);
+              document.querySelector('#updSession').className = 'right';
+              document.querySelector('#currentSession').className = 'current';
             }
-            document.querySelector('#updSession').className = 'right';
-            document.querySelector('#listSessions').className = 'current';
+
         }
     
     } catch(e) {
@@ -1064,36 +1133,44 @@ function displayListSessions() {
  * Add an Session to the list.
 */ 
 function addSession(list, cursor) {
-    var li = document.createElement("li");
+  var li = document.createElement("li");
+  
+  var a = document.createElement("a");
+  a.setAttribute("id", cursor.value.idSession);
+  // a.text = cursor.value.name;
+  a.href = "#";
+
+  var p0 = document.createElement("p");
+  p0.innerHTML = cursor.value.name;
+  a.appendChild(p0);
+
+  var p1 = document.createElement("p");
+  p1.innerHTML = cursor.value.desc;
+  a.appendChild(p1);
     
-    var a = document.createElement("a");
-    a.setAttribute("id", cursor.value.idSession);
-    a.text = cursor.value.name;
-    a.href = "#";
+    // var checkbox = document.createElement('input');
+    // checkbox.type = "checkbox";
+    // checkbox.name = "checkBoxEx";
+    // checkbox.value = cursor.value.idSession;
+    // checkbox.id = "checkBoxEx";
     
-    var checkbox = document.createElement('input');
-    checkbox.type = "checkbox";
-    checkbox.name = "checkBoxEx";
-    checkbox.value = cursor.value.idSession;
-    checkbox.id = "checkBoxEx";
+    //var spanl = document.createElement("span");
+    //var spanr = document.createElement("span");
     
-    var spanl = document.createElement("span");
-    var spanr = document.createElement("span");
+    // var label = document.createElement("label");
+    // label.className = "pack-checkbox";
+    // label.appendChild(checkbox);
+    // var spanlbl = document.createElement("span");
+    // label.appendChild(spanlbl);
     
-    var label = document.createElement("label");
-    label.className = "pack-checkbox";
-    label.appendChild(checkbox);
-    var spanlbl = document.createElement("span");
-    label.appendChild(spanlbl);
+    //spanl.className = "rightCheckbox";
+    //spanr.className = "left";
     
-    spanl.className = "rightCheckbox";
-    spanr.className = "left";
+    //spanl.appendChild(a);
+    //spanr.appendChild(label);
     
-    spanl.appendChild(a);
-    spanr.appendChild(label);
-    
-    li.appendChild(spanl);
-    li.appendChild(spanr);
+    li.appendChild(a);
+  //li.appendChild(spanr);
 
     list.appendChild(li);    
 }
@@ -1105,6 +1182,22 @@ function addExercisesToSession() {
 
     var idSession = document.getElementById('idSession');
     displayListUpdateExercise(idSession.value);
+}
+
+function deleteSession() {
+    if (window.confirm(navigator.mozL10n.get("confirmDeleteSession"))) {
+      var idSession = document.getElementById('idSession');
+      var id  = parseInt(idSession.value);
+
+      // Delete session and exercises.
+      dbDeleteSession(id);
+
+      document.querySelector('#updSession').className = 'right';
+      document.querySelector('[data-position="current"]').className = 'current';
+
+      listSessions();
+      displayListSessions();
+    }
 }
 
 function deleteSessions() {
@@ -1121,7 +1214,7 @@ function deleteSessions() {
             }
         }
         // Delete session and exercises.
-        dbDeleteSession(listSession);
+        dbDeleteSessions(listSession);
         
         listSessions();
         displayListSessions();
