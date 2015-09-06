@@ -330,7 +330,7 @@
           <div class="magneto">
             <div style="width:45%;float:left;">
               <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
-              <!--span style="font-size:1.5rem;text-align:center;">TOTAL&nbsp;</span --><span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
+              <span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
             </div>
             <div style="width:55%; float:right;">
               <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
@@ -340,10 +340,48 @@
           </div>
         </div>
       </article>
-
   </section>
-  
-  
+
+  <!-- Add/Update Session -->
+  <section role="region" id="updSession" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-upd-session-back" href="#"><span class="icon icon-back">back</span></a>
+       <menu type="toolbar">
+         <button id="btn-upd-session" data-l10n-id="idUpdSession">Save</button>
+       </menu>
+      
+      <h1 data-l10n-id="idSession">Session</h1>
+    </header>
+    <article class="content scrollable header">
+      <p width="100%">
+        <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required/>
+        <input type="hidden" id="idSession" value=""/>
+      </p>
+
+      <p width="100%">
+        <textarea id="descSession" data-l10n-id="idDescSession" placeholder=""></textarea>
+      </p>
+
+      <div style="height:5rem;">
+        <label data-l10n-id="idnextAuto" class="parameters">Next auto:</label> 
+        <label class="pack-switch">
+          <input type="checkbox" checked  id="chk-nextAuto">
+            </input>
+            <span></span>
+        </label>  
+
+      </div>
+      <div>
+        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises" >Exercises</button>
+      </div>
+
+      <div>
+        <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteExercise" >Delete</button>
+      </div>
+      
+    </article>
+  </section>
+    
   <!--·························· add Exercise ··························-->
   <section role="region" id="addExercise" data-position="right">
     <header class="fixed">
@@ -515,37 +553,6 @@
 
 
 
-  <!-- Add/Update Session -->
-
-  <section role="region" id="updSession" data-position="right">
-    <header class="fixed">
-      <a id="btn-go-upd-session-back" href="#"><span class="icon icon-back">back</span></a>
-       <menu type="toolbar">
-         <button id="btn-upd-session" data-l10n-id="idUpdSession">Save</button>
-       </menu>
-      
-      <h1 data-l10n-id="idSession">Session</h1>
-    </header>
-    <article class="content scrollable header">
-      <p width="100%">
-        <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required/>
-        <input type="hidden" id="idSession" value=""/>
-      </p>
-
-      <p width="100%">
-        <textarea id="descSession" data-l10n-id="idDescSession" placeholder=""></textarea>
-      </p>
-
-      <div>
-        <button id="btn-add-sesEx" class="recommend" data-l10n-id="idAddExercises" >Exercises</button>
-      </div>
-
-      <div>
-        <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteExercise" >Delete</button>
-      </div>
-      
-    </article>
-  </section>
 
   <!--·························· Parameters ··························-->
   <section role="region" id="pnl_parameters" data-position="right">
