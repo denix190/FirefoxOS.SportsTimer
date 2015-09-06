@@ -936,10 +936,10 @@ Chronos.prototype.stop = function() {
 }
 
 
-function displaySessionSecond() {
-    session.addSessionSec();
-    displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
-}
+// function displaySessionSecond() {
+//     session.addSessionSec();
+//     displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+// }
 
 /**
  * Update session.
