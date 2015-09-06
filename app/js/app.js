@@ -1069,14 +1069,13 @@ function listSessionEx(idSession) {
     var index = objectStore.index("BySession");
     var id = parseInt(idSession);
     var request = index.openCursor(IDBKeyRange.only(id));
-    
+  var i = 0;
     request.onsuccess = function(event) {
         try {
             var cursor = event.target.result;
             if (cursor) {
-                var li = document.createElement("li");
-                var a = document.createElement("a");
-                var opt = document.createElement('option');
+              var li = document.createElement("li");
+              var opt = document.createElement('option');
                 
                 opt.appendChild(
                     document.createTextNode(cursor.value.name
@@ -1088,6 +1087,8 @@ function listSessionEx(idSession) {
                     + "," + cursor.value.breakTime
                     + "," + cursor.value.nbRetry;
                 listEx.appendChild(opt);
+              // li.appendChild(a);
+              // listEx.appendChild(li);
                 cursor.continue();
             }
             else {
