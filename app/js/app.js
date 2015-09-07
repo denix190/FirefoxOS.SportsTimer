@@ -14,8 +14,11 @@ var nbRetryEx;
 
 var typeCounter;
 var typeCounterPause;
+
+// Parameters
 var flagSound = true;
 var flagStart = false;
+var idNextExercice = true
 
 var chronoDisplay = document.getElementById('chronoDisplay');
 var breakTimeDisplay = document.getElementById('breakTimeDisplay');
@@ -176,6 +179,8 @@ document.querySelector('#btn-del-ex').addEventListener('click', deleteExercises)
 
 document.querySelector('#chk-sound').addEventListener('change', checkSoundHandler);
 
+document.querySelector('#chk-next-exercice').addEventListener('change', checkNextExercice);
+
 // Update an Session.
 document.querySelector('#btn-upd-session').addEventListener('click', updateSession);
 
@@ -204,6 +209,13 @@ var listFiles = document.getElementById('list-files');
 function checkSoundHandler(event) {
   flagSound = event.originalTarget.checked;
   saveParameters(db, 1, flagSound);
+}
+
+/**
+ * Check the next exercice.
+ */
+function checkNextExercice(event) {
+  idNextExercice = event.originalTarget.checked;
 }
 
 /*
@@ -538,28 +550,28 @@ function displayListExercise() {
     var request = index.openCursor(null, 'next');
 
     request.onsuccess = function(event) {
-                                  var cursor = event.target.result;
-                                  if (cursor) {
-                                    var li = document.createElement("li");
-                                    var a = document.createElement("a");
-                                    var opt = document.createElement('option');
-                                    
-                                    opt.appendChild(
-                                      document.createTextNode(cursor.value.name
-                                  + " (" + cursor.value.duration
-                                  + " -  " + cursor.value.breakTime + ")"
-                             + "*" + cursor.value.nbRetry) );
-                                    
-                                        opt.value = cursor.value.duration
-     + "," + cursor.value.breakTime
+      var cursor = event.target.result;
+      if (cursor) {
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        var opt = document.createElement('option');
+        
+        opt.appendChild(
+          document.createTextNode(cursor.value.name
+                                 + " (" + cursor.value.duration
+                                 + " -  " + cursor.value.breakTime + ")"
+                                 + "*" + cursor.value.nbRetry) );
+        
+        opt.value = cursor.value.duration
+                  + "," + cursor.value.breakTime
                   + "," + cursor.value.nbRetry;
-                                    listEx.appendChild(opt);
-                                    cursor.continue();
-                                  }
-                                  else {
-                                    // alert();ert("No more entries!");
-                                  }
-                                };
+        listEx.appendChild(opt);
+        cursor.continue();
+      }
+      else {
+        // alert();ert("No more entries!");
+      }
+    };
   } catch (e) {
                                         console.log(e);
   }
@@ -579,23 +591,23 @@ function displayListUpdateExercise(idSession) {
   var request = index.openCursor(IDBKeyRange.only(id));
   
   request.onsuccess = function(event) {
-              try {
-                var cursor = event.target.result;
-                if (cursor) {
-                  addExercise(listEx, cursor);
-                  cursor.continue();
-                }
-                else {
-                  // alert("No more entries!");
-                }
-              } catch (e) {
-                console.log(e);
-              }
-            };
-
-                    request.onerror = function(e) {
-                    console.log("listExercise ", e);
-       }
+    try {
+      var cursor = event.target.result;
+      if (cursor) {
+        addExercise(listEx, cursor);
+        cursor.continue();
+      }
+      else {
+        // alert("No more entries!");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  request.onerror = function(e) {
+    console.log("listExercise ", e);
+  }
 }
 
 /**
@@ -730,13 +742,17 @@ function playSound(sound) {
 function display() {
   
   if (nbRetryCounter > nbRetryEx) {
+    // End of exercice.
     playSound('finalSound');
     session.stopExercise();
     endExercise();
     chronos.stop();
 
+    if (idNextExercice) {
+      nextEx();
+    }
     try {   
-            window.navigator.vibrate(1000);
+      window.navigator.vibrate(1000);
     } catch(e) {
       window.alert(e);
     }
@@ -883,33 +899,33 @@ function loadParameters(id) {
     var request = store.get(id);
     
     request.onerror = function(e) {
-                     console.log("Error parameterRecord", e.target.error.name);
-                   }
+      console.log("Error parameterRecord", e.target.error.name);
+    }
     
     request.onsuccess = function(event) {
-               try {
-                 console.log("parameters value: " + request.result.value);
-                 flagSound = request.result.value;
-                 var chk = document.getElementById("chk-sound");
+      try {
+        console.log("parameters value: " + request.result.value);
+        flagSound = request.result.value;
+        var chk = document.getElementById("chk-sound");
                  chk.checked = flagSound;
-               } catch(e) {
-                 console.log(e);
-               }
-             }
-
+      } catch(e) {
+        console.log(e);
+      }
+    }
+    
   } catch(e) {
-                     console.log(e);
+    console.log(e);
   }
 }
 
-                     /**
-                         * 
-                         */
-                     function Chronos() {
-                       this.timer;
-                       this.lock;
-                       this.isLock;
-                     }
+/**
+ * 
+ */
+function Chronos() {
+  this.timer;
+  this.lock;
+  this.isLock;
+}
 
 Chronos.prototype.start = function() {
                      this.timer = window.setInterval(display, 1000);
