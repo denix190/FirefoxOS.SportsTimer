@@ -67,9 +67,7 @@ Session.prototype.addSessionSec = function () {
 
 Session.prototype.displaySessionx = function() {
   try {
-    
     this.sessionSec++;
-    // this.addSessionSec();
     displaySecond(document.getElementById('chronoSession'), this.sessionSec);
   } catch(e) {
       console.log(e);
@@ -83,7 +81,6 @@ Session.prototype.displaySessionx = function() {
 Session.prototype.startExercise = function(exercise) {
   try {
     this.exercises.push(exercise);
-    console.log(this.exercises);
   } catch(e) {
     console.log(e);
   }

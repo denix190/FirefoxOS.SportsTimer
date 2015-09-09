@@ -43,42 +43,45 @@ ImportSession.prototype.load = function() {
  */
 
 ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
+
+  if (typeof navigator.getDeviceStorage === "function") {  
     var files = navigator.getDeviceStorage(storagename);
 	var cursor = files.enumerate();
     var done = false;
 	cursor.onsuccess = function () {
-		var file = this.result;
-		if (file != null ) {
-            try {
-                var fileName = file.name;
-
-                if (fileName.startsWith("st") && fileName.endsWith(".json")) {
-                    var li = document.createElement("li");
-                    var a = document.createElement("a");
-                    a.setAttribute("id", file.name);
-                    a.href = "#";
-
-                    var p0 = document.createElement("p");
-                    p0.innerHTML = file.name;
-                    a.appendChild(p0);
-
-                    li.appendChild(a);
-			        listFiles.appendChild(li);
-
-			        done = false;
-                }
-            } catch(e) {
-                console.log(e);
-            }
-		}
-		else {
-			done = true;
-		}
-        
-		if (!done) {
-			cursor.continue();
-		}
+	  var file = this.result;
+	  if (file != null ) {
+        try {
+          var fileName = file.name;
+          
+          if (fileName.startsWith("st") && fileName.endsWith(".json")) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.setAttribute("id", file.name);
+            a.href = "#";
+            
+            var p0 = document.createElement("p");
+            p0.innerHTML = file.name;
+            a.appendChild(p0);
+            
+            li.appendChild(a);
+			listFiles.appendChild(li);
+            
+			done = false;
+          }
+        } catch(e) {
+          console.log(e);
+        }
+	  }
+	  else {
+		done = true;
+	  }
+      
+	  if (!done) {
+		cursor.continue();
+	  }
 	}
+  }
 }
 
    

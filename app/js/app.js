@@ -236,17 +236,17 @@ listFiles.onclick = function(e) {
       var reader = new FileReader();
       
       reader.onload = function(e) {
-                     var sessions = JSON.parse(reader.result);
-
-                     // Write sessions
-                     if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) {
-                       var chkReplaceAll = document.getElementById('chk-replaceAll');
-                       var importSession = new ImportSession(sessions, chkReplaceAll.checked);
-                       importSession.load();
-                       window.alert(navigator.mozL10n.get("ImportSessionFinish"));
-                       dataChange(0);
-                     }
-                   }
+        var sessions = JSON.parse(reader.result);
+        
+        // Write sessions
+        if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) {
+          var chkReplaceAll = document.getElementById('chk-replaceAll');
+          var importSession = new ImportSession(sessions, chkReplaceAll.checked);
+          importSession.load();
+          window.alert(navigator.mozL10n.get("ImportSessionFinish"));
+          dataChange(0);
+        }
+      }
       
       reader.readAsText(file, 'utf-8');
     }  catch (e){
@@ -255,8 +255,8 @@ listFiles.onclick = function(e) {
   }
 
   request.onerror = function () {
-   console.warn( this.error);
- }
+    console.warn( this.error);
+  }
 
 }
 
@@ -265,7 +265,6 @@ listItemEx.onclick = function(e) {
     var collEnfants = e.target.parentNode.childNodes;
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
-
       if (collEnfants[i].tagName === 'A'){
 
         try {
@@ -399,26 +398,26 @@ function displaySession() {
 
     request.onsuccess = function(evt) {
                         
-                        var value = evt.target.result;
-                        var name = document.getElementById('nameSession');
-                        var desc = document.getElementById('descSession');
-                        var check = document.getElementById('chk-nextAuto');
-                        try {
-                          var idSession = request.result.idSession;
-                        } catch (e) {
-                          console.log(e);
-                        }
-                        name.value = request.result.name;
-                        desc.value = request.result.desc;
-                        if (request.result.hasOwnProperty("nextAuto")) {
-                          console.log("id : " + id + " nextAuto " + request.result.nextAuto);
-                          check.checked = request.result.nextAuto;
-                        } else {
-                          check.checked = false;
-                        }
-                              
-                        idSession.value = id;
-                      };
+      var value = evt.target.result;
+      var name = document.getElementById('nameSession');
+      var desc = document.getElementById('descSession');
+      var check = document.getElementById('chk-nextAuto');
+      try {
+        var idSession = request.result.idSession;
+      } catch (e) {
+        console.log(e);
+      }
+      name.value = request.result.name;
+      desc.value = request.result.desc;
+      if (request.result.hasOwnProperty("nextAuto")) {
+        console.log("id : " + id + " nextAuto " + request.result.nextAuto);
+        check.checked = request.result.nextAuto;
+      } else {
+        check.checked = false;
+      }
+      
+      idSession.value = id;
+    };
   } catch (ex) {
     console.log(ex);
   }
@@ -458,7 +457,7 @@ function storeEx() {
       duration: duration,
       breakTime: breakTime,
       nbRetry: nbRetry,
-        desc: descEx,
+      desc: descEx,
       idSession : parseInt(idSession.value),
       created:new Date()
     }
@@ -509,7 +508,7 @@ function updateEx() {
       id: id,
       name: nameEx,
       duration: duration,
-        breakTime: breakTime,
+      breakTime: breakTime,
       nbRetry: nbRetry,
       desc: descEx,
       idSession :parseInt(idSession.value),
@@ -523,7 +522,7 @@ function updateEx() {
     }
     
     request.onsuccess = function(event) {
-      displayListUpdateExercise(parseInt(idSession.value));
+      dataChange(parseInt(idSession.value));
     }
     
     document.querySelector('#updExercise').className = 'right';
@@ -626,9 +625,9 @@ function addExercise(list, cursor) {
   
   var checkbox = document.createElement('input');
   checkbox.type = "checkbox";
-      checkbox.name = "checkBoxEx";
+  checkbox.name = "checkBoxEx";
   checkbox.value = cursor.value.id;
-      checkbox.id = "checkBoxEx";
+  checkbox.id = "checkBoxEx";
   
   var spanl = document.createElement("span");
   var spanr = document.createElement("span");
@@ -654,16 +653,16 @@ function addExercise(list, cursor) {
 
 function pauseEx() {
 
-      if (flagStart) {
-        if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
-          typeCounterPause = typeCounter;
-          typeCounter = STATE_EX_PAUSE;
-          chronos.stop();
-        } else  {
-          chronos.start();
-          typeCounter = typeCounterPause;
-        }
-      }
+  if (flagStart) {
+    if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
+      typeCounterPause = typeCounter;
+      typeCounter = STATE_EX_PAUSE;
+      chronos.stop();
+    } else  {
+      chronos.start();
+      typeCounter = typeCounterPause;
+    }
+  }
 }
 
 function previousEx() {
@@ -928,154 +927,117 @@ function Chronos() {
 }
 
 Chronos.prototype.start = function() {
-                     this.timer = window.setInterval(display, 1000);
-                          this.lock = window.navigator.requestWakeLock("screen");
-                          this.isLock = true;
-                        }
+  this.timer = window.setInterval(display, 1000);
 
-                     Chronos.prototype.stop = function() {
-                     this.timer = window.clearInterval(this.timer);
-                     try {
-                       if (this.lock !== null && this.lock !== undefined && this.isLock == true) {
-                         this.lock.unlock();
-                         this.isLock = false;
-                       }
-                     } catch (e) {
-                       if (e.result =! 2152923147) {
-                         alert(e);
-                         console.log(e);
-                       }
-                     }
-                                     }
+  if (typeof window.navigator.requestWakeLock === "function") {
+    try {
+      this.lock = window.navigator.requestWakeLock("screen");
+    } catch(e) {
+      console.log("Can't lock the screen!" + e);
+    }
+  }
 
+  this.isLock = true;
+}
 
-// function displaySessionSecond() {
-//     session.addSessionSec();
-//     displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
-// }
+Chronos.prototype.stop = function() {
+  this.timer = window.clearInterval(this.timer);
+  try {
+    if (this.lock !== null && this.lock !== undefined && this.isLock == true) {
+      this.lock.unlock();
+      this.isLock = false;
+    }
+  } catch (e) {
+    if (e.result =! 2152923147) {
+      alert(e);
+      console.log(e);
+    }
+  }
+}
+
 
 /**
  * Update session.
-                                                                 */
-                     function updateSession() {
-                     try {
+ */
+function updateSession() {
+  try {
+    
+    var nameId = document.getElementById("nameSession");
+    var descId = document.getElementById("descSession");
+    var idSession = document.getElementById('idSession');
+    var chkNextAuto = document.getElementById('chk-nextAuto');
+    
+    var nameSes = nameId.value;
+    var descSes = descId.value;
+    var id = parseInt(idSession.value);
+        
+    if (nameSes.length == 0) {
+      window.alert(navigator.mozL10n.get("idAlertNoName"));
+      return;
+    }
+    
+    var transaction = db.transaction(["sessions"],"readwrite");
+    var store = transaction.objectStore("sessions");
+    
+    if (id == -1) {
+      //Define a new sessionRecord
+      var sessionRecord = {
+        name: nameSes,
+        desc: descSes,
+        nextAuto: chkNextAuto.checked,
+          created:new Date()
+      }
+      
+      var request = store.add(sessionRecord);
+      
+      request.onerror = function(e) {
+        console.log("Error SportsTimer", e.target.error.name);
+      }
+      
+      request.onsuccess = function(event) {
+        document.getElementById('idSession').value = event.target.result;
+        document.getElementById('btn-add-sesEx').disabled = false;
+        
+        displayListSessions();
+        document.querySelector('#updSession').className = 'right';
+        document.querySelector('[data-position="current"]').className = 'current';
+      }
+    } else {
+      // Update session
+      var sessionRecord = {
+        name: nameSes,
+        desc: descSes,
+          nextAuto: chkNextAuto.checked,
+        created:new Date(),
+          idSession : id
+      }
+      console.log("Update id:" + id + " nextAuto: " + chkNextAuto.checked);
+      var request = store.put(sessionRecord);
+      
+      request.onerror = function(e) {
+        console.log("Error SportsTimer", e.target.error.name);
+      }
+      
+      request.onsuccess = function(event) {
+        dataChange(id);
+        var title = document.getElementById('idTitleSession');
+        title.innerHTML = nameSes;
+        document.querySelector('#updSession').className = 'right';
+        document.querySelector('#currentSession').className = 'current';
+      }
+      
+    }
+    
+  } catch(e) {
+    console.log(e);
+  }
+} 
 
-                       var nameId = document.getElementById("nameSession");
-                       var descId = document.getElementById("descSession");
-                       var idSession = document.getElementById('idSession');
-                       var chkNextAuto = document.getElementById('chk-nextAuto');
-                       
-                       var nameSes = nameId.value;
-                       var descSes = descId.value;
-                       var id = parseInt(idSession.value);
 
-                       if (nameSes.length == 0) {
-                         window.alert(navigator.mozL10n.get("idAlertNoName"));
-                         return;
-                       }
-
-                       var transaction = db.transaction(["sessions"],"readwrite");
-                       var store = transaction.objectStore("sessions");
-
-                       if (id == -1) {
-                         //Define a new sessionRecord
-                         var sessionRecord = {
-                           name: nameSes,
-                           desc: descSes,
-                           nextAuto: chkNextAuto.checked,
-                           created:new Date()
-                         }
-                         
-                         var request = store.add(sessionRecord);
-                         
-                         request.onerror = function(e) {
-                          console.log("Error SportsTimer", e.target.error.name);
-                        }
-                         
-                         request.onsuccess = function(event) {
-                         document.getElementById('idSession').value = event.target.result;
-                         document.getElementById('btn-add-sesEx').disabled = false;
-
-                         displayListSessions();
-                         listSessions();
-                         document.querySelector('#updSession').className = 'right';
-                         document.querySelector('[data-position="current"]').className = 'current';
-                       }
-                       } else {
-                         // Update session
-                         var sessionRecord = {
-                           name: nameSes,
-                           desc: descSes,
-                           nextAuto: chkNextAuto.checked,
-                           created:new Date(),
-                           idSession : id
-                         }
-                             console.log("Update id:" + id + " nextAuto: " + chkNextAuto.checked);
-                         var request = store.put(sessionRecord);
-                             
-                             request.onerror = function(e) {
-                                         console.log("Error SportsTimer", e.target.error.name);
-                                       }
-                         
-                         request.onsuccess = function(event) {
-            dataChange(id);
-            var title = document.getElementById('idTitleSession');
-            title.innerHTML = nameSes;
-            document.querySelector('#updSession').className = 'right';
-            document.querySelector('#currentSession').className = 'current';
-          }
-
-                       }
-                       
-                     } catch(e) {
-                       console.log(e);
-                     }
-                     } 
-
-/**
-                                            * Load the list of sessions for the main page.
-                                                                                          */ 
-function listSessions() {
-  // var objectStore = db.transaction("sessions").objectStore("sessions");
-  // var listSes = document.getElementById("list-session");
-  
-  // removeAllItems(listSes);
-
-  // objectStore.openCursor().onsuccess = function(event) {
-  //     var cursor = event.target.result;
-  //     if (cursor) {
-  //         var li = document.createElement("li");
-  //         var a = document.createElement("a");
-  //         var opt = document.createElement('option');
-  
-  //         opt.appendChild(
-  //             document.createTextNode(cursor.value.name));
-  
-  //         opt.value = cursor.value.idSession;
-  
-  //         listSes.appendChild(opt);
-  //         cursor.continue();
-  //     }
-  //     else {
-  //         // Initialize the list of Exercises for the first Session.
-  //         //changeSessionEx(null);
-  //     }
-  // };
-}
-/*
-                                    function changeSessionEx(event) {
-
- var listEx = document.getElementById('list-session');
-                                               var x = listEx.selectedIndex;
-                                         if (x != -1) {
-                                                      listSessionEx(listEx.options[x].value);
-                                                                                   }
-                                                                               }
-                                                  */
 
 /** 
-             * Load the list of exercise for a Session 
-                                        */ 
+ * Load the list of exercise for a Session 
+ */ 
 function listSessionEx(idSession) {
   var objectStore = db.transaction("exercice").objectStore("exercice");
   var listEx = document.getElementById("list-session-ex");
@@ -1087,37 +1049,37 @@ function listSessionEx(idSession) {
   var request = index.openCursor(IDBKeyRange.only(id));
   var i = 0;
   request.onsuccess = function(event) {
-                     try {
-                       var cursor = event.target.result;
-                       if (cursor) {
-                         var li = document.createElement("li");
-                         var opt = document.createElement('option');
-                         
-                             opt.appendChild(
-                             document.createTextNode(cursor.value.name
-                                             + " (" + cursor.value.duration
-                                              + " -  " + cursor.value.breakTime + ")"
-                                          + "x" + cursor.value.nbRetry) );
-                         
-                         opt.value = cursor.value.duration
-         + "," + cursor.value.breakTime
-                 + "," + cursor.value.nbRetry;
-                         listEx.appendChild(opt);
-                         // li.appendChild(a);
-                         // listEx.appendChild(li);
-                         cursor.continue();
-                       }
-                       else {
-                         // alert("No more entries!");
-                       }
-                     } catch (e) {
-                       console.log(e);
-                     }
-                   };
+    try {
+      var cursor = event.target.result;
+      if (cursor) {
+        var li = document.createElement("li");
+        var opt = document.createElement('option');
+        
+        opt.appendChild(
+              document.createTextNode(cursor.value.name
+            + " (" + cursor.value.duration
+            + " -  " + cursor.value.breakTime + ")"
+            + "x" + cursor.value.nbRetry) );
+        
+        opt.value = cursor.value.duration
+      + "," + cursor.value.breakTime
+      + "," + cursor.value.nbRetry;
+        listEx.appendChild(opt);
+        // li.appendChild(a);
+        // listEx.appendChild(li);
+        cursor.continue();
+      }
+      else {
+        // alert("No more entries!");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   request.onerror = function(e) {
-        console.log("listExercise ", e);
-    }
+    console.log("listExercise ", e);
+  }
 }
 
 /**
@@ -1207,7 +1169,6 @@ function deleteSession() {
       document.querySelector('#updSession').className = 'right';
       document.querySelector('[data-position="current"]').className = 'current';
 
-      listSessions();
       displayListSessions();
     }
 }
@@ -1227,8 +1188,7 @@ function deleteSessions() {
         }
         // Delete session and exercises.
         dbDeleteSessions(listSession);
-        
-        listSessions();
+
         displayListSessions();
     }
 }
@@ -1239,7 +1199,7 @@ function deleteSessions() {
  * Actualize the list, after modification of session/exercice.
 */
 function dataChange(idSession) {
-    listSessions();
+
     displayListUpdateExercise(idSession);
     displayListSessions();
     listSessionEx(idSession);
@@ -1265,39 +1225,39 @@ function removeAllItems(list) {
 
 function loadListFiles(storagename) {
 
-    // Remove all elements.
-    removeAllItems(document.getElementById("list-files"));
+  // Remove all elements.
+  removeAllItems(document.getElementById("list-files"));
     
-    
+  if (typeof navigator.getDeviceStorage === "function") {  
 	var files = navigator.getDeviceStorage(storagename);
 	var cursor = files.enumerate();
     var listFiles = document.getElementById('list-files');
-
+    
     var importSession = new ImportSession();
     importSession.loadListFiles('sdcard', listFiles);
+  }
 }
 
 function exportSessions() {
     
-    var chkSessionExport = document.getElementById('chk-sessionExport');
-    //  var chkDataExport = document.getElementById('chk-dataExport');
-
-    var fileName = document.getElementById('fileName');
-
-    if (fileName.value.length == 0) {
-        window.alert(navigator.mozL10n.get("idAlertNoFileName"));
-        return;
-    }
-
-    if (chkSessionExport.checked ) {
-        var backup = new Export(fileName.value);
-
-        backup.build();
-
-        // dbExportSessions(fileName.value);
-        // window.alert(navigator.mozL10n.get("alertExportNoCheck"));
-        // return;
-    }
+  var chkSessionExport = document.getElementById('chk-sessionExport');
+  
+  var fileName = document.getElementById('fileName');
+  
+  if (fileName.value.length == 0) {
+    window.alert(navigator.mozL10n.get("idAlertNoFileName"));
+    return;
+  }
+  
+  if (chkSessionExport.checked ) {
+    var backup = new Export(fileName.value);
+    
+    backup.build();
+    
+    // dbExportSessions(fileName.value);
+    // window.alert(navigator.mozL10n.get("alertExportNoCheck"));
+    // return;
+  }
 }
 
 function importSessions() {
