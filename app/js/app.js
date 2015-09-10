@@ -333,12 +333,9 @@ listItemSes.onclick = function(e) {
         listSessionEx(id);
 
         var transaction = db.transaction(["sessions"]);
-        var objectStore = transaction.objectStore("sessions", 'readonly');        
-
+        var objectStore = transaction.objectStore("sessions", 'readonly');
         var request = objectStore.get(id);
 
-        // var request = objectStore.get(id);
-        
         request.onerror = function(event) {
           console.log("Not found for Id: " + id);
         };
@@ -347,7 +344,6 @@ listItemSes.onclick = function(e) {
       
           try {
             if (request.result.hasOwnProperty("nextAuto")) {
-              console.log("id : " + id + " nextAuto " + request.result.nextAuto);
               nextAuto = request.result.nextAuto;
             } else {
               nextAuto = false;
@@ -410,7 +406,6 @@ function displaySession() {
       name.value = request.result.name;
       desc.value = request.result.desc;
       if (request.result.hasOwnProperty("nextAuto")) {
-        console.log("id : " + id + " nextAuto " + request.result.nextAuto);
         check.checked = request.result.nextAuto;
       } else {
         check.checked = false;
@@ -966,6 +961,7 @@ function updateSession() {
     var descId = document.getElementById("descSession");
     var idSession = document.getElementById('idSession');
     var chkNextAuto = document.getElementById('chk-nextAuto');
+    var chkChainExercises = document.getElementById('chk-chainExercises');
     
     var nameSes = nameId.value;
     var descSes = descId.value;
@@ -985,7 +981,8 @@ function updateSession() {
         name: nameSes,
         desc: descSes,
         nextAuto: chkNextAuto.checked,
-          created:new Date()
+        chainExercises : chkChainExercises.checked,
+        created:new Date()
       }
       
       var request = store.add(sessionRecord);
@@ -1007,7 +1004,8 @@ function updateSession() {
       var sessionRecord = {
         name: nameSes,
         desc: descSes,
-          nextAuto: chkNextAuto.checked,
+        nextAuto: chkNextAuto.checked,
+        chainExercises : chkChainExercises.checked,
         created:new Date(),
           idSession : id
       }
