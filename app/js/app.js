@@ -397,7 +397,7 @@ function displaySession() {
       var value = evt.target.result;
       var name = document.getElementById('nameSession');
       var desc = document.getElementById('descSession');
-      var check = document.getElementById('chk-nextAuto');
+      var check = document.getElementById('chk-chainExercises');
       try {
         var idSession = request.result.idSession;
       } catch (e) {
@@ -405,8 +405,8 @@ function displaySession() {
       }
       name.value = request.result.name;
       desc.value = request.result.desc;
-      if (request.result.hasOwnProperty("nextAuto")) {
-        check.checked = request.result.nextAuto;
+      if (request.result.hasOwnProperty("chainExercises")) {
+        check.checked = request.result.chainExercises;
       } else {
         check.checked = false;
       }
@@ -745,11 +745,11 @@ function display() {
     if (idNextExercice) {
       nextEx();
     }
-    try {   
+   
+    if ('vibrate' in navigator) {
       window.navigator.vibrate(1000);
-    } catch(e) {
-      window.alert(e);
     }
+ 
     return;
   }
   
@@ -924,7 +924,7 @@ function Chronos() {
 Chronos.prototype.start = function() {
   this.timer = window.setInterval(display, 1000);
 
-  if (typeof window.navigator.requestWakeLock === "function") {
+  if ('requestWakeLock' in navigator) {
     try {
       this.lock = window.navigator.requestWakeLock("screen");
     } catch(e) {
@@ -960,7 +960,6 @@ function updateSession() {
     var nameId = document.getElementById("nameSession");
     var descId = document.getElementById("descSession");
     var idSession = document.getElementById('idSession');
-    var chkNextAuto = document.getElementById('chk-nextAuto');
     var chkChainExercises = document.getElementById('chk-chainExercises');
     
     var nameSes = nameId.value;
@@ -980,7 +979,6 @@ function updateSession() {
       var sessionRecord = {
         name: nameSes,
         desc: descSes,
-        nextAuto: chkNextAuto.checked,
         chainExercises : chkChainExercises.checked,
         created:new Date()
       }
@@ -1004,12 +1002,10 @@ function updateSession() {
       var sessionRecord = {
         name: nameSes,
         desc: descSes,
-        nextAuto: chkNextAuto.checked,
         chainExercises : chkChainExercises.checked,
         created:new Date(),
-          idSession : id
+        idSession : id
       }
-      console.log("Update id:" + id + " nextAuto: " + chkNextAuto.checked);
       var request = store.put(sessionRecord);
       
       request.onerror = function(e) {
