@@ -1,12 +1,8 @@
 'use strict';
 
-var note = null;
-var lock = null;
-
 var durationCounter;
 var breakTimeCounter;
 var nbRetryCounter;
-var nextAuto = false;
 
 var durationEx;
 var breakTimeEx;
@@ -15,10 +11,8 @@ var nbRetryEx;
 var typeCounter;
 var typeCounterPause;
 
-// Parameters
-var flagSound = true;
+
 var flagStart = false;
-var idNextExercice = true
 
 var chronoDisplay = document.getElementById('chronoDisplay');
 var breakTimeDisplay = document.getElementById('breakTimeDisplay');
@@ -26,6 +20,10 @@ var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
 var session = new Session();
 var chronos = new Chronos();
+
+// Parameters
+var parameters = new Parameters();
+
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -72,7 +70,6 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
     document.getElementById('descSession').value = "";
     
     document.querySelector('#updSession').className = 'current';
-    // document.querySelector('#listSessions').className = 'right';
     document.querySelector('[data-position="current"]').className = 'left';
   } catch(e) {
     console.log(e);
@@ -207,7 +204,7 @@ var listFiles = document.getElementById('list-files');
  * Activate the sound.
  */
 function checkSoundHandler(event) {
-  flagSound = event.originalTarget.checked;
+  paramaters.setSound(event.originalTarget.checked);
   saveParameters(db, 1, flagSound);
 }
 
@@ -215,7 +212,7 @@ function checkSoundHandler(event) {
  * Check the next exercice.
  */
 function checkNextExercice(event) {
-  idNextExercice = event.originalTarget.checked;
+  parameters.setNextExercice(event.originalTarget.checked);
 }
 
 /*
@@ -280,9 +277,9 @@ listItemEx.onclick = function(e) {
           var request = objectStore.get(id);
 
           request.onerror = function(event) {
-                   console.log("Not found for Id: " + id);
-                 };
-
+            console.log("Not found for Id: " + id);
+          };
+          
           request.onsuccess = function(evt) {
              
              var value = evt.target.result;
@@ -294,7 +291,7 @@ listItemEx.onclick = function(e) {
              var idUpd = document.getElementById('idUpd');
              
              name.value = request.result.name;
-                 nbRetry.value = request.result.nbRetry;
+            nbRetry.value = request.result.nbRetry;
              breakTime.value = request.result.breakTime;
              duration.value = request.result.duration;
              desc.value = request.result.desc;
@@ -328,6 +325,9 @@ listItemSes.onclick = function(e) {
         
         var idSession = document.getElementById('idSession');
         idSession.value = id;
+        
+        session.setIdSession(id);
+        
         var title = document.getElementById('idTitleSession');
         title.innerHTML = collEnfants[i].innerHTML;
         listSessionEx(id);
@@ -343,10 +343,10 @@ listItemSes.onclick = function(e) {
         request.onsuccess = function(evt) {
       
           try {
-            if (request.result.hasOwnProperty("nextAuto")) {
-              nextAuto = request.result.nextAuto;
+            if (request.result.hasOwnProperty("chainExercises")) {
+              session.setChainExercises( request.result.chainExercises);
             } else {
-              nextAuto = false;
+              session.setChainExercises(false);
             }
 
           } catch (e) {
@@ -645,20 +645,28 @@ function addExercise(list, cursor) {
   list.appendChild(li);    
 }
 
-
-function pauseEx() {
-
-  if (flagStart) {
-    if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
-      typeCounterPause = typeCounter;
-      typeCounter = STATE_EX_PAUSE;
-      chronos.stop();
-    } else  {
-      chronos.start();
-      typeCounter = typeCounterPause;
+/**
+ * Delete exercises.
+ */
+function deleteExercises() {
+  if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) { 
+    var list = document.getElementById('list-items-ex');
+    var chk = list.getElementsByTagName('input');
+    
+    var transaction = db.transaction(["exercice"],"readwrite");
+    var store = transaction.objectStore("exercice");
+    
+    for (var i = 0; i  < chk.length;i++) {
+      if (chk[i].checked == true) {
+        var request = store.delete(parseInt(chk[i].value)); 
+      }
     }
+    var idSession = document.getElementById('idSession');
+    
+    dataChange(parseInt(idSession.value));
   }
 }
+
 
 function previousEx() {
   var listEx = document.getElementById('list-session-ex');
@@ -676,8 +684,23 @@ function nextEx() {
 
   if ((x+1) < listEx.childElementCount ) {
     listEx.selectedIndex = x + 1;
+    return true;
   }
+  return false;
+}
 
+function pauseEx() {
+
+  if (flagStart) {
+    if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
+      typeCounterPause = typeCounter;
+      typeCounter = STATE_EX_PAUSE;
+      chronos.stop();
+    } else  {
+      chronos.start();
+      typeCounter = typeCounterPause;
+    }
+  }
 }
 
 function startEx() {
@@ -700,7 +723,7 @@ function startEx() {
       
       durationEx = parseInt(res[0]) + 1;
       breakTimeEx = parseInt(res[1]);
-          nbRetryEx = parseInt(res[2]);
+      nbRetryEx = parseInt(res[2]);
       
       var effortDiv = document.getElementById('effortDiv');
       effortDiv.style.color = '#F97C17';
@@ -728,7 +751,7 @@ function startEx() {
  * Play the sound if activate.
  */
 function playSound(sound) {
-  if (flagSound) {
+  if (parameters.isSound()) {
     document.getElementById(sound).play();
   }
 }
@@ -742,9 +765,14 @@ function display() {
     endExercise();
     chronos.stop();
 
-    if (idNextExercice) {
-      nextEx();
+    if (session.isChainExercises() || parameters.isNextExercice()) {
+      var ok = nextEx();
+      if (ok && session.isChainExercises()) {
+        startEx();
+      }
     }
+
+
    
     if ('vibrate' in navigator) {
       window.navigator.vibrate(1000);
@@ -825,38 +853,16 @@ function endExercise() {
   flagStart = false;
 }
 
-      function cancelEx() {
-      chronos.stop();
-      
-      chronoDisplay.textContent = "00:00";
-        breakTimeDisplay.textContent = "00:00";
-        nbRetryDisplay.textContent = "0/0";
-        endExercise();
-      }
-
-
-
-/**
- * Delete exercises.
- */
-function deleteExercises() {
-  if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) { 
-    var list = document.getElementById('list-items-ex');
-    var chk = list.getElementsByTagName('input');
-    
-    var transaction = db.transaction(["exercice"],"readwrite");
-    var store = transaction.objectStore("exercice");
-    
-    for (var i = 0; i  < chk.length;i++) {
-      if (chk[i].checked == true) {
-        var request = store.delete(parseInt(chk[i].value)); 
-      }
-    }
-    var idSession = document.getElementById('idSession');
-    
-    dataChange(parseInt(idSession.value));
-  }
+function cancelEx() {
+  chronos.stop();
+  
+  chronoDisplay.textContent = "00:00";
+  breakTimeDisplay.textContent = "00:00";
+  nbRetryDisplay.textContent = "0/0";
+  endExercise();
 }
+
+
 
 function saveParameters(dbObj, id, value) {
   try {
@@ -899,9 +905,9 @@ function loadParameters(id) {
     request.onsuccess = function(event) {
       try {
         console.log("parameters value: " + request.result.value);
-        flagSound = request.result.value;
+        parameters.setSound (request.result.value);
         var chk = document.getElementById("chk-sound");
-                 chk.checked = flagSound;
+        chk.checked = parameters.isSound();
       } catch(e) {
         console.log(e);
       }

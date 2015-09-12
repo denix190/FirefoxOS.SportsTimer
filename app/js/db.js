@@ -142,6 +142,7 @@ function dbAddSession(sessionData) {
     var sessionRecord = {
       name: sessionData.name,
       desc: sessionData.desc,
+      chainExercises : sessionData.chainExercises,
       created:new Date()
     }
     

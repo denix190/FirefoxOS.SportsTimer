@@ -9,9 +9,23 @@ function Session() {
   this.sessionSec = 0;
   this.beginSession;
   this.endSession;
-  this.self = this;
+  this.chainExercises = false;
+  this.idSession;
+  
   this.exercises = new Array();
 
+}
+
+Session.prototype.setIdSession = function(id) {
+  this.idSession = id;
+}
+
+Session.prototype.setChainExercises = function(bchainExercises) {
+  this.chainExercises = bchainExercises;
+}
+
+Session.prototype.isChainExercises = function() {
+  return this.chainExercises;
 }
 
 /**
@@ -27,7 +41,7 @@ Session.prototype.startSes = function() {
       this.timerSession = window.setInterval(this.displaySessionx.bind(this), 1000);
       this.flagStartSes = true;
     }
-  } catch(e) {
+  } catch(e) {var lock = null;
     console.log(e);
   }
 }
@@ -85,6 +99,7 @@ Session.prototype.startExercise = function(exercise) {
     console.log(e);
   }
 }
+
 
 /**
 * Stop/End of Exercise
