@@ -693,7 +693,6 @@ function hasNextEx() {
   var listEx = document.getElementById('list-session-ex');
   
   var x = listEx.selectedIndex;
-  console.log("x " + x + " listEx.childElementCount " + listEx.childElementCount);
   if ((x+1) < listEx.childElementCount ) {
     return true;
   }
@@ -775,10 +774,6 @@ function display() {
     if (!session.isChainExercises() ) {
       playSound('finalSound');
     } else {
-      var is = session.isChainExercises();
-      var n = hasNextEx();
-      console.log("is " + is + " n " + n + " f " + (session.isChainExercises() && !hasNextEx()));
-
       if (session.isChainExercises() && !hasNextEx()) {
         // Final sound .
         playSound('finalSound');
