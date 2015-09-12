@@ -567,7 +567,7 @@ function displayListExercise() {
       }
     };
   } catch (e) {
-                                        console.log(e);
+    console.log(e);
   }
 }
 
@@ -689,6 +689,17 @@ function nextEx() {
   return false;
 }
 
+function hasNextEx() {
+  var listEx = document.getElementById('list-session-ex');
+  
+  var x = listEx.selectedIndex;
+  console.log("x " + x + " listEx.childElementCount " + listEx.childElementCount);
+  if ((x+1) < listEx.childElementCount ) {
+    return true;
+  }
+  return false;
+}
+
 function pauseEx() {
 
   if (flagStart) {
@@ -760,7 +771,21 @@ function display() {
   
   if (nbRetryCounter > nbRetryEx) {
     // End of exercice.
-    playSound('finalSound');
+
+    if (!session.isChainExercises() ) {
+      playSound('finalSound');
+    } else {
+      var is = session.isChainExercises();
+      var n = hasNextEx();
+      console.log("is " + is + " n " + n + " f " + (session.isChainExercises() && !hasNextEx()));
+
+      if (session.isChainExercises() && !hasNextEx()) {
+        // Final sound .
+        playSound('finalSound');
+      }
+    }
+
+
     session.stopExercise();
     endExercise();
     chronos.stop();
@@ -772,12 +797,9 @@ function display() {
       }
     }
 
-
-   
     if ('vibrate' in navigator) {
       window.navigator.vibrate(1000);
-    }
- 
+    } 
     return;
   }
   
@@ -825,7 +847,7 @@ function display() {
           
     if ((breakTimeEx - breakTimeCounter) == 5) {
       // 
-          playSound('5SecSound');
+      playSound('5SecSound');
     }
   }
 }
