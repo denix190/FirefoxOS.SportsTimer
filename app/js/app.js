@@ -200,6 +200,9 @@ var listItemSes = document.getElementById('list-items-ses');
 // List Files.
 var listFiles = document.getElementById('list-files');
 
+// List Session/Exercises
+var listSessionExercises = document.getElementById('list-session-ex');
+
 /**
  * Activate the sound.
  */
@@ -215,14 +218,14 @@ function checkNextExercice(event) {
   parameters.setNextExercice(event.originalTarget.checked);
 }
 
+
+
 /*
  * Import sessions from file.
  */
 listFiles.onclick = function(e) {
 
   var parent = e.target.innerHTML;
-  console.log(parent);
-
   var sdcard = navigator.getDeviceStorage('sdcard');
   var request = sdcard.get(parent);
 
@@ -257,9 +260,31 @@ listFiles.onclick = function(e) {
 
 }
 
+/**
+ * Select an exercise of the session.
+ */ 
+listSessionExercises.onclick = function(e) {
+  console.log(e);
+  console.log(e.target.parentElement.id);
+  try {
+
+    var i = 0;
+    var x = e.target.parentNode.parentNode.parentNode;
+    for (i = 0; i < x.childElementCount;i++) {
+      x.childNodes[i].className=""; 
+    }
+    e.target.parentNode.parentNode.className="active";
+  } catch(e) {
+    console.log(e);
+  }
+var collEnfants = e.target.parentNode.childNodes;
+  console.log("len " + collEnfants.length);
+}
 
 listItemEx.onclick = function(e) {
+    console.log("Ex");
     var collEnfants = e.target.parentNode.childNodes;
+   
     var i = 0;
     for (i = 0; i < collEnfants.length; i++)  {
       if (collEnfants[i].tagName === 'A'){
@@ -670,20 +695,36 @@ function deleteExercises() {
 
 function previousEx() {
   var listEx = document.getElementById('list-session-ex');
-  var x = listEx.selectedIndex;
+  var selected = 0;
+  var i = 0;
+  for (i = 0; i < listEx.childElementCount; i++) {
+    if (listEx.childNodes[i].className =="active") {
+      selected = i;
+    }
+  }
 
-  if (x > 0 ) {
-    listEx.selectedIndex = x - 1;
+  if (selected  > 0 ) {
+    listEx.childNodes[selected].className = "";
+    listEx.childNodes[selected - 1].className = "active"
+    listEx.childNodes[selected - 1].scrollIntoView(true);
   }
 }
 
 function nextEx() {
   var listEx = document.getElementById('list-session-ex');
-  
-  var x = listEx.selectedIndex;
 
-  if ((x+1) < listEx.childElementCount ) {
-    listEx.selectedIndex = x + 1;
+  var selected = 0;
+  var i = 0;
+  for (i = 0; i < listEx.childElementCount; i++) {
+    if (listEx.childNodes[i].className =="active") {
+      selected = i;
+    }
+  }
+  
+  if ((selected + 1) < listEx.childElementCount ) {
+    listEx.childNodes[selected].className = "";
+    listEx.childNodes[selected + 1 ].className = "active"
+    listEx.childNodes[selected + 1 ].scrollIntoView(true);
     return true;
   }
   return false;
@@ -691,9 +732,16 @@ function nextEx() {
 
 function hasNextEx() {
   var listEx = document.getElementById('list-session-ex');
-  
-  var x = listEx.selectedIndex;
-  if ((x+1) < listEx.childElementCount ) {
+
+  var i = 0;
+  var selected = 0;
+  for (i = 0; i < listEx.childElementCount; i++) {
+    if (listEx.childNodes[i].className =="active") {
+      selected = i;
+    }
+  }
+ 
+  if ((selected + 1) < listEx.childElementCount ) {
     return true;
   }
   return false;
@@ -723,30 +771,28 @@ function startEx() {
     typeCounter = STATE_EX_EFFORT;
     
     var listEx = document.getElementById('list-session-ex');
-
-    var x = listEx.selectedIndex;
-    if (x != -1) {
-      var sequence;
-      sequence = listEx.options[x].value;
-      var name = listEx.options[x].text;
-      var res = sequence.split(",");
-      
-      durationEx = parseInt(res[0]) + 1;
-      breakTimeEx = parseInt(res[1]);
-      nbRetryEx = parseInt(res[2]);
-      
-      var effortDiv = document.getElementById('effortDiv');
-      effortDiv.style.color = '#F97C17';
-
-      chronos.start();
-      flagStart = true;
-      try {
-        var exercise = new Exercise(name, durationEx, breakTimeEx, nbRetryEx);
-        session.startExercise(exercise);
-      } catch(e) {
-        console.log(e);
+    var i = 0;
+    for (i = 0; i < listEx.childElementCount; i++) {
+      if (listEx.childNodes[i].className =="active") {
+        var res = listEx.childNodes[i].id.split(",");
+        
+        durationEx = parseInt(res[0]) + 1;
+        breakTimeEx = parseInt(res[1]);
+        nbRetryEx = parseInt(res[2]);
+        
+        var effortDiv = document.getElementById('effortDiv');
+        effortDiv.style.color = '#F97C17';
+        
+        chronos.start();
+        flagStart = true;
+        try {
+          var exercise = new Exercise(name, durationEx, breakTimeEx, nbRetryEx);
+          session.startExercise(exercise);
+        } catch(e) {
+          console.log(e);
+        }
       }
-    }
+    } 
   } else {
     if (typeCounter == STATE_EX_PAUSE) {
       chronos.start();
@@ -1041,16 +1087,12 @@ function updateSession() {
         title.innerHTML = nameSes;
         document.querySelector('#updSession').className = 'right';
         document.querySelector('#currentSession').className = 'current';
-      }
-      
-    }
-    
+      } 
+    }    
   } catch(e) {
     console.log(e);
   }
 } 
-
-
 
 /** 
  * Load the list of exercise for a Session 
@@ -1069,22 +1111,44 @@ function listSessionEx(idSession) {
     try {
       var cursor = event.target.result;
       if (cursor) {
-        var li = document.createElement("li");
-        var opt = document.createElement('option');
-        
-        opt.appendChild(
-              document.createTextNode(cursor.value.name
-            + " (" + cursor.value.duration
-            + " -  " + cursor.value.breakTime + ")"
-            + "x" + cursor.value.nbRetry) );
-        
-        opt.value = cursor.value.duration
-      + "," + cursor.value.breakTime
-      + "," + cursor.value.nbRetry;
-        listEx.appendChild(opt);
-        // li.appendChild(a);
-        // listEx.appendChild(li);
-        cursor.continue();
+          var li = document.createElement("li");
+          if (i == 0) {
+              li.className="active";
+          }
+          var a = document.createElement("a");
+          
+          li.setAttribute("id", cursor.value.duration
+              + "," + cursor.value.breakTime 
+              + "," + cursor.value.nbRetry);
+          a.href = "#";
+
+          var p0 = document.createElement("p");
+          p0.innerHTML = cursor.value.name;
+          a.appendChild(p0);
+          
+          var p1 = document.createElement("p");
+          p1.innerHTML = "(" + cursor.value.duration
+              + " -  " + cursor.value.breakTime + ")"
+              + "x" + cursor.value.nbRetry;
+          a.appendChild(p1);
+
+          var aside = document.createElement("aside");
+          aside.className ="pack-end";
+
+          var img = document.createElement("IMG");
+
+          if ((i % 2) == 0) {
+              img.src = "images/exo7.png";
+              aside.appendChild(img);
+          } else {
+              img.src = "images/exo8.png";
+              aside.appendChild(img);
+          }
+          li.appendChild(aside);
+          li.appendChild(a);
+          listEx.appendChild(li);    
+              cursor.continue();
+              i++;
       }
       else {
         // alert("No more entries!");

@@ -268,3 +268,14 @@ button.icon_button {
     position: absolute;
     bottom: 0;
 }
+
+.rightExercise {
+    float: right;
+    margin-left: 5px;
+    margin-top:6px;
+    width:60%
+}
+
+.li.selected {
+    color: red;
+}
