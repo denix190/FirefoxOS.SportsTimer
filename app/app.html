@@ -15,6 +15,7 @@
 
   <link rel="stylesheet" href="style/drawer.css">
   <link rel="stylesheet" href="style/lists.css">
+  <link rel="stylesheet" href="style/listsimage.css">
   <link rel="stylesheet" href="style/switches.css">
   <link rel="stylesheet" href="icons/styles/media_icons.css">
   <link rel="stylesheet" href="icons/styles/action_icons.css">
@@ -289,11 +290,11 @@
         <div>
           <div>
             <!-- List of exercices -->
-            <div data-type="list">
+            <div data-type="listImage">
               <!-- <select id="list-session-ex" style="width:180px;"> -->
               <!-- </select> -->
 
-              <ul id="list-session-ex" style="height:100px" >
+              <ul id="list-session-ex" style="height:8.8rem;" >
               </ul>
               <!-- img src="images/exo2.png" alt=""/ --> 
             </div>
@@ -450,6 +451,14 @@
           <input id="nbRetry" type="number" placeholder="1" required min="1" max="10" value="1" />
         </p>
 
+        <!-- Image -->
+      <p> 
+        <image src="" id="imagePath"/>
+        <div>
+          <button id="btn-choose-img" class="recommend" data-l10n-id="idAddImages" >Choose Image</button>
+      </div>
+      </p>
+    
         <p width="100%">
           <textarea id="descEx" data-l10n-id="descEx-id"></textarea>
         </p>
@@ -517,6 +526,14 @@
           <input id="nbRetryUpd" type="number" placeholder="1" required min="1" max="10" value="1" />
         </p>
 
+        <!-- Image -->
+      <p> 
+        <image src="" id="imagePathUpd"/>
+        <div>
+          <button id="btn-chooseUpd-img" class="recommend" data-l10n-id="idAddImages" >Choose Image</button>
+      </div>
+      </p>
+        
        <p width="100%">
           <textarea id="descExUpd" data-l10n-id="descEx-id"></textarea>
         </p>
@@ -527,6 +544,56 @@
 
     </article>
   </section> 
+
+  <!------------------------------ Image --------------------------------------->
+
+    <section role="region" id="pnl-chooseImage" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-choose-image-back" href="#"><span class="icon icon-back">back</span></a>
+     <menu type="toolbar">
+       <button class="icon icon-edit" id="btn-go-upd-session">
+         <span>edit</span>
+       </button>
+      </menu>
+
+      <h1 id="idTitleSession">Image</h1>
+    </header>
+
+      <article class="scrollable header">
+        <div>
+            <!-- List of images -->
+            <div data-type="listImage">
+              <ul id="list-images" >
+                <li>
+                    <aside class="pack-end">
+                       <img src="images/gym1.png" id="images/gym1.png"/>
+                    </aside>
+                </li>
+                <li>
+                    <aside class="pack-end">
+                       <img src="images/gym2.png" id="images/gym2.png"/>
+                    </aside>
+                </li>
+                <li>
+                    <aside class="pack-end">
+                       <img src="images/gym3.png" id="images/gym3.png"/>
+                    </aside>
+                </li>
+                <li>
+                    <aside class="pack-end">
+                       <img src="images/gym4.png" id="images/gym4.png"/>
+                    </aside>
+                </li>
+                <li>
+                    <aside class="pack-end">
+                       <img src="images/gym5.png" id="images/gym5.png"/>
+                    </aside>
+                </li>
+               </ul>
+            </div>
+        </div>
+      </article>
+  </section>
 
     <!--·························· List Exercises ··························-->
   <section role="region" id="listExercise" data-position="right">

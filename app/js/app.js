@@ -33,27 +33,31 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
   document.getElementById('descEx').value = "";
   document.getElementById('duration').value = "60";
   document.getElementById('breakTime').value = "60";
+  document.getElementById('imagePath').src = "";
+  document.getElementById('idUpd').value = "-1";
   
   document.querySelector('#addExercise').className = 'current';
   document.querySelector('#listExercise').className = 'right';
 });
 
 document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
+  document.getElementById('nameEx').scrollIntoView(true);
   document.querySelector('#addExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
 
 document.querySelector('#btn-go-list-ex-back').addEventListener('click', function () {
+  document.getElementById('nameSession').scrollIntoView(true);
   document.querySelector('#listExercise').className = 'right';
   document.querySelector('#updSession').className = 'current';
 });
 
 
 document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
+  document.getElementById('nameExUpd').scrollIntoView(true);
   document.querySelector('#updExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
-
 
 
 // Display the panel updating a Session.
@@ -82,7 +86,6 @@ document.querySelector('#btn-go-upd-session-back').addEventListener('click', fun
   var id = parseInt(idSession.value);
   if (id == -1) {
     document.querySelector('#updSession').className = 'right';
-    //document.querySelector('#listSessions').className = 'current';
     document.querySelector('[data-position="current"]').className = 'current';
   } else {
     document.querySelector('#updSession').className = 'right';
@@ -191,6 +194,25 @@ document.querySelector('#btn-del-ses').addEventListener('click', deleteSession);
 
 document.querySelector('#btn-export').addEventListener('click', exportSessions);
 
+
+// Display Image
+document.querySelector('#btn-choose-img').addEventListener('click', function () {
+  document.querySelector('#pnl-chooseImage').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+// Display Image
+document.querySelector('#btn-chooseUpd-img').addEventListener('click', function () {
+  document.querySelector('#pnl-chooseImage').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+// Return to the exercise
+document.querySelector('#btn-go-choose-image-back').addEventListener('click', function () {
+  document.querySelector('#pnl-chooseImage').className = 'right';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
+
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
 
@@ -202,6 +224,10 @@ var listFiles = document.getElementById('list-files');
 
 // List Session/Exercises
 var listSessionExercises = document.getElementById('list-session-ex');
+
+// List All images.
+var listImages = document.getElementById('list-images');
+
 
 /**
  * Activate the sound.
@@ -264,10 +290,8 @@ listFiles.onclick = function(e) {
  * Select an exercise of the session.
  */ 
 listSessionExercises.onclick = function(e) {
-  console.log(e);
-  console.log(e.target.parentElement.id);
-  try {
 
+  try {
     var i = 0;
     var x = e.target.parentNode.parentNode.parentNode;
     for (i = 0; i < x.childElementCount;i++) {
@@ -277,9 +301,10 @@ listSessionExercises.onclick = function(e) {
   } catch(e) {
     console.log(e);
   }
-var collEnfants = e.target.parentNode.childNodes;
+  var collEnfants = e.target.parentNode.childNodes;
   console.log("len " + collEnfants.length);
 }
+
 
 listItemEx.onclick = function(e) {
     console.log("Ex");
@@ -307,21 +332,28 @@ listItemEx.onclick = function(e) {
           
           request.onsuccess = function(evt) {
              
-             var value = evt.target.result;
-             var name = document.getElementById('nameExUpd');
-             var desc = document.getElementById('descExUpd');
-             var nbRetry = document.getElementById('nbRetryUpd');
-             var breakTime = document.getElementById('breakTimeUpd');
-             var duration = document.getElementById('durationUpd');
-             var idUpd = document.getElementById('idUpd');
-             
-             name.value = request.result.name;
+            var value = evt.target.result;
+            var name = document.getElementById('nameExUpd');
+            var desc = document.getElementById('descExUpd');
+            var nbRetry = document.getElementById('nbRetryUpd');
+            var breakTime = document.getElementById('breakTimeUpd');
+            var duration = document.getElementById('durationUpd');
+            var imagePath = document.getElementById('imagePathUpd');
+            var idUpd = document.getElementById('idUpd');
+            
+            name.value = request.result.name;
             nbRetry.value = request.result.nbRetry;
-             breakTime.value = request.result.breakTime;
-             duration.value = request.result.duration;
-             desc.value = request.result.desc;
-             
-             idUpd.value = id;
+            breakTime.value = request.result.breakTime;
+            duration.value = request.result.duration;
+            desc.value = request.result.desc;
+
+            if (request.result.imagePath == "") {
+              imagePath.style.display = "none";
+            } else {
+              imagePath.style.display = "visible";
+            }
+            imagePath.src = request.result.imagePath;
+            idUpd.value = id;
            };
         } catch (ex) {
           console.log(ex);
@@ -386,6 +418,34 @@ listItemSes.onclick = function(e) {
   }
 }
 
+/**
+ * Update image path for the exercise.
+ */ 
+listImages.onclick = function(e) {
+ 
+  try {
+    console.log(  document.querySelector('[data-position="current"]'));
+    var idUpd = document.getElementById('idUpd');
+    if (parseInt(idUpd.value) == -1) {
+      var imagePath = document.getElementById('imagePath');
+      imagePath.src = e.target.id;
+      imagePath.style.display = "visible";
+    } else {
+      var imagePath = document.getElementById('imagePathUpd');
+      imagePath.src = e.target.id;
+      imagePath.style.display = "visible";
+    }
+
+
+    document.querySelector('#pnl-chooseImage').className = 'right';
+    document.querySelector('[data-position="current"]').className = 'current';
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
+
 function startSes() {
   session.startSes();
 }
@@ -414,8 +474,8 @@ function displaySession() {
     var request = objectStore.get(parseInt(id));
 
     request.onerror = function(event) {
-                        console.log("Not found for Id: " + id);
-                      };
+      console.log("Not found for Id: " + id);
+    };
 
     request.onsuccess = function(evt) {
                         
@@ -451,11 +511,18 @@ function displaySession() {
 function storeEx() {
   try {
     var durationId = document.getElementById("duration");
-    var breakTimeId = document.getElementById("breakTime");         
+    var breakTimeId = document.getElementById("breakTime");
     var nbRetryId = document.getElementById("nbRetry");
     var nameId = document.getElementById("nameEx");
     var descId = document.getElementById("descEx");
+    var imagePath = document.getElementById("imagePath");
     var idSession = document.getElementById('idSession');
+
+    var path = "";
+    if (imagePath.src.indexOf("app.html") < 0) {
+      var index = imagePath.src.lastIndexOf("/");
+      path = "images" + imagePath.src.substring(index);
+    }
     
     var duration = durationId.value;
     var breakTime = breakTimeId.value;
@@ -478,6 +545,7 @@ function storeEx() {
       breakTime: breakTime,
       nbRetry: nbRetry,
       desc: descEx,
+      imagePath: path,
       idSession : parseInt(idSession.value),
       created:new Date()
     }
@@ -512,7 +580,12 @@ function updateEx() {
     var idUpd = document.getElementById('idUpd');
     var descIdUpd = document.getElementById("descExUpd");
     var idSession = document.getElementById('idSession');
-    
+    var imagePath = document.getElementById('imagePathUpd');
+    var path = "";
+    if (imagePath.src.indexOf("app.html") < 0) {
+      var index = imagePath.src.lastIndexOf("/");
+      path = "images" + imagePath.src.substring(index);
+    }
     var duration = durationId.value;
     var breakTime = breakTimeId.value;
     var nbRetry = nbRetryId.value;
@@ -531,6 +604,7 @@ function updateEx() {
       breakTime: breakTime,
       nbRetry: nbRetry,
       desc: descEx,
+      imagePath: path,
       idSession :parseInt(idSession.value),
       created:new Date()
     }
@@ -1111,44 +1185,40 @@ function listSessionEx(idSession) {
     try {
       var cursor = event.target.result;
       if (cursor) {
-          var li = document.createElement("li");
-          if (i == 0) {
-              li.className="active";
-          }
-          var a = document.createElement("a");
-          
-          li.setAttribute("id", cursor.value.duration
-              + "," + cursor.value.breakTime 
-              + "," + cursor.value.nbRetry);
-          a.href = "#";
-
-          var p0 = document.createElement("p");
-          p0.innerHTML = cursor.value.name;
-          a.appendChild(p0);
-          
-          var p1 = document.createElement("p");
-          p1.innerHTML = "(" + cursor.value.duration
-              + " -  " + cursor.value.breakTime + ")"
-              + "x" + cursor.value.nbRetry;
-          a.appendChild(p1);
-
-          var aside = document.createElement("aside");
-          aside.className ="pack-end";
-
+        var li = document.createElement("li");
+        if (i == 0) {
+          li.className="active";
+        }
+        var a = document.createElement("a");
+        
+        li.setAttribute("id", cursor.value.duration
+      + "," + cursor.value.breakTime 
+      + "," + cursor.value.nbRetry);
+        a.href = "#";
+        
+        var p0 = document.createElement("p");
+        p0.innerHTML = cursor.value.name;
+        a.appendChild(p0);
+        
+        var p1 = document.createElement("p");
+        p1.innerHTML = "(" + cursor.value.duration
+      + " -  " + cursor.value.breakTime + ")"
+      + "x" + cursor.value.nbRetry;
+        a.appendChild(p1);
+        
+        var aside = document.createElement("aside");
+        aside.className ="pack-end";
+        if (cursor.value.imagePath != "") {
           var img = document.createElement("IMG");
+          img.src = cursor.value.imagePath;
+          aside.appendChild(img);
+        }
 
-          if ((i % 2) == 0) {
-              img.src = "images/exo7.png";
-              aside.appendChild(img);
-          } else {
-              img.src = "images/exo8.png";
-              aside.appendChild(img);
-          }
-          li.appendChild(aside);
-          li.appendChild(a);
-          listEx.appendChild(li);    
-              cursor.continue();
-              i++;
+        li.appendChild(aside);
+        li.appendChild(a);
+        listEx.appendChild(li);    
+        cursor.continue();
+        i++;
       }
       else {
         // alert("No more entries!");
@@ -1202,32 +1272,9 @@ function addSession(list, cursor) {
   var p1 = document.createElement("p");
   p1.innerHTML = cursor.value.desc;
   a.appendChild(p1);
-    
-    // var checkbox = document.createElement('input');
-    // checkbox.type = "checkbox";
-    // checkbox.name = "checkBoxEx";
-    // checkbox.value = cursor.value.idSession;
-    // checkbox.id = "checkBoxEx";
-    
-    //var spanl = document.createElement("span");
-    //var spanr = document.createElement("span");
-    
-    // var label = document.createElement("label");
-    // label.className = "pack-checkbox";
-    // label.appendChild(checkbox);
-    // var spanlbl = document.createElement("span");
-    // label.appendChild(spanlbl);
-    
-    //spanl.className = "rightCheckbox";
-    //spanr.className = "left";
-    
-    //spanl.appendChild(a);
-    //spanr.appendChild(label);
-    
-    li.appendChild(a);
-  //li.appendChild(spanr);
 
-    list.appendChild(li);    
+  li.appendChild(a);
+  list.appendChild(li);
 }
 
 // Add Exercises to Session.
@@ -1284,17 +1331,6 @@ function dataChange(idSession) {
     displayListUpdateExercise(idSession);
     displayListSessions();
     listSessionEx(idSession);
-
-    /*var listEx = document.getElementById('list-session');
-    var x = listEx.selectedIndex;
-    if (x != -1) { 
-        var sequence;
-        sequence = listEx.options[x].value;
-        
-        if (idSession == sequence) {
-            listSessionEx(sequence);
-        }
-    } */
 }
 
 function removeAllItems(list) {
