@@ -215,6 +215,7 @@ function dbAddExercise(exercice, idSession) {
       breakTime: exercice.breakTime,
       nbRetry: exercice.nbRetry,
       desc: exercice.descEx,
+      imagePath: exercice.imagePath,
       idSession : idSession,
       created:new Date()
     }
