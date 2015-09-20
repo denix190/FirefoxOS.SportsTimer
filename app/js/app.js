@@ -38,10 +38,11 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
   
   document.querySelector('#addExercise').className = 'current';
   document.querySelector('#listExercise').className = 'right';
+  //document.getElementById('nameEx').scrollIntoView(true); 
 });
 
 document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
-  document.getElementById('nameEx').scrollIntoView(true);
+//  document.getElementById('nameEx').scrollIntoView(true);
   document.querySelector('#addExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
@@ -297,7 +298,7 @@ listSessionExercises.onclick = function(e) {
     for (i = 0; i < x.childElementCount;i++) {
       x.childNodes[i].className=""; 
     }
-    e.target.parentNode.parentNode.className="active";
+    e.target.parentNode.parentNode.className="activeImage";
   } catch(e) {
     console.log(e);
   }
@@ -772,14 +773,14 @@ function previousEx() {
   var selected = 0;
   var i = 0;
   for (i = 0; i < listEx.childElementCount; i++) {
-    if (listEx.childNodes[i].className =="active") {
+    if (listEx.childNodes[i].className =="activeImage") {
       selected = i;
     }
   }
 
   if (selected  > 0 ) {
     listEx.childNodes[selected].className = "";
-    listEx.childNodes[selected - 1].className = "active"
+    listEx.childNodes[selected - 1].className = "activeImage"
     listEx.childNodes[selected - 1].scrollIntoView(true);
   }
 }
@@ -790,14 +791,14 @@ function nextEx() {
   var selected = 0;
   var i = 0;
   for (i = 0; i < listEx.childElementCount; i++) {
-    if (listEx.childNodes[i].className =="active") {
+    if (listEx.childNodes[i].className =="activeImage") {
       selected = i;
     }
   }
   
   if ((selected + 1) < listEx.childElementCount ) {
     listEx.childNodes[selected].className = "";
-    listEx.childNodes[selected + 1 ].className = "active"
+    listEx.childNodes[selected + 1 ].className = "activeImage"
     listEx.childNodes[selected + 1 ].scrollIntoView(true);
     return true;
   }
@@ -810,7 +811,7 @@ function hasNextEx() {
   var i = 0;
   var selected = 0;
   for (i = 0; i < listEx.childElementCount; i++) {
-    if (listEx.childNodes[i].className =="active") {
+    if (listEx.childNodes[i].className =="activeImage") {
       selected = i;
     }
   }
@@ -847,7 +848,7 @@ function startEx() {
     var listEx = document.getElementById('list-session-ex');
     var i = 0;
     for (i = 0; i < listEx.childElementCount; i++) {
-      if (listEx.childNodes[i].className =="active") {
+      if (listEx.childNodes[i].className =="activeImage") {
         var res = listEx.childNodes[i].id.split(",");
         
         durationEx = parseInt(res[0]) + 1;
@@ -1187,7 +1188,7 @@ function listSessionEx(idSession) {
       if (cursor) {
         var li = document.createElement("li");
         if (i == 0) {
-          li.className="active";
+          li.className="activeImage";
         }
         var a = document.createElement("a");
         
@@ -1279,12 +1280,12 @@ function addSession(list, cursor) {
 
 // Add Exercises to Session.
 function addExercisesToSession() {
-      document.getElementById('nameEx').scrollIntoView(true);
-    document.querySelector('#listExercise').className = 'current';
-    document.querySelector('#updSession').className = 'right';
 
-    var idSession = document.getElementById('idSession');
-    displayListUpdateExercise(idSession.value);
+  document.querySelector('#listExercise').className = 'current';
+  document.querySelector('#updSession').className = 'right';
+
+  var idSession = document.getElementById('idSession');
+  displayListUpdateExercise(idSession.value);
 }
 
 function deleteSession() {
