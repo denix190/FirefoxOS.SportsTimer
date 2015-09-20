@@ -1279,6 +1279,7 @@ function addSession(list, cursor) {
 
 // Add Exercises to Session.
 function addExercisesToSession() {
+      document.getElementById('nameEx').scrollIntoView(true);
     document.querySelector('#listExercise').className = 'current';
     document.querySelector('#updSession').className = 'right';
 
