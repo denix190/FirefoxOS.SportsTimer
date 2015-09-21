@@ -122,13 +122,14 @@ li a:active {
   display: block;
   overflow: hidden;
    width: 10rem;
-  height: 8.5rem; 
+  height: 8.4rem; 
   border-radius: 0rem;
   margin-top: 0.2rem;
   box-sizing: border-box;
   background: transparent center center / cover;
   position: relative;
-
+  border-width:1px;
+  border-style:solid;
   /* Favor performance over quality */
   image-rendering: -moz-crisp-edges;
 }
