@@ -143,6 +143,7 @@ function dbAddSession(sessionData) {
       name: sessionData.name,
       desc: sessionData.desc,
       chainExercises : sessionData.chainExercises,
+      delayBetweenExercises: sessionData.delayBetweenExercises,
       created:new Date()
     }
     
@@ -180,6 +181,7 @@ function dbUpdateSession(sessionData) {
       name: sessionData.name,
       desc: sessionData.desc,
       created:new Date(),
+      delayBetweenExercises: sessionData.delayBetweenExercises,
       idSession : sessionData.id
     }
     

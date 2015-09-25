@@ -121,15 +121,24 @@ li a:active {
 [data-type="listImage"] aside img {
   display: block;
   overflow: hidden;
+<<<<<<< HEAD
    width: 10rem;
+=======
+  width: 10rem;
+>>>>>>> d1baadcbaabc690546579443ed794278ddad3e7d
   height: 8.4rem; 
   border-radius: 0rem;
   margin-top: 0.2rem;
   box-sizing: border-box;
   background: transparent center center / cover;
   position: relative;
+<<<<<<< HEAD
   border-width:1px;
   border-style:solid;
+=======
+  border-style: solid;
+  border-width: 1px;
+>>>>>>> d1baadcbaabc690546579443ed794278ddad3e7d
   /* Favor performance over quality */
   image-rendering: -moz-crisp-edges;
 }
