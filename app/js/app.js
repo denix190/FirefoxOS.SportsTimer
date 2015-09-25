@@ -437,7 +437,6 @@ listImages.onclick = function(e) {
       imagePath.style.display = "visible";
     }
 
-
     document.querySelector('#pnl-chooseImage').className = 'right';
     document.querySelector('[data-position="current"]').className = 'current';
   } catch (e) {
@@ -484,6 +483,7 @@ function displaySession() {
       var name = document.getElementById('nameSession');
       var desc = document.getElementById('descSession');
       var check = document.getElementById('chk-chainExercises');
+      var delayBetweenExercises = document.getElementById('idDelayBetweenExercises');
       try {
         var idSession = request.result.idSession;
       } catch (e) {
@@ -491,6 +491,7 @@ function displaySession() {
       }
       name.value = request.result.name;
       desc.value = request.result.desc;
+      delayBetweenExercises.value = request.result.delayBetweenExercises;
       if (request.result.hasOwnProperty("chainExercises")) {
         check.checked = request.result.chainExercises;
       } else {
@@ -901,7 +902,6 @@ function display() {
       }
     }
 
-
     session.stopExercise();
     endExercise();
     chronos.stop();
@@ -1105,7 +1105,7 @@ function updateSession() {
     var descId = document.getElementById("descSession");
     var idSession = document.getElementById('idSession');
     var chkChainExercises = document.getElementById('chk-chainExercises');
-    
+    var delayBetweenExercises = document.getElementById('idDelayBetweenExercises').value;
     var nameSes = nameId.value;
     var descSes = descId.value;
     var id = parseInt(idSession.value);
@@ -1124,6 +1124,7 @@ function updateSession() {
         name: nameSes,
         desc: descSes,
         chainExercises : chkChainExercises.checked,
+        delayBetweenExercises: delayBetweenExercises,
         created:new Date()
       }
       
@@ -1147,6 +1148,7 @@ function updateSession() {
         name: nameSes,
         desc: descSes,
         chainExercises : chkChainExercises.checked,
+        delayBetweenExercises: delayBetweenExercises,
         created:new Date(),
         idSession : id
       }

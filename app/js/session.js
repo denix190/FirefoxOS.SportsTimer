@@ -10,6 +10,7 @@ function Session() {
   this.beginSession;
   this.endSession;
   this.chainExercises = false;
+  this.delayBetweenExercises = 0;
   this.idSession;
   
   this.exercises = new Array();
@@ -26,6 +27,14 @@ Session.prototype.setChainExercises = function(bchainExercises) {
 
 Session.prototype.isChainExercises = function() {
   return this.chainExercises;
+}
+
+Session.prototype.setdelayBetweenExercises = function(delay) {
+  this.delayBetweenExercises = delay;
+}
+
+Session.prototype.getdelayBetweenExercises = function() {
+  return this.delayBetweenExercises;
 }
 
 /**
