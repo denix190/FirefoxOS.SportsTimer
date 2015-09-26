@@ -224,7 +224,7 @@ var listItemSes = document.getElementById('list-items-ses');
 var listFiles = document.getElementById('list-files');
 
 // List Session/Exercises
-var listSessionExercises = document.getElementById('list-session-ex');
+// var listSessionExercises = document.getElementById('list-session-ex');
 
 // List All images.
 var listImages = document.getElementById('list-images');
@@ -290,21 +290,21 @@ listFiles.onclick = function(e) {
 /**
  * Select an exercise of the session.
  */ 
-listSessionExercises.onclick = function(e) {
+// listSessionExercises.onclick = function(e) {
 
-  try {
-    var i = 0;
-    var x = e.target.parentNode.parentNode.parentNode;
-    for (i = 0; i < x.childElementCount;i++) {
-      x.childNodes[i].className=""; 
-    }
-    e.target.parentNode.parentNode.className="activeImage";
-  } catch(e) {
-    console.log(e);
-  }
-  var collEnfants = e.target.parentNode.childNodes;
-  console.log("len " + collEnfants.length);
-}
+//   try {
+//     var i = 0;
+//     var x = e.target.parentNode.parentNode.parentNode;
+//     for (i = 0; i < x.childElementCount;i++) {
+//       x.childNodes[i].className=""; 
+//     }
+//     e.target.parentNode.parentNode.className="activeImage";
+//   } catch(e) {
+//     console.log(e);
+//   }
+//   var collEnfants = e.target.parentNode.childNodes;
+//   console.log("len " + collEnfants.length);
+// }
 
 
 listItemEx.onclick = function(e) {
@@ -770,57 +770,68 @@ function deleteExercises() {
 
 
 function previousEx() {
-  var listEx = document.getElementById('list-session-ex');
-  var selected = 0;
-  var i = 0;
-  for (i = 0; i < listEx.childElementCount; i++) {
-    if (listEx.childNodes[i].className =="activeImage") {
-      selected = i;
-    }
-  }
 
-  if (selected  > 0 ) {
-    listEx.childNodes[selected].className = "";
-    listEx.childNodes[selected - 1].className = "activeImage"
-    listEx.childNodes[selected - 1].scrollIntoView(true);
-  }
+  var ok = session.setNumExercise(session.getNumExercise() - 1);
+  displayCurrentExercise();
+  return ok;
+  // var listEx = document.getElementById('list-session-ex');
+  // var selected = 0;
+  // var i = 0;
+  // for (i = 0; i < listEx.childElementCount; i++) {
+  //   if (listEx.childNodes[i].className =="activeImage") {
+  //     selected = i;
+  //   }
+  // }
+
+  // if (selected  > 0 ) {
+  //   listEx.childNodes[selected].className = "";
+  //   listEx.childNodes[selected - 1].className = "activeImage"
+  //   listEx.childNodes[selected - 1].scrollIntoView(true);
+  // }
 }
 
 function nextEx() {
-  var listEx = document.getElementById('list-session-ex');
 
-  var selected = 0;
-  var i = 0;
-  for (i = 0; i < listEx.childElementCount; i++) {
-    if (listEx.childNodes[i].className =="activeImage") {
-      selected = i;
-    }
-  }
+  var ret = session.setNumExercise(session.getNumExercise() + 1);
+  displayCurrentExercise();
+  return ret;
+  // var listEx = document.getElementById('list-session-ex');
+
+  // var selected = 0;
+  // var i = 0;
+  // for (i = 0; i < listEx.childElementCount; i++) {
+  //   if (listEx.childNodes[i].className =="activeImage") {
+  //     selected = i;
+  //   }
+  // }
   
-  if ((selected + 1) < listEx.childElementCount ) {
-    listEx.childNodes[selected].className = "";
-    listEx.childNodes[selected + 1 ].className = "activeImage"
-    listEx.childNodes[selected + 1 ].scrollIntoView(true);
-    return true;
-  }
-  return false;
+  // if ((selected + 1) < listEx.childElementCount ) {
+  //   listEx.childNodes[selected].className = "";
+  //   listEx.childNodes[selected + 1 ].className = "activeImage"
+  //   listEx.childNodes[selected + 1 ].scrollIntoView(true);
+  //   return true;
+  // }
+  // return false;
+
 }
 
 function hasNextEx() {
-  var listEx = document.getElementById('list-session-ex');
 
-  var i = 0;
-  var selected = 0;
-  for (i = 0; i < listEx.childElementCount; i++) {
-    if (listEx.childNodes[i].className =="activeImage") {
-      selected = i;
-    }
-  }
+  return session.hasNextExercise();
+  // var listEx = document.getElementById('list-session-ex');
+
+  // var i = 0;
+  // var selected = 0;
+  // for (i = 0; i < listEx.childElementCount; i++) {
+  //   if (listEx.childNodes[i].className =="activeImage") {
+  //     selected = i;
+  //   }
+  // }
  
-  if ((selected + 1) < listEx.childElementCount ) {
-    return true;
-  }
-  return false;
+  // if ((selected + 1) < listEx.childElementCount ) {
+  //   return true;
+  // }
+  // return false;
 }
 
 function pauseEx() {
@@ -845,8 +856,26 @@ function startEx() {
     nbRetryCounter = 1;
 
     typeCounter = STATE_EX_EFFORT;
+
+    var curExercise = session.getCurrentExercise();
+
+    durationEx = parseInt(curExercise.getDuration());
+    breakTimeEx = parseInt(curExercise.getBreakTime());
+    nbRetryEx = parseInt(curExercise.getNbRetry());
+        
+    var effortDiv = document.getElementById('effortDiv');
+    effortDiv.style.color = '#F97C17';
+        
+    chronos.start();
+    flagStart = true;
+    try {
+      var exercise = new Exercise(name, durationEx, breakTimeEx, nbRetryEx);
+      session.startExercise(exercise);
+    } catch(e) {
+      console.log(e);
+    }
     
-    var listEx = document.getElementById('list-session-ex');
+    /* var listEx = document.getElementById('list-session-ex');
     var i = 0;
     for (i = 0; i < listEx.childElementCount; i++) {
       if (listEx.childNodes[i].className =="activeImage") {
@@ -867,8 +896,8 @@ function startEx() {
         } catch(e) {
           console.log(e);
         }
-      }
-    } 
+      } 
+  } */
   } else {
     if (typeCounter == STATE_EX_PAUSE) {
       chronos.start();
@@ -1176,10 +1205,12 @@ function updateSession() {
  */ 
 function listSessionEx(idSession) {
   var objectStore = db.transaction("exercice").objectStore("exercice");
-  var listEx = document.getElementById("list-session-ex");
+  // var listEx = document.getElementById("list-session-ex");
 
-  removeAllItems(listEx);
+  // removeAllItems(listEx);
   
+  session.initListExercises();
+
   var index = objectStore.index("BySession");
   var id = parseInt(idSession);
   var request = index.openCursor(IDBKeyRange.only(id));
@@ -1188,43 +1219,61 @@ function listSessionEx(idSession) {
     try {
       var cursor = event.target.result;
       if (cursor) {
-        var li = document.createElement("li");
-        if (i == 0) {
-          li.className="activeImage";
-        }
-        var a = document.createElement("a");
-        
-        li.setAttribute("id", cursor.value.duration
-      + "," + cursor.value.breakTime 
-      + "," + cursor.value.nbRetry);
-        a.href = "#";
-        
-        var p0 = document.createElement("p");
-        p0.innerHTML = cursor.value.name;
-        a.appendChild(p0);
-        
-        var p1 = document.createElement("p");
-        p1.innerHTML = "(" + cursor.value.duration
-      + " -  " + cursor.value.breakTime + ")"
-      + "x" + cursor.value.nbRetry;
-        a.appendChild(p1);
-        
-        var aside = document.createElement("aside");
-        aside.className ="pack-end";
-        if (cursor.value.imagePath != "") {
-          var img = document.createElement("IMG");
-          img.src = cursor.value.imagePath;
-          aside.appendChild(img);
-        }
-
-        li.appendChild(aside);
-        li.appendChild(a);
-        listEx.appendChild(li);    
+        console.log("onsuccess");
+        var exercise = new Exercise( cursor.value.name,  cursor.value.duration,  cursor.value.breakTime, cursor.value.nbRetry);
+        exercise.setImagePath(cursor.value.imagePath);
+        session.addListExercises(exercise);
         cursor.continue();
-        i++;
+      //   var li = document.createElement("li");
+      //   if (i == 0) {
+      //     li.className="activeImage";
+      //   }
+      //   var a = document.createElement("a");
+        
+      //   li.setAttribute("id", cursor.value.duration
+      // + "," + cursor.value.breakTime 
+      // + "," + cursor.value.nbRetry);
+      //   a.href = "#";
+        
+      //   var p0 = document.createElement("p");
+      //   p0.innerHTML = cursor.value.name;
+      //   a.appendChild(p0);
+        
+      //   var p1 = document.createElement("p");
+      //   p1.innerHTML = "(" + cursor.value.duration
+      // + " -  " + cursor.value.breakTime + ")"
+      // + "x" + cursor.value.nbRetry;
+      //   a.appendChild(p1);
+        
+      //   var aside = document.createElement("aside");
+      //   aside.className ="pack-end";
+      //   if (cursor.value.imagePath != "") {
+      //     var img = document.createElement("IMG");
+      //     img.src = cursor.value.imagePath;
+      //     aside.appendChild(img);
+      //   }
+
+      //   li.appendChild(aside);
+      //   li.appendChild(a);
+      //   listEx.appendChild(li);    
+      //   cursor.continue();
+
+      //   i++;
       }
       else {
-        // alert("No more entries!");
+        displayCurrentExercise();
+        // if (session.getListExercises().length > 0) {
+        //   var nameExercise = document.getElementById("idNameExercise");
+        //   var image = document.getElementById("idImageExercise");
+        //   var infoExercise = document.getElementById("idInfoExercise");
+
+        //   var curExercise = session.getListExercises()[0];
+        //   console.log(curExercise);
+        //   nameExercise.textContent = curExercise.getName();
+        //   infoExercise.textContent = "[" + curExercise.getDuration() 
+        //              + " -  " + curExercise.breakTime + "]"
+        //              + "x" + curExercise.nbRetry;
+        //   image.src = curExercise.getImagePath();
       }
     } catch (e) {
       console.log(e);
@@ -1233,6 +1282,25 @@ function listSessionEx(idSession) {
 
   request.onerror = function(e) {
     console.log("listExercise ", e);
+  }
+}
+
+function displayCurrentExercise() {
+  try {
+    var curExercise = session.getCurrentExercise();
+    if (curExercise != null) {
+      var nameExercise = document.getElementById("idNameExercise");
+      var image = document.getElementById("idImageExercise");
+      var infoExercise = document.getElementById("idInfoExercise");
+   
+      nameExercise.textContent = curExercise.getName();
+      infoExercise.textContent = "[" + curExercise.getDuration() 
+    + " -  " + curExercise.breakTime + "]"
+    + "x" + curExercise.nbRetry;
+      image.src = curExercise.getImagePath();
+    }
+  } catch(e) {
+    console.log(e);
   }
 }
 

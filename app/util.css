@@ -151,7 +151,7 @@ ul, ol, li {
 .chronos {
   text-align: center;
   font-size: 3.0rem; 
-  margin: 10px 10px 0px 0px;
+  margin: 5px 10px 0px 0px;
 }
 
 .chronosAction {
@@ -161,7 +161,7 @@ ul, ol, li {
   text-align: center;
   font-size: 6.0rem; 
   font-weight:bold;
-  margin: 10px 10px 0px 5px;
+  margin: 5px 10px 0px 5px;
   border-width: 1px;
   border-style: none;
   border-radius: 10px;
@@ -173,7 +173,7 @@ ul, ol, li {
   color: white /* #14FF15 */;
   text-align: center; 
   font-size: 3rem; 
-  margin: 10px 10px 0px 5px;
+  margin: 5px 10px 0px 5px;
   border-width: 0px;
   border-style: none;
   border-radius: 10px;
@@ -186,7 +186,7 @@ ul, ol, li {
   color: white; /* #64A0E3 */
   text-align: ext-align: center;
   font-size: 3rem; 
-  margin: 10px 10px 0px 5px; 
+  margin: 5px 10px 0px 5px; 
   border-width: 0px;
   border-style: none;
   border-radius: 10px;
@@ -252,7 +252,7 @@ button.icon_button {
   color: black;
   text-align: ext-align: center;
   font-size: 3rem; 
-  margin: 10px 10px 0px 5px; 
+  margin: 5px 10px 0px 5px; 
   border-width: 0px;
   border-style: none;
   border-radius: 10px;
