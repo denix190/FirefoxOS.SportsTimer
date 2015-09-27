@@ -92,7 +92,8 @@ Session.prototype.startSes = function() {
       this.timerSession = window.setInterval(this.displaySessionx.bind(this), 1000);
       this.flagStartSes = true;
     }
-  } catch(e) {var lock = null;
+  } catch(e) {
+    var lock = null;
     console.log(e);
   }
 }

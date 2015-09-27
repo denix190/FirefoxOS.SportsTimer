@@ -3,6 +3,7 @@
 var durationCounter;
 var breakTimeCounter;
 var nbRetryCounter;
+var durationBetweenExercise;
 
 var durationEx;
 var breakTimeEx;
@@ -406,7 +407,7 @@ listItemSes.onclick = function(e) {
             } else {
               session.setChainExercises(false);
             }
-
+            session.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
           } catch (e) {
             console.log(e);
           }
@@ -425,7 +426,6 @@ listItemSes.onclick = function(e) {
 listImages.onclick = function(e) {
  
   try {
-    console.log(  document.querySelector('[data-position="current"]'));
     var idUpd = document.getElementById('idUpd');
     if (parseInt(idUpd.value) == -1) {
       var imagePath = document.getElementById('imagePath');
@@ -714,9 +714,9 @@ function addExercise(list, cursor) {
   var a = document.createElement("a");
   a.setAttribute("id", cursor.value.id);
   a.text = cursor.value.name
-      + " (" + cursor.value.duration
-  + " -  " + cursor.value.breakTime + ")"
-                                + "x" + cursor.value.nbRetry;
+      + " [" + cursor.value.duration
+      + " - " + cursor.value.breakTime + "]"
+      + "x" + cursor.value.nbRetry;
   a.href = "#";
   
   var checkbox = document.createElement('input');
@@ -816,7 +816,7 @@ function nextEx() {
 }
 
 function hasNextEx() {
-
+  console.log(session.hasNextExercise());
   return session.hasNextExercise();
   // var listEx = document.getElementById('list-session-ex');
 
@@ -854,6 +854,7 @@ function startEx() {
     durationCounter =  0;
     breakTimeCounter = 0;
     nbRetryCounter = 1;
+    durationBetweenExercise = 0;
 
     typeCounter = STATE_EX_EFFORT;
 
@@ -925,9 +926,17 @@ function display() {
     if (!session.isChainExercises() ) {
       playSound('finalSound');
     } else {
-      if (session.isChainExercises() && !hasNextEx()) {
-        // Final sound .
-        playSound('finalSound');
+      try {
+        if (session.isChainExercises() && !hasNextEx() ) {
+          // Final sound .
+          playSound('finalSound');
+        }
+        else if ( durationBetweenExercise < session.getdelayBetweenExercises()) {
+          durationBetweenExercise++;
+          return;
+        }
+      } catch(e) {
+        console.log(e);
       }
     }
 
@@ -938,6 +947,7 @@ function display() {
     if (session.isChainExercises() || parameters.isNextExercice()) {
       var ok = nextEx();
       if (ok && session.isChainExercises()) {
+        // Start the next exercise.
         startEx();
       }
     }
@@ -1117,7 +1127,7 @@ Chronos.prototype.stop = function() {
     }
   } catch (e) {
     if (e.result =! 2152923147) {
-      alert(e);
+      // alert(e);
       console.log(e);
     }
   }
