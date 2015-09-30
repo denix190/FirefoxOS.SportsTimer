@@ -923,7 +923,7 @@ function display() {
     displaySecond(chronoDisplay, nbSec);
     break;
 
-  // Recovery
+    // Recovery
     case STATE_EX_RECOVERY:
     breakTimeCounter++;
     if (breakTimeCounter >= breakTimeEx) {       
