@@ -774,20 +774,6 @@ function previousEx() {
   var ok = session.setNumExercise(session.getNumExercise() - 1);
   displayCurrentExercise();
   return ok;
-  // var listEx = document.getElementById('list-session-ex');
-  // var selected = 0;
-  // var i = 0;
-  // for (i = 0; i < listEx.childElementCount; i++) {
-  //   if (listEx.childNodes[i].className =="activeImage") {
-  //     selected = i;
-  //   }
-  // }
-
-  // if (selected  > 0 ) {
-  //   listEx.childNodes[selected].className = "";
-  //   listEx.childNodes[selected - 1].className = "activeImage"
-  //   listEx.childNodes[selected - 1].scrollIntoView(true);
-  // }
 }
 
 function nextEx() {
@@ -795,43 +781,11 @@ function nextEx() {
   var ret = session.setNumExercise(session.getNumExercise() + 1);
   displayCurrentExercise();
   return ret;
-  // var listEx = document.getElementById('list-session-ex');
-
-  // var selected = 0;
-  // var i = 0;
-  // for (i = 0; i < listEx.childElementCount; i++) {
-  //   if (listEx.childNodes[i].className =="activeImage") {
-  //     selected = i;
-  //   }
-  // }
-  
-  // if ((selected + 1) < listEx.childElementCount ) {
-  //   listEx.childNodes[selected].className = "";
-  //   listEx.childNodes[selected + 1 ].className = "activeImage"
-  //   listEx.childNodes[selected + 1 ].scrollIntoView(true);
-  //   return true;
-  // }
-  // return false;
-
 }
 
 function hasNextEx() {
   console.log(session.hasNextExercise());
   return session.hasNextExercise();
-  // var listEx = document.getElementById('list-session-ex');
-
-  // var i = 0;
-  // var selected = 0;
-  // for (i = 0; i < listEx.childElementCount; i++) {
-  //   if (listEx.childNodes[i].className =="activeImage") {
-  //     selected = i;
-  //   }
-  // }
- 
-  // if ((selected + 1) < listEx.childElementCount ) {
-  //   return true;
-  // }
-  // return false;
 }
 
 function pauseEx() {
@@ -875,30 +829,6 @@ function startEx() {
     } catch(e) {
       console.log(e);
     }
-    
-    /* var listEx = document.getElementById('list-session-ex');
-    var i = 0;
-    for (i = 0; i < listEx.childElementCount; i++) {
-      if (listEx.childNodes[i].className =="activeImage") {
-        var res = listEx.childNodes[i].id.split(",");
-        
-        durationEx = parseInt(res[0]) + 1;
-        breakTimeEx = parseInt(res[1]);
-        nbRetryEx = parseInt(res[2]);
-        
-        var effortDiv = document.getElementById('effortDiv');
-        effortDiv.style.color = '#F97C17';
-        
-        chronos.start();
-        flagStart = true;
-        try {
-          var exercise = new Exercise(name, durationEx, breakTimeEx, nbRetryEx);
-          session.startExercise(exercise);
-        } catch(e) {
-          console.log(e);
-        }
-      } 
-  } */
   } else {
     if (typeCounter == STATE_EX_PAUSE) {
       chronos.start();
@@ -930,10 +860,18 @@ function display() {
         if (session.isChainExercises() && !hasNextEx() ) {
           // Final sound .
           playSound('finalSound');
-        }
-        else if ( durationBetweenExercise < session.getdelayBetweenExercises()) {
-          durationBetweenExercise++;
-          return;
+        } else {
+          breakTimeDisplay.style.color = 'green';
+          if (durationBetweenExercise == 0) {
+            // Sound begin chain exercice.
+            playSound('beginChangeSound');
+          }
+          if ( durationBetweenExercise <= session.getdelayBetweenExercises()) {
+            displaySecond(breakTimeDisplay, session.getdelayBetweenExercises() - durationBetweenExercise);
+            durationBetweenExercise++;
+            return;
+          } 
+          breakTimeDisplay.style.color = 'white';
         }
       } catch(e) {
         console.log(e);
@@ -957,9 +895,10 @@ function display() {
     } 
     return;
   }
-  
-  // Duration
-  if (typeCounter == STATE_EX_EFFORT) {
+
+  switch (typeCounter) {
+    // Duration
+    case STATE_EX_EFFORT:
     nbRetryDisplay.textContent = nbRetryCounter + "/" +nbRetryEx;
     durationCounter++;
     
@@ -982,10 +921,10 @@ function display() {
     }
     var nbSec = durationEx - durationCounter;
     displaySecond(chronoDisplay, nbSec);
-  }
+    break;
 
   // Recovery
-  if (typeCounter == STATE_EX_RECOVERY) {
+    case STATE_EX_RECOVERY:
     breakTimeCounter++;
     if (breakTimeCounter >= breakTimeEx) {       
       nbRetryCounter++;
@@ -1004,6 +943,7 @@ function display() {
       // 
       playSound('5SecSound');
     }
+    break;
   }
 }
 
@@ -1229,7 +1169,6 @@ function listSessionEx(idSession) {
     try {
       var cursor = event.target.result;
       if (cursor) {
-        console.log("onsuccess");
         var exercise = new Exercise( cursor.value.name,  cursor.value.duration,  cursor.value.breakTime, cursor.value.nbRetry);
         exercise.setImagePath(cursor.value.imagePath);
         session.addListExercises(exercise);

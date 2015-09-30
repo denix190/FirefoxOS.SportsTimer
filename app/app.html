@@ -226,20 +226,26 @@
       </header>
 
       <audio id="beepBeginSound">
-          <source src="sounds/soundbegin.mp3">
+        <source src="sounds/soundbegin.mp3">
       </audio>
 
       <audio id="beepEndSound">
-          <source src="sounds/soundend.mp3">
+        <source src="sounds/soundend.mp3">
       </audio>
       
       <audio id="finalSound">
-          <source src="sounds/soundfinal.mp3">
+        <source src="sounds/soundfinal.mp3">
       </audio>
 
       <audio id="5SecSound">
-          <source src="sounds/5sec.mp3">
+        <source src="sounds/5sec.mp3">
       </audio>
+
+      <audio id="beginChangeSound">
+        <!-- Begin Change exercice -->
+        <source src="sounds/beginchange.mp3">
+      </audio>
+      
       <nav>
         <ul>
           <li><a id="btn-go-param-ex" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>
@@ -291,13 +297,9 @@
       <article class="scrollable header">
         <div>
           <div>
-            <!-- List of exercices -->
-            <!-- <div data-type="listImage"> -->
-            <!--   <ul id="list-session-ex" style="height:0rem;" > -->
-            <!--   </ul> -->
-            <!-- </div> -->
+
             <div style="margin-left: auto; margin-right: auto; display: block; text-align: center;">
-              <span id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;">Donney Kick'</span> <span id="idInfoExercise" style="font-size: small;">[60x60] x 1</span>
+              <span id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;"></span> <span id="idInfoExercise" style="font-size: small;"></span>
               <img  id="idImageExercise" src="" alt="" style="margin-left: auto; margin-right: auto; display: block;margin-top:0px;margin-bottom:0px; width:250px;height:105px;"/>
 
             </div>
@@ -305,7 +307,7 @@
               <span id="chronoDisplay" >00:00</span>
             </div>
             <div class="chronosRecovery">
-              <span data-l10n-id="idRecovery" class="left">Recovery:</span>
+              <span data-l10n-id="idRecovery" id="lblRecovery" class="left">Recovery:</span>
               <span  id="breakTimeDisplay" class="right">00:00</span>
             </div>
             <div class="chronosRound">
@@ -472,7 +474,7 @@
       <p> 
         <image src="" id="imagePath" style="border-width:1px; border-style:solid;"/>
         <div>
-          <button id="btn-choose-img" class="recommend" data-l10n-id="idAddImages" >Choose Image</button>
+          <button id="btn-choose-img" class="recommend" data-l10n-id="idAddImages" >Choose image</button>
       </div>
       </p>
     

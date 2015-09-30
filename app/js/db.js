@@ -19,7 +19,6 @@ function init() {
     };
 
     DBOpenRequest.onsuccess = function(event) {
-      console.log ("Database initialised.");
       db = DBOpenRequest.result;
       displayListSessions();
     };
