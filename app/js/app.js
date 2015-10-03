@@ -1155,9 +1155,6 @@ function updateSession() {
  */ 
 function listSessionEx(idSession) {
   var objectStore = db.transaction("exercice").objectStore("exercice");
-  // var listEx = document.getElementById("list-session-ex");
-
-  // removeAllItems(listEx);
   
   session.initListExercises();
 
@@ -1173,56 +1170,9 @@ function listSessionEx(idSession) {
         exercise.setImagePath(cursor.value.imagePath);
         session.addListExercises(exercise);
         cursor.continue();
-      //   var li = document.createElement("li");
-      //   if (i == 0) {
-      //     li.className="activeImage";
-      //   }
-      //   var a = document.createElement("a");
-        
-      //   li.setAttribute("id", cursor.value.duration
-      // + "," + cursor.value.breakTime 
-      // + "," + cursor.value.nbRetry);
-      //   a.href = "#";
-        
-      //   var p0 = document.createElement("p");
-      //   p0.innerHTML = cursor.value.name;
-      //   a.appendChild(p0);
-        
-      //   var p1 = document.createElement("p");
-      //   p1.innerHTML = "(" + cursor.value.duration
-      // + " -  " + cursor.value.breakTime + ")"
-      // + "x" + cursor.value.nbRetry;
-      //   a.appendChild(p1);
-        
-      //   var aside = document.createElement("aside");
-      //   aside.className ="pack-end";
-      //   if (cursor.value.imagePath != "") {
-      //     var img = document.createElement("IMG");
-      //     img.src = cursor.value.imagePath;
-      //     aside.appendChild(img);
-      //   }
-
-      //   li.appendChild(aside);
-      //   li.appendChild(a);
-      //   listEx.appendChild(li);    
-      //   cursor.continue();
-
-      //   i++;
       }
       else {
         displayCurrentExercise();
-        // if (session.getListExercises().length > 0) {
-        //   var nameExercise = document.getElementById("idNameExercise");
-        //   var image = document.getElementById("idImageExercise");
-        //   var infoExercise = document.getElementById("idInfoExercise");
-
-        //   var curExercise = session.getListExercises()[0];
-        //   console.log(curExercise);
-        //   nameExercise.textContent = curExercise.getName();
-        //   infoExercise.textContent = "[" + curExercise.getDuration() 
-        //              + " -  " + curExercise.breakTime + "]"
-        //              + "x" + curExercise.nbRetry;
-        //   image.src = curExercise.getImagePath();
       }
     } catch (e) {
       console.log(e);

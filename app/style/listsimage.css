@@ -121,8 +121,8 @@ li a:active {
 [data-type="listImage"] aside img {
   display: block;
   overflow: hidden;
-  width: 150px;
-  height: 104px; 
+  width: 250px;
+  height: 105px; 
   border-radius: 0rem;
   margin-top: 0.2rem;
   box-sizing: border-box;
