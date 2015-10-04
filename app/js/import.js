@@ -44,17 +44,25 @@ ImportSession.prototype.load = function() {
 
 ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
 
-  if (typeof navigator.getDeviceStorage === "function") {  
+  if (typeof navigator.getDeviceStorage === "function") {
     var files = navigator.getDeviceStorage(storagename);
+
 	var cursor = files.enumerate();
     var done = false;
 	cursor.onsuccess = function () {
-	  var file = this.result;
-	  if (file != null ) {
-        try {
+      console.log("onsuccess");
+      try {
+	    var file = this.result;
+	    if (file != null ) {
+
           var fileName = file.name;
+          fileName = "sdcard/" + fileName;
           
-          if (fileName.startsWith("st") && fileName.endsWith(".json")) {
+          // if (fileName.startsWith("st") && fileName.endsWith(".json")) {
+          var posSlash = fileName.lastIndexOf('/');
+
+          if (posSlash != -1 && fileName.substring(posSlash + 1).startsWith("st") && fileName.endsWith(".json")) {
+          //if (file.type == "application/json") {
             var li = document.createElement("li");
             var a = document.createElement("a");
             a.setAttribute("id", file.name);
@@ -69,18 +77,22 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
             
 			done = false;
           }
-        } catch(e) {
-          console.log(e);
-        }
-	  }
-	  else {
-		done = true;
-	  }
-      
-	  if (!done) {
-		cursor.continue();
-	  }
+	    }
+	    else {
+		  done = true;
+	    }
+        
+	    if (!done) {
+		  cursor.continue();
+	    }
+      } catch(e) {
+        window.alert(e);
+      }
 	}
+    
+    cursor.onerror = function() {
+      console.warn( this.error);
+    }    
   }
 }
 

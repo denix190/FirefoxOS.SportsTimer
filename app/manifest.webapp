@@ -6,13 +6,18 @@
     "128": "/images/app_timer_128.png",
     "60": "/images/app_timer_60.png"
   },
-  "version": "1.2",
+  "version": "2.0",
   "developer": {
     "name": "Denis Minier",
     "url": "http://ta152-h1-hp"
   },
  
-  "default_locale": "en"
-
-  
+  "default_locale": "en",
+  "type" : "privileged",
+    "permissions" : {
+        "device-storage:sdcard" : {
+            "access": "readwrite",
+            "description": "Write export of all feeds on SD card as an json file."
+        }
+    }
 }

@@ -69,7 +69,7 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
     idSession.value = "-1";
 
     // Desactivate the button "AddExercises"
-    document.getElementById('btn-add-sesEx').disabled = true;
+    // document.getElementById('btn-add-sesEx').disabled = true;
     document.getElementById('btn-del-ses').disabled = true;
 
     document.getElementById('nameSession').value = "";
@@ -370,6 +370,7 @@ listItemEx.onclick = function(e) {
 listItemSes.onclick = function(e) {
   
   document.getElementById('btn-add-sesEx').disabled = false;
+  document.getElementById('btn-del-ses').disabled = false;
   
   var collEnfants = e.target.parentNode.childNodes;
   var i = 0;
@@ -683,6 +684,7 @@ function displayListUpdateExercise(idSession) {
 
   var index = objectStore.index("BySession");
   var id = parseInt(idSession);
+  console.log("displayListUpdateExercise idSession" + id);
   var request = index.openCursor(IDBKeyRange.only(id));
   
   request.onsuccess = function(event) {
@@ -809,6 +811,7 @@ function startEx() {
     breakTimeCounter = 0;
     nbRetryCounter = 1;
     durationBetweenExercise = 0;
+    breakTimeDisplay.style.color = 'white';
 
     typeCounter = STATE_EX_EFFORT;
 
@@ -819,7 +822,7 @@ function startEx() {
     nbRetryEx = parseInt(curExercise.getNbRetry());
         
     var effortDiv = document.getElementById('effortDiv');
-    effortDiv.style.color = '#F97C17';
+    effortDiv.style.color = EFFORT_COLOR;
         
     chronos.start();
     flagStart = true;
@@ -861,7 +864,7 @@ function display() {
           // Final sound .
           playSound('finalSound');
         } else {
-          breakTimeDisplay.style.color = 'green';
+          breakTimeDisplay.style.color = EFFORT_COLOR;
           if (durationBetweenExercise == 0) {
             // Sound begin chain exercice.
             playSound('beginChangeSound');
@@ -904,7 +907,7 @@ function display() {
     
     if (durationCounter == 1) {
       var effortDiv = document.getElementById('effortDiv');
-      effortDiv.style.color = '#F97C17';
+      effortDiv.style.color = EFFORT_COLOR;
       playSound('beepBeginSound');
     }
 
@@ -976,6 +979,7 @@ function cancelEx() {
   chronoDisplay.textContent = "00:00";
   breakTimeDisplay.textContent = "00:00";
   nbRetryDisplay.textContent = "0/0";
+  breakTimeDisplay.style.color = "white";
   endExercise();
 }
 
@@ -996,12 +1000,12 @@ function saveParameters(dbObj, id, value) {
     var request = store.put(parametersRecord);
     
     request.onerror = function(e) {
-                    console.log("Error parameterRecord", e.target.error.name);
-                  }
+      console.log("Error parameterRecord", e.target.error.name);
+    }
     
     request.onsuccess = function(event) {
-                      console.log("parameters add");
-                    }
+      console.log("parameters add");
+    }
   } catch(e) {
     console.log(e);
   }
@@ -1077,7 +1081,7 @@ Chronos.prototype.stop = function() {
 /**
  * Update session.
  */
-function updateSession() {
+function updateSession(flagExercise) {
   try {
     
     var nameId = document.getElementById("nameSession");
@@ -1114,12 +1118,21 @@ function updateSession() {
       }
       
       request.onsuccess = function(event) {
-        document.getElementById('idSession').value = event.target.result;
-        document.getElementById('btn-add-sesEx').disabled = false;
+        if (flagExercise) {
+          console.log("flagExercise new exercise" + event.currentTarget.result);
+          document.querySelector('#listExercise').className = 'current';
+          document.querySelector('#updSession').className = 'right';
+          idSession.value = event.currentTarget.result;
+          displayListUpdateExercise(event.currentTarget.result);
+        } else {
+          console.log("Update exercises");
+          document.getElementById('idSession').value = event.target.result;
+          document.getElementById('btn-add-sesEx').disabled = false;
         
-        displayListSessions();
-        document.querySelector('#updSession').className = 'right';
-        document.querySelector('[data-position="current"]').className = 'current';
+          displayListSessions();
+          document.querySelector('#updSession').className = 'right';
+          document.querySelector('[data-position="current"]').className = 'current';
+        }
       }
     } else {
       // Update session
@@ -1249,12 +1262,16 @@ function addSession(list, cursor) {
 
 // Add Exercises to Session.
 function addExercisesToSession() {
-
-  document.querySelector('#listExercise').className = 'current';
-  document.querySelector('#updSession').className = 'right';
-
   var idSession = document.getElementById('idSession');
-  displayListUpdateExercise(idSession.value);
+  var id = parseInt(idSession.value);
+  if (id == -1) {
+    updateSession(true);
+  } else {
+    document.querySelector('#listExercise').className = 'current';
+    document.querySelector('#updSession').className = 'right';
+
+    displayListUpdateExercise(idSession.value);
+  }
 }
 
 function deleteSession() {
@@ -1312,17 +1329,22 @@ function removeAllItems(list) {
 }
 
 function loadListFiles(storagename) {
-
-  // Remove all elements.
-  removeAllItems(document.getElementById("list-files"));
+  try {
+    // Remove all elements.
+    removeAllItems(document.getElementById("list-files"));
     
-  if (typeof navigator.getDeviceStorage === "function") {  
-	var files = navigator.getDeviceStorage(storagename);
-	var cursor = files.enumerate();
-    var listFiles = document.getElementById('list-files');
-    
-    var importSession = new ImportSession();
-    importSession.loadListFiles('sdcard', listFiles);
+    if (typeof navigator.getDeviceStorage === "function") {  
+	  // var files = navigator.getDeviceStorage(storagename);
+	  // var cursor = files.enumerate();
+      var listFiles = document.getElementById('list-files');
+      
+      var importSession = new ImportSession();
+      importSession.loadListFiles('sdcard', listFiles);
+    } else {
+      window.alert("getDeviceStorage not a function")
+    }
+  } catch (e) {
+    window.alert(e);
   }
 }
 

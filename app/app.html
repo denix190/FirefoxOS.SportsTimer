@@ -299,7 +299,7 @@
           <div>
 
             <div style="margin-left: auto; margin-right: auto; display: block; text-align: center;">
-              <span id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;"></span> <span id="idInfoExercise" style="font-size: small;"></span>
+              <span id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;"></span><span style="font-size:large;"> / <span id="idInfoExercise" style="font-size: small;"></span>
               <img  id="idImageExercise" src="" alt="" style="margin-left: auto; margin-right: auto; display: block;margin-top:0px;margin-bottom:0px; width:250px;height:105px;"/>
 
             </div>
@@ -387,17 +387,15 @@
       </div>    
 
       <div>
-        <p width="100%">
-          <span data-l10n-id="idDelayBetween">Delay between exercise</span>
-          <select name="idDelayBetween" id="idDelayBetweenExercises">
-            <option value="10">10 sec</option>
-            <option value="15">15 sec</option>
-            <option value="30">30 sec</option>
-            <option value="45">45 sec</option> 
-            <option value="60" selected>1 min</option>
-         </select>
-        </p>
-        
+        <p></p>
+        <label data-l10n-id="idDelayBetween" class="parameters">Chain of exercises</label>
+        <select name="idDelayBetween" id="idDelayBetweenExercises">
+          <option value="10">10 sec</option>
+          <option value="15">15 sec</option>
+          <option value="30" selected>30 sec</option>
+          <option value="45">45 sec</option> 
+          <option value="60">1 min</option>
+        </select>
       </div>
 
       <div>
@@ -575,7 +573,7 @@
        </button>
       </menu>
 
-      <h1 id="idTitleSession">Image</h1>
+      <h1 id="idTitleSession">Images</h1>
     </header>
 
       <article class="scrollable header">
@@ -586,7 +584,7 @@
            
                 <li>
                     <aside class="pack-end">
-                       <img src="images/gym-bridge.png" id="images/gym-bridge.png"/>
+                      <img src="images/gym-bridge.png" id="images/gym-bridge.png"/>
                     </aside>
                 </li>
 
@@ -696,14 +694,14 @@
           </label>  
 
       </div>
-      <div style="height:7rem;">
+      <!-- div style="height:7rem;">
          <label data-l10n-id="idSaveSession" class="parameters">Save sessions</label>
          <label class="pack-switch">
           <input type="checkbox" checked class="denix" id="chk-save-session">
           <span></span>
         </label>         
          <p style="padding-left:10px; font-size:1.2rem;line-height:1.5rem;" data-l10n-id="idInfoSaveSession">Save history</p> 
-      </div>
+      </div -->
       <div style="height:7rem;">
          <label data-l10n-id="idNextExercise" class="parameters">Next exercise</label>
          <label class="pack-switch">
