@@ -812,7 +812,7 @@ function startEx() {
     nbRetryCounter = 1;
     durationBetweenExercise = 0;
     breakTimeDisplay.style.color = 'white';
-
+    nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
     typeCounter = STATE_EX_EFFORT;
 
     var curExercise = session.getCurrentExercise();
@@ -852,57 +852,11 @@ function playSound(sound) {
 }
 
 function display() {
-  
-  if (nbRetryCounter > nbRetryEx) {
-    // End of exercice.
-
-    if (!session.isChainExercises() ) {
-      playSound('finalSound');
-    } else {
-      try {
-        if (session.isChainExercises() && !hasNextEx() ) {
-          // Final sound .
-          playSound('finalSound');
-        } else {
-          breakTimeDisplay.style.color = EFFORT_COLOR;
-          if (durationBetweenExercise == 0) {
-            // Sound begin chain exercice.
-            playSound('beginChangeSound');
-          }
-          if ( durationBetweenExercise <= session.getdelayBetweenExercises()) {
-            displaySecond(breakTimeDisplay, session.getdelayBetweenExercises() - durationBetweenExercise);
-            durationBetweenExercise++;
-            return;
-          } 
-          breakTimeDisplay.style.color = 'white';
-        }
-      } catch(e) {
-        console.log(e);
-      }
-    }
-
-    session.stopExercise();
-    endExercise();
-    chronos.stop();
-
-    if (session.isChainExercises() || parameters.isNextExercice()) {
-      var ok = nextEx();
-      if (ok && session.isChainExercises()) {
-        // Start the next exercise.
-        startEx();
-      }
-    }
-
-    if ('vibrate' in navigator) {
-      window.navigator.vibrate(1000);
-    } 
-    return;
-  }
 
   switch (typeCounter) {
     // Duration
     case STATE_EX_EFFORT:
-    nbRetryDisplay.textContent = nbRetryCounter + "/" +nbRetryEx;
+    breakTimeDisplay.style.color = 'white';
     durationCounter++;
     
     if (durationCounter == 1) {
@@ -919,6 +873,10 @@ function display() {
     if (durationCounter >= durationEx) {
       playSound('beepEndSound');
 
+      if ('vibrate' in navigator) {
+        window.navigator.vibrate(1000);
+      } 
+
       breakTimeCounter = 0;
       typeCounter = STATE_EX_RECOVERY;
     }
@@ -928,23 +886,73 @@ function display() {
 
     // Recovery
     case STATE_EX_RECOVERY:
+ 
     breakTimeCounter++;
     if (breakTimeCounter >= breakTimeEx) {       
       nbRetryCounter++;
       if (nbRetryCounter <= nbRetryEx) {
         nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
+        typeCounter =  STATE_EX_EFFORT;
+        durationCounter = 0;
+      } else {
+        typeCounter = STATE_EX_BETWEEN;
+        durationCounter = 0;
+        displaySecond(breakTimeDisplay, 0);
       }
-      typeCounter = STATE_EX_EFFORT;
-      durationCounter = 0;
-      displaySecond(breakTimeDisplay, 0);
     } else {
       var nbSec =  breakTimeEx - breakTimeCounter;
       displaySecond(breakTimeDisplay, nbSec);
     }
-          
+    
     if ((breakTimeEx - breakTimeCounter) == 5) {
       // 
       playSound('5SecSound');
+    }
+    break;
+    
+    case STATE_EX_BETWEEN:
+
+    if (!session.isChainExercises()) {
+      typeCounter = STATE_EX_EFFORT;
+
+      var ok = nextEx();
+      if (!ok) {
+        session.stopExercise();
+        endExercise();
+        chronos.stop();
+        playSound('finalSound');
+      }
+      break;
+    }
+    
+    if (parameters.isNextExercice() && durationBetweenExercise == 0) {
+      var ok = nextEx();
+      if (!ok) {
+        session.stopExercise();
+        endExercise();
+        chronos.stop();
+        playSound('finalSound');
+      }
+    }
+    
+    if (durationBetweenExercise == 0) {
+      // Sound begin chain exercice.
+      playSound('beginChangeSound');
+      durationBetweenExercise++;
+    } else {
+      if ( durationBetweenExercise <= session.getdelayBetweenExercises()) {
+        breakTimeDisplay.style.color = EFFORT_COLOR;
+        displaySecond(breakTimeDisplay, session.getdelayBetweenExercises() - durationBetweenExercise);
+        durationBetweenExercise++;
+      } else {
+        if (durationBetweenExercise >= session.getdelayBetweenExercises()) {
+          // Temps entre exercice depasse. Exercice suivant.
+          durationBetweenExercise = 0;
+          breakTimeDisplay.style.color = 'white';
+          typeCounter = STATE_EX_EFFORT;
+          startEx();
+        }
+      }
     }
     break;
   }
@@ -1002,7 +1010,7 @@ function saveParameters(dbObj, id, value) {
     request.onerror = function(e) {
       console.log("Error parameterRecord", e.target.error.name);
     }
-    
+ 
     request.onsuccess = function(event) {
       console.log("parameters add");
     }
@@ -1209,8 +1217,15 @@ function displayCurrentExercise() {
       infoExercise.textContent = "[" + curExercise.getDuration() 
     + " -  " + curExercise.breakTime + "]"
     + "x" + curExercise.nbRetry;
-      image.src = curExercise.getImagePath();
+        image.src = curExercise.getImagePath();
+
+        durationEx = parseInt(curExercise.getDuration());
+        breakTimeEx = parseInt(curExercise.getBreakTime());
+        nbRetryEx = parseInt(curExercise.getNbRetry());
+        nbRetryCounter = 1;
+        nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
     }
+      
   } catch(e) {
     console.log(e);
   }

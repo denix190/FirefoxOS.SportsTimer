@@ -52,6 +52,13 @@ Session.prototype.setNumExercise = function (numExercise) {
   return false;
 }
 
+Session.prototype.getNextExercise = function (numExercise) {
+  if ((this.numExercise + 1) < this.listExercises.length) {
+    return this.numExercise + 1;
+  }
+  return this.numExercise;
+}
+
 Session.prototype.initListExercises = function () {
   this.numExercise = 0;
   this.listExercises = new Array();
