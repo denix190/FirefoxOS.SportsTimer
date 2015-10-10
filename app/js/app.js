@@ -270,20 +270,23 @@ function addImage(path) {
 
 initListImages();
 
+saveParameters( db, 2, true);
+saveParameters( db, 1, true);
 
 /**
  * Activate the sound.
  */
 function checkSoundHandler(event) {
-  paramaters.setSound(event.originalTarget.checked);
-  saveParameters(db, 1, flagSound);
+  parameters.setSound(event.originalTarget.checked);
+  saveParameters(db, 1, parameters.isSound());
 }
 
 /**
  * Check the next exercice.
  */
 function checkNextExercice(event) {
-  parameters.setNextExercice(event.originalTarget.checked);
+  parameters.setNextExercise(event.originalTarget.checked);
+  saveParameters(db, 2, parameters.isNextExercise());
 }
 
 
@@ -654,8 +657,7 @@ function updateEx() {
  * Initialize the list of Exercises.
  */
 function displayListExercise() {
-  loadParameters(1);
-  
+ 
   try {
     var objectStore = db.transaction("exercice").objectStore("exercice");
     var index = objectStore.index("by_name");
@@ -933,28 +935,50 @@ function display() {
     
     case STATE_EX_BETWEEN:
 
-    if (!session.isChainExercises()) {
-      typeCounter = STATE_EX_EFFORT;
+    if (parameters.isNextExercise() ) {
 
-      var ok = nextEx();
-      if (!ok) {
-        session.stopExercise();
-        endExercise();
-        chronos.stop();
-        playSound('finalSound');
+      if (durationBetweenExercise == 0) {
+        // Pass to the next exercise.
+        var ok = nextEx();
+        if (!ok) {
+          session.stopExercise();
+          endExercise();
+          chronos.stop();
+          playSound('finalSound');
+          break;
+        }
+        
+        if (!session.isChainExercises()) {
+          typeCounter = STATE_EX_EFFORT;
+          session.stopExercise();
+          endExercise();
+          chronos.stop();
+          break;
+        }
       }
+    } else {
+      session.stopExercise();
+      endExercise();
+      chronos.stop();
       break;
     }
     
-    if (parameters.isNextExercice() && durationBetweenExercise == 0) {
+    /* if (!session.isChainExercises()) {
+      typeCounter = STATE_EX_EFFORT;
+
       var ok = nextEx();
+
+      session.stopExercise();
+      endExercise();
+      chronos.stop();
+      
       if (!ok) {
-        session.stopExercise();
-        endExercise();
-        chronos.stop();
+        // End of session      
         playSound('finalSound');
       }
-    }
+
+      break;
+    } */
     
     if (durationBetweenExercise == 0) {
       // Sound begin chain exercice.
@@ -967,7 +991,7 @@ function display() {
         durationBetweenExercise++;
       } else {
         if (durationBetweenExercise >= session.getdelayBetweenExercises()) {
-          // Temps entre exercice depasse. Exercice suivant.
+          // Temps entre exercise depasse. Exercice suivant.
           durationBetweenExercise = 0;
           breakTimeDisplay.style.color = 'white';
           typeCounter = STATE_EX_EFFORT;
@@ -1043,21 +1067,29 @@ function saveParameters(dbObj, id, value) {
 
 function loadParameters(id) {
   try {
-    var transaction = db.transaction(["parameters"],"readwrite");
-    var store = transaction.objectStore("parameters");
-
-    var request = store.get(id);
+    console.log("loadParameters");
+    var objectStore = db.transaction(["parameters"],"readwrite").objectStore("parameters");
     
-    request.onerror = function(e) {
-      console.log("Error parameterRecord", e.target.error.name);
-    }
-    
-    request.onsuccess = function(event) {
+    objectStore.openCursor().onsuccess = function(event) {
       try {
-        console.log("parameters value: " + request.result.value);
-        parameters.setSound (request.result.value);
-        var chk = document.getElementById("chk-sound");
-        chk.checked = parameters.isSound();
+        console.log(event);
+        var cursor = event.target.result;
+        if (cursor) {
+          if (cursor.value.id == 1) {
+            console.log("sound");
+            parameters.setSound (cursor.value.value);
+            var chk = document.getElementById("chk-sound");
+            chk.checked = parameters.isSound();
+          }
+          
+          if (cursor.value.id == 2) {
+            console.log("nextExercise");
+            parameters.setNextExercise (cursor.value.value);
+            var chk = document.getElementById("chk-next-exercice");
+            chk.checked = parameters.isNextExercise();
+          }
+          cursor.continue();
+        }
       } catch(e) {
         console.log(e);
       }
@@ -1240,9 +1272,6 @@ function displayCurrentExercise() {
     + "x" + curExercise.getNbRetry();
         image.src = curExercise.getImagePath();
 
-        // durationEx = parseInt(curExercise.getDuration());
-        //breakTimeEx = parseInt(curExercise.getBreakTime());
-        //nbRetryEx = parseInt(curExercise.getNbRetry());
         nbRetryCounter = 1;
         nbRetryDisplay.textContent = nbRetryCounter + "/" + curExercise.getNbRetry();
     }
@@ -1256,21 +1285,22 @@ function displayCurrentExercise() {
  * Display the list of Sessions.
 */
 function displayListSessions() {
-    var objectStore = db.transaction("sessions").objectStore("sessions");
-    var listSes = document.getElementById("list-items-ses");
-
-    removeAllItems(listSes);
-
-    objectStore.openCursor().onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-            addSession(listSes, cursor);
-            cursor.continue();
-        }
-        else {
-            // alert("No more entries!");
-        }
-    };
+  loadParameters(1);
+  var objectStore = db.transaction("sessions").objectStore("sessions");
+  var listSes = document.getElementById("list-items-ses");
+  
+  removeAllItems(listSes);
+  
+  objectStore.openCursor().onsuccess = function(event) {
+      var cursor = event.target.result;
+    if (cursor) {
+      addSession(listSes, cursor);
+      cursor.continue();
+    }
+    else {
+      // alert("No more entries!");
+    }
+  };
 }
 
 /**

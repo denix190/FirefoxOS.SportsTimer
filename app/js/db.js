@@ -9,6 +9,7 @@ function init() {
   try {
     window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
     window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
     // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
     // Let us open our database
     var DBOpenRequest = window.indexedDB.open(dbName, dbVersion);
@@ -53,10 +54,8 @@ function init() {
       if (thisDB.objectStoreNames.contains("parameters")) {
         thisDB.deleteObjectStore("parameters");
         var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
-        saveParameters( thisDB, 1, true);
       } else {
         var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
-        saveParameters( thisDB, 1, true);                
       }
     };
   } catch(e) {

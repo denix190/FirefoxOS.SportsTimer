@@ -4,7 +4,9 @@
 
 function Parameters() {
   this.flagSound = true;
-  this.nextExercice = true;
+
+  // Pass to the next Exercise, but not start.
+  this.nextExercise = true;
 }
 
 Parameters.prototype.setSound = function(bSound) {
@@ -15,10 +17,10 @@ Parameters.prototype.isSound = function(bSound) {
   return this.flagSound;
 }
 
-Parameters.prototype.setNextExercice = function(bNextExercice) {
-  this.nextExercice = bNextExercice;
+Parameters.prototype.setNextExercise = function(bNextExercise) {
+  this.nextExercise = bNextExercise;
 }
 
-Parameters.prototype.isNextExercice = function() {
-  return this.nextExercice;
+Parameters.prototype.isNextExercise = function() {
+  return this.nextExercise;
 }
