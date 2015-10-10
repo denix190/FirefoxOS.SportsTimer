@@ -5,9 +5,11 @@ var breakTimeCounter;
 var nbRetryCounter;
 var durationBetweenExercise;
 
-var durationEx;
-var breakTimeEx;
-var nbRetryEx;
+var curExercise;
+
+//var durationEx;
+//var breakTimeEx;
+//var nbRetryEx;
 
 var typeCounter;
 var typeCounterPause;
@@ -230,6 +232,44 @@ var listFiles = document.getElementById('list-files');
 // List All images.
 var listImages = document.getElementById('list-images');
 
+function initListImages() {
+
+  var listImages = [  "gym-ab-bikes.png",
+                      "gym-crunch-abdos.png",
+                      "gym-planche.png",
+                      "gym-squat.png",
+                      "gym-allonge.png",
+                      "gym-desk.png",
+                      "gym-side-plank.png",
+                      "gym-standing-butterfly.png",
+                      "gym-arm.png",
+                      "gym-donkey-side-kick.png",
+                      "gym-single-leg-hip-raise.png",
+                      "gym-bridge.png",
+                      "gym-mountain.png",
+                      "gym-situps.png"];
+
+  for (var i = 0; i < listImages.length; i++) {
+    addImage("images/" + listImages[i]);
+  }
+
+}
+
+function addImage(path) {
+  var li = document.createElement("li");
+  var aside = document.createElement("aside");
+  aside.className = "pack-end";
+  var image = document.createElement("img");
+  image.src = path;
+  image.id = path;
+
+  aside.appendChild(image);
+  listImages.appendChild(aside);
+  
+}
+
+initListImages();
+
 
 /**
  * Activate the sound.
@@ -287,26 +327,6 @@ listFiles.onclick = function(e) {
   }
 
 }
-
-/**
- * Select an exercise of the session.
- */ 
-// listSessionExercises.onclick = function(e) {
-
-//   try {
-//     var i = 0;
-//     var x = e.target.parentNode.parentNode.parentNode;
-//     for (i = 0; i < x.childElementCount;i++) {
-//       x.childNodes[i].className=""; 
-//     }
-//     e.target.parentNode.parentNode.className="activeImage";
-//   } catch(e) {
-//     console.log(e);
-//   }
-//   var collEnfants = e.target.parentNode.childNodes;
-//   console.log("len " + collEnfants.length);
-// }
-
 
 listItemEx.onclick = function(e) {
     console.log("Ex");
@@ -812,14 +832,14 @@ function startEx() {
     nbRetryCounter = 1;
     durationBetweenExercise = 0;
     breakTimeDisplay.style.color = 'white';
-    nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
+    nbRetryDisplay.textContent = nbRetryCounter + "/" + curExercise.getNbRetry();
     typeCounter = STATE_EX_EFFORT;
 
-    var curExercise = session.getCurrentExercise();
+    curExercise = session.getCurrentExercise();
 
-    durationEx = parseInt(curExercise.getDuration());
-    breakTimeEx = parseInt(curExercise.getBreakTime());
-    nbRetryEx = parseInt(curExercise.getNbRetry());
+    //durationEx = parseInt(curExercise.getDuration());
+    //breakTimeEx = parseInt(curExercise.getBreakTime());
+    // nbRetryEx = parseInt(curExercise.getNbRetry());
         
     var effortDiv = document.getElementById('effortDiv');
     effortDiv.style.color = EFFORT_COLOR;
@@ -827,7 +847,7 @@ function startEx() {
     chronos.start();
     flagStart = true;
     try {
-      var exercise = new Exercise(name, durationEx, breakTimeEx, nbRetryEx);
+      var exercise = new Exercise(name, curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
       session.startExercise(exercise);
     } catch(e) {
       console.log(e);
@@ -865,12 +885,12 @@ function display() {
       playSound('beepBeginSound');
     }
 
-    if ((durationEx - durationCounter) == 10) {
+    if ((curExercise.getDuration() - durationCounter) == 10) {
       var effortDiv = document.getElementById('effortDiv');
       effortDiv.style.color = 'red';
     }
     
-    if (durationCounter >= durationEx) {
+    if (durationCounter >= curExercise.getDuration()) {
       playSound('beepEndSound');
 
       if ('vibrate' in navigator) {
@@ -880,7 +900,7 @@ function display() {
       breakTimeCounter = 0;
       typeCounter = STATE_EX_RECOVERY;
     }
-    var nbSec = durationEx - durationCounter;
+    var nbSec = curExercise.getDuration() - durationCounter;
     displaySecond(chronoDisplay, nbSec);
     break;
 
@@ -888,10 +908,11 @@ function display() {
     case STATE_EX_RECOVERY:
  
     breakTimeCounter++;
-    if (breakTimeCounter >= breakTimeEx) {       
+    if (breakTimeCounter > curExercise.getBreakTime()) {
       nbRetryCounter++;
-      if (nbRetryCounter <= nbRetryEx) {
-        nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
+      if (nbRetryCounter <= curExercise.getNbRetry()) {
+
+        nbRetryDisplay.textContent = nbRetryCounter + "/" + curExercise.getNbRetry();
         typeCounter =  STATE_EX_EFFORT;
         durationCounter = 0;
       } else {
@@ -900,11 +921,11 @@ function display() {
         displaySecond(breakTimeDisplay, 0);
       }
     } else {
-      var nbSec =  breakTimeEx - breakTimeCounter;
+      var nbSec =  curExercise.getBreakTime() - breakTimeCounter;
       displaySecond(breakTimeDisplay, nbSec);
     }
     
-    if ((breakTimeEx - breakTimeCounter) == 5) {
+    if ((curExercise.getBreakTime() - breakTimeCounter) == 5) {
       // 
       playSound('5SecSound');
     }
@@ -1207,7 +1228,7 @@ function listSessionEx(idSession) {
 
 function displayCurrentExercise() {
   try {
-    var curExercise = session.getCurrentExercise();
+    curExercise = session.getCurrentExercise();
     if (curExercise != null) {
       var nameExercise = document.getElementById("idNameExercise");
       var image = document.getElementById("idImageExercise");
@@ -1215,15 +1236,15 @@ function displayCurrentExercise() {
    
       nameExercise.textContent = curExercise.getName();
       infoExercise.textContent = "[" + curExercise.getDuration() 
-    + " -  " + curExercise.breakTime + "]"
-    + "x" + curExercise.nbRetry;
+    + " -  " + curExercise.getBreakTime() + "]"
+    + "x" + curExercise.getNbRetry();
         image.src = curExercise.getImagePath();
 
-        durationEx = parseInt(curExercise.getDuration());
-        breakTimeEx = parseInt(curExercise.getBreakTime());
-        nbRetryEx = parseInt(curExercise.getNbRetry());
+        // durationEx = parseInt(curExercise.getDuration());
+        //breakTimeEx = parseInt(curExercise.getBreakTime());
+        //nbRetryEx = parseInt(curExercise.getNbRetry());
         nbRetryCounter = 1;
-        nbRetryDisplay.textContent = nbRetryCounter + "/" + nbRetryEx;
+        nbRetryDisplay.textContent = nbRetryCounter + "/" + curExercise.getNbRetry();
     }
       
   } catch(e) {

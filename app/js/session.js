@@ -173,12 +173,16 @@ Session.prototype.stopExercise = function() {
   }
 }
 
+
+/**
+ * Exercise
+ */
 function Exercise(name, duration, breakTime, nbRetry) {
   try {
     this.name = name;
-    this.duration = duration;
-    this.breakTime = breakTime;
-    this.nbRetry = nbRetry;
+    this.duration = parseInt(duration);
+    this.breakTime = parseInt(breakTime);
+    this.nbRetry = parseInt(nbRetry);
     this.imagePath;
     this.beginExercise = new Date();
     this.endExercise;
