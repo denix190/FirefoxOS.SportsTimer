@@ -7,13 +7,8 @@ var durationBetweenExercise;
 
 var curExercise;
 
-//var durationEx;
-//var breakTimeEx;
-//var nbRetryEx;
-
 var typeCounter;
 var typeCounterPause;
-
 
 var flagStart = false;
 
@@ -145,13 +140,6 @@ document.querySelector('#btn-go-about-ex-back').addEventListener('click', functi
 });
 
 
-// Display the panel List session.
-document.querySelector('#btn-go-sessions').addEventListener('click', function () {
-  document.querySelector('#listSessions').className = 'current';
-  document.querySelector('[data-position="current"]').className = 'left';
-  displayListSessions();
-});
-
 // Hide panel List sessions.
 document.querySelector('#btn-go-current-session-back').addEventListener('click', function () {
   document.querySelector('#currentSession').className = 'right';
@@ -223,17 +211,14 @@ var listItemEx = document.getElementById('list-items-ex');
 // List Session.
 var listItemSes = document.getElementById('list-items-ses');
 
-// List Files.
-var listFiles = document.getElementById('list-files');
-
-// List Session/Exercises
-// var listSessionExercises = document.getElementById('list-session-ex');
-
 // List All images.
 var listImages = document.getElementById('list-images');
 
+/**
+ * Load the list of Images.
+ */
 function initListImages() {
-
+  // List of all images.
   var listImages = [  "gym-ab-bikes.png",
                       "gym-crunch-abdos.png",
                       "gym-planche.png",
@@ -265,70 +250,10 @@ function addImage(path) {
 
   aside.appendChild(image);
   listImages.appendChild(aside);
-  
+
 }
 
 initListImages();
-loadParameters();
-
-
-/**
- * Activate the sound.
- */
-function checkSoundHandler(event) {
-  parameters.setSound(event.originalTarget.checked);
-  saveParameters(1, parameters.isSound());
-}
-
-/**
- * Check the next exercice.
- */
-function checkNextExercice(event) {
-  parameters.setNextExercise(event.originalTarget.checked);
-  saveParameters(2, parameters.isNextExercise());
-}
-
-
-
-/*
- * Import sessions from file.
- */
-listFiles.onclick = function(e) {
-
-  var parent = e.target.innerHTML;
-  var sdcard = navigator.getDeviceStorage('sdcard');
-  var request = sdcard.get(parent);
-
-  request.onsuccess = function () {
-    var file = this.result;
-
-    try {
-      var reader = new FileReader();
-      
-      reader.onload = function(e) {
-        var sessions = JSON.parse(reader.result);
-        
-        // Write sessions
-        if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) {
-          var chkReplaceAll = document.getElementById('chk-replaceAll');
-          var importSession = new ImportSession(sessions, chkReplaceAll.checked);
-          importSession.load();
-          window.alert(navigator.mozL10n.get("ImportSessionFinish"));
-          dataChange(0);
-        }
-      }
-      
-      reader.readAsText(file, 'utf-8');
-    }  catch (e){
-      console.log(e);
-    }
-  }
-
-  request.onerror = function () {
-    console.warn( this.error);
-  }
-
-}
 
 /**
  * Select a exercice to update.
@@ -469,8 +394,6 @@ listImages.onclick = function(e) {
   }
 }
 
-
-
 function startSes() {
   session.startSes();
 }
@@ -528,8 +451,6 @@ function displaySession() {
   } catch (ex) {
     console.log(ex);
   }
-
-
 }
 
 /**
@@ -707,7 +628,7 @@ function displayListUpdateExercise(idSession) {
 
   var index = objectStore.index("BySession");
   var id = parseInt(idSession);
-  console.log("displayListUpdateExercise idSession" + id);
+
   var request = index.openCursor(IDBKeyRange.only(id));
   
   request.onsuccess = function(event) {
@@ -816,7 +737,7 @@ function hasNextEx() {
 function pauseEx() {
 
   if (flagStart) {
-    if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY) {
+    if ( typeCounter == STATE_EX_EFFORT || typeCounter == STATE_EX_RECOVERY || typeCounter == STATE_EX_BETWEEN) {
       typeCounterPause = typeCounter;
       typeCounter = STATE_EX_PAUSE;
       chronos.stop();
@@ -840,10 +761,6 @@ function startEx() {
 
     curExercise = session.getCurrentExercise();
 
-    //durationEx = parseInt(curExercise.getDuration());
-    //breakTimeEx = parseInt(curExercise.getBreakTime());
-    // nbRetryEx = parseInt(curExercise.getNbRetry());
-        
     var effortDiv = document.getElementById('effortDiv');
     effortDiv.style.color = EFFORT_COLOR;
         
@@ -874,6 +791,9 @@ function playSound(sound) {
   }
 }
 
+/**
+ * Manage the chain of the exercises.
+ */
 function display() {
 
   switch (typeCounter) {
@@ -963,24 +883,7 @@ function display() {
       chronos.stop();
       break;
     }
-    
-    /* if (!session.isChainExercises()) {
-      typeCounter = STATE_EX_EFFORT;
 
-      var ok = nextEx();
-
-      session.stopExercise();
-      endExercise();
-      chronos.stop();
-      
-      if (!ok) {
-        // End of session      
-        playSound('finalSound');
-      }
-
-      break;
-    } */
-    
     if (durationBetweenExercise == 0) {
       // Sound begin chain exercice.
       playSound('beginChangeSound');
@@ -1004,6 +907,9 @@ function display() {
   }
 }
 
+/**
+ * Display the number of second (HH:MM:SS).
+ */
 function displaySecond(display, nbSec) {
   var seconds = new String(nbSec % 60);
   var minutes = new String(Math.floor(nbSec / 60));
@@ -1312,8 +1218,6 @@ function deleteSessions() {
     }
 }
 
-
-
 /**
  * Actualize the list, after modification of session/exercice.
 */
@@ -1330,52 +1234,3 @@ function removeAllItems(list) {
         list.removeChild(list.firstChild);
     }
 }
-
-function loadListFiles(storagename) {
-  try {
-    // Remove all elements.
-    removeAllItems(document.getElementById("list-files"));
-    
-    if (typeof navigator.getDeviceStorage === "function") {  
-	  // var files = navigator.getDeviceStorage(storagename);
-	  // var cursor = files.enumerate();
-      var listFiles = document.getElementById('list-files');
-      
-      var importSession = new ImportSession();
-      importSession.loadListFiles('sdcard', listFiles);
-    } else {
-      window.alert("getDeviceStorage not a function")
-    }
-  } catch (e) {
-    window.alert(e);
-  }
-}
-
-function exportSessions() {
-    
-  var chkSessionExport = document.getElementById('chk-sessionExport');
-  
-  var fileName = document.getElementById('fileName');
-  
-  if (fileName.value.length == 0) {
-    window.alert(navigator.mozL10n.get("idAlertNoFileName"));
-    return;
-  }
-  
-  if (chkSessionExport.checked ) {
-    var backup = new Export(fileName.value);
-    
-    backup.build();
-    
-    // dbExportSessions(fileName.value);
-    // window.alert(navigator.mozL10n.get("alertExportNoCheck"));
-    // return;
-  }
-}
-
-function importSessions() {
-
- //   listContents('sdcard'); 
-}
-
-

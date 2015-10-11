@@ -95,5 +95,63 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
   }
 }
 
-   
+// List Files.
+var listFiles = document.getElementById('list-files');
+
+/*
+ * Import sessions from file.
+ */
+listFiles.onclick = function(e) {
+
+  var parent = e.target.innerHTML;
+  var sdcard = navigator.getDeviceStorage('sdcard');
+  var request = sdcard.get(parent);
+
+  request.onsuccess = function () {
+    var file = this.result;
+
+    try {
+      var reader = new FileReader();
+      
+      reader.onload = function(e) {
+        var sessions = JSON.parse(reader.result);
+        
+        // Write sessions
+        if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) {
+          var chkReplaceAll = document.getElementById('chk-replaceAll');
+          var importSession = new ImportSession(sessions, chkReplaceAll.checked);
+          importSession.load();
+          window.alert(navigator.mozL10n.get("ImportSessionFinish"));
+          dataChange(0);
+        }
+      }
+      reader.readAsText(file, 'utf-8');
+    }  catch (e){
+      console.log(e);
+    }
+  }
+
+  request.onerror = function () {
+    console.warn( this.error);
+  }
+
+}
     
+/**
+ * Load the import files.
+ */
+function loadListFiles(storagename) {
+  try {
+    // Remove all elements.
+    removeAllItems(document.getElementById("list-files"));
+    
+    if (typeof navigator.getDeviceStorage === "function") {        
+      var importSession = new ImportSession();
+      importSession.loadListFiles('sdcard', listFiles);
+    } else {
+      window.alert("getDeviceStorage not a function")
+    }
+  } catch (e) {
+    window.alert(e);
+  }
+}

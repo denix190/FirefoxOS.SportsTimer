@@ -25,6 +25,25 @@ Parameters.prototype.isNextExercise = function() {
   return this.nextExercise;
 }
 
+/**
+ * Activate the sound.
+ */
+function checkSoundHandler(event) {
+  parameters.setSound(event.originalTarget.checked);
+  saveParameters(1, parameters.isSound());
+}
+
+/**
+ * Check the next exercice.
+ */
+function checkNextExercice(event) {
+  parameters.setNextExercise(event.originalTarget.checked);
+  saveParameters(2, parameters.isNextExercise());
+}
+
+/**
+ * Adding parameters.
+ */
 function addParameters(value) {
   try {
     var transaction = db.transaction(["parameters"],"readwrite");
@@ -50,6 +69,9 @@ function addParameters(value) {
   }
 }
 
+/**
+ * Update parameter.
+ */
 function saveParameters(id, value) {
   try {
     var transaction = db.transaction(["parameters"],"readwrite");
@@ -78,17 +100,14 @@ function saveParameters(id, value) {
 
 function loadParameters() {
   try {
-    console.log("loadParameters");
     var cpt = 0;
     var objectStore = db.transaction(["parameters"],"readwrite").objectStore("parameters");
     
     objectStore.openCursor().onsuccess = function(event) {
       try {
-        console.log(event);
         var cursor = event.target.result;
         if (cursor) {
           if (cursor.value.id == 1) {
-            console.log("sound");
             cpt += 1;
             parameters.setSound (cursor.value.value);
             var chk = document.getElementById("chk-sound");
@@ -96,7 +115,6 @@ function loadParameters() {
           }
           
           if (cursor.value.id == 2) {
-            console.log("nextExercise");
             cpt += 2;
             parameters.setNextExercise (cursor.value.value);
             var chk = document.getElementById("chk-next-exercice");

@@ -111,3 +111,24 @@ Export.prototype.writeSessions = function(sessions) {
 Export.prototype.getFullName = function() {
   return "st-" + this.fileName + ".json";
 }
+/**
+ * Generate the backup file.
+ */
+function exportSessions() {
+    
+  var chkSessionExport = document.getElementById('chk-sessionExport');
+  
+  var fileName = document.getElementById('fileName');
+  
+  if (fileName.value.length == 0) {
+    window.alert(navigator.mozL10n.get("idAlertNoFileName"));
+    return;
+  }
+  
+  if (chkSessionExport.checked ) {
+    var backup = new Export(fileName.value);
+    
+    backup.build();
+
+  }
+}

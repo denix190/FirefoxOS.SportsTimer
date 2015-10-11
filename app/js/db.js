@@ -22,6 +22,8 @@ function init() {
     DBOpenRequest.onsuccess = function(event) {
       db = DBOpenRequest.result;
       displayListSessions();
+      
+      loadParameters();
     };
 
     DBOpenRequest.onupgradeneeded = function(event) {
@@ -53,10 +55,9 @@ function init() {
       
       if (thisDB.objectStoreNames.contains("parameters")) {
         thisDB.deleteObjectStore("parameters");
-        var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
-      } else {
-        var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id"}  );    
       }
+      var objectStore = thisDB.createObjectStore("parameters", { keyPath : "id",  autoIncrement: true}  ); 
+
     };
   } catch(e) {
     console.log(e);
