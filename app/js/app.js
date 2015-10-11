@@ -228,6 +228,7 @@ function initListImages() {
                       "gym-side-plank.png",
                       "gym-standing-butterfly.png",
                       "gym-arm.png",
+                      "gym-curl.png",
                       "gym-donkey-side-kick.png",
                       "gym-single-leg-hip-raise.png",
                       "gym-bridge.png",
