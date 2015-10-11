@@ -50,7 +50,6 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
 	var cursor = files.enumerate();
     var done = false;
 	cursor.onsuccess = function () {
-      console.log("onsuccess");
       try {
 	    var file = this.result;
 	    if (file != null ) {

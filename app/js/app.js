@@ -269,16 +269,15 @@ function addImage(path) {
 }
 
 initListImages();
+loadParameters();
 
-saveParameters( db, 2, true);
-saveParameters( db, 1, true);
 
 /**
  * Activate the sound.
  */
 function checkSoundHandler(event) {
   parameters.setSound(event.originalTarget.checked);
-  saveParameters(db, 1, parameters.isSound());
+  saveParameters(1, parameters.isSound());
 }
 
 /**
@@ -286,7 +285,7 @@ function checkSoundHandler(event) {
  */
 function checkNextExercice(event) {
   parameters.setNextExercise(event.originalTarget.checked);
-  saveParameters(db, 2, parameters.isNextExercise());
+  saveParameters(2, parameters.isNextExercise());
 }
 
 
@@ -331,8 +330,10 @@ listFiles.onclick = function(e) {
 
 }
 
+/**
+ * Select a exercice to update.
+ */
 listItemEx.onclick = function(e) {
-    console.log("Ex");
     var collEnfants = e.target.parentNode.childNodes;
    
     var i = 0;
@@ -1036,70 +1037,6 @@ function cancelEx() {
   endExercise();
 }
 
-
-
-function saveParameters(dbObj, id, value) {
-  try {
-    var transaction = dbObj.transaction(["parameters"],"readwrite");
-    var store = transaction.objectStore("parameters");
-    
-    //Define a new exerciceRecord
-    var parametersRecord = {
-      id: id, 
-      value: value,
-      created:new Date()
-    }
-    
-    var request = store.put(parametersRecord);
-    
-    request.onerror = function(e) {
-      console.log("Error parameterRecord", e.target.error.name);
-    }
- 
-    request.onsuccess = function(event) {
-      console.log("parameters add");
-    }
-  } catch(e) {
-    console.log(e);
-  }
-}
-
-
-function loadParameters(id) {
-  try {
-    console.log("loadParameters");
-    var objectStore = db.transaction(["parameters"],"readwrite").objectStore("parameters");
-    
-    objectStore.openCursor().onsuccess = function(event) {
-      try {
-        console.log(event);
-        var cursor = event.target.result;
-        if (cursor) {
-          if (cursor.value.id == 1) {
-            console.log("sound");
-            parameters.setSound (cursor.value.value);
-            var chk = document.getElementById("chk-sound");
-            chk.checked = parameters.isSound();
-          }
-          
-          if (cursor.value.id == 2) {
-            console.log("nextExercise");
-            parameters.setNextExercise (cursor.value.value);
-            var chk = document.getElementById("chk-next-exercice");
-            chk.checked = parameters.isNextExercise();
-          }
-          cursor.continue();
-        }
-      } catch(e) {
-        console.log(e);
-      }
-    }
-    
-  } catch(e) {
-    console.log(e);
-  }
-}
-
 /**
  * 
  */
@@ -1285,7 +1222,7 @@ function displayCurrentExercise() {
  * Display the list of Sessions.
 */
 function displayListSessions() {
-  loadParameters(1);
+  //loadParameters(1);
   var objectStore = db.transaction("sessions").objectStore("sessions");
   var listSes = document.getElementById("list-items-ses");
   
