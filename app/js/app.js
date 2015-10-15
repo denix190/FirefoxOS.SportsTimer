@@ -229,6 +229,8 @@ function initListImages() {
                       "gym-standing-butterfly.png",
                       "gym-arm.png",
                       "gym-curl.png",
+                      "gym-shoulder.png",
+                      "gym-thigh.png",
                       "gym-donkey-side-kick.png",
                       "gym-single-leg-hip-raise.png",
                       "gym-bridge.png",
@@ -299,11 +301,11 @@ listItemEx.onclick = function(e) {
             duration.value = request.result.duration;
             desc.value = request.result.desc;
 
-            if (request.result.imagePath == "") {
-              imagePath.style.display = "none";
-            } else {
-              imagePath.style.display = "visible";
-            }
+            // if (request.result.imagePath == "") {
+            //   imagePath.style.display = "none";
+            // } else {
+            //   imagePath.style.display = "visible";
+            // }
             imagePath.src = request.result.imagePath;
             idUpd.value = id;
            };
@@ -381,11 +383,11 @@ listImages.onclick = function(e) {
     if (parseInt(idUpd.value) == -1) {
       var imagePath = document.getElementById('imagePath');
       imagePath.src = e.target.id;
-      imagePath.style.display = "visible";
+      // imagePath.style.display = "visible";
     } else {
       var imagePath = document.getElementById('imagePathUpd');
       imagePath.src = e.target.id;
-      imagePath.style.display = "visible";
+      //imagePath.style.display = "visible";
     }
 
     document.querySelector('#pnl-chooseImage').className = 'right';
