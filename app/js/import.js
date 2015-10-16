@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Class ImportSession
  * @param sessions sessions to load.
@@ -35,7 +37,7 @@ ImportSession.prototype.load = function() {
     } catch(e) {
         console.log(e);
     }
-}
+};
 
 /**
  * storagename
@@ -52,8 +54,7 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
 	cursor.onsuccess = function () {
       try {
 	    var file = this.result;
-	    if (file != null ) {
-
+	    if (file !== null &&  file !== undefined) {
           var fileName = file.name;
           fileName = "sdcard/" + fileName;
           
@@ -85,15 +86,15 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
 		  cursor.continue();
 	    }
       } catch(e) {
-        window.alert(e);
+        console.log(e);
       }
-	}
+	};
     
     cursor.onerror = function() {
       console.warn( this.error);
-    }    
+    };   
   }
-}
+};
 
 // List Files.
 var listFiles = document.getElementById('list-files');
@@ -124,18 +125,18 @@ listFiles.onclick = function(e) {
           window.alert(navigator.mozL10n.get("ImportSessionFinish"));
           dataChange(0);
         }
-      }
+      };
       reader.readAsText(file, 'utf-8');
     }  catch (e){
       console.log(e);
     }
-  }
+  };
 
   request.onerror = function () {
     console.warn( this.error);
-  }
+  };
 
-}
+};
     
 /**
  * Load the import files.
@@ -149,7 +150,7 @@ function loadListFiles(storagename) {
       var importSession = new ImportSession();
       importSession.loadListFiles('sdcard', listFiles);
     } else {
-      window.alert("getDeviceStorage not a function")
+      window.alert("getDeviceStorage not a function");
     }
   } catch (e) {
     window.alert(e);

@@ -14,15 +14,15 @@ Export.prototype.build = function () {
   try {
     request.onsuccess = function () {
       window.alert(navigator.mozL10n.get("idAlertFileExist"));
-    }
+    };
     
     request.onerror = function () {
       self.generate();
-    }
+    };
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 Export.prototype.generate = function () {
   var objectStore = db.transaction("sessions").objectStore("sessions");
@@ -50,8 +50,8 @@ Export.prototype.generate = function () {
   
   objectStore.openCursor().onerror = function() {
     console.lg("exportSessions Error");
-  }
-}
+  };
+};
 
 /**
  * Add all the exercises on the sessions.
@@ -83,7 +83,7 @@ Export.prototype.exportExercises = function(sessions) {
       console.log(e);
     }
   };
-}
+};
 
 /**
  * Write all the sessions on the sdcard.
@@ -99,18 +99,19 @@ Export.prototype.writeSessions = function(sessions) {
   request.onsuccess = function () {
     var name = this.result;
     window.alert('File "' + name + '" successfully wrote on the sdcard storage area');
-  }
+  };
   
   // An error typically occur if a file with the same name already exist
   request.onerror = function () {
     window.alert('Unable to write the file: ' + this.error);
-  }
+  };
   
-}
+};
 
 Export.prototype.getFullName = function() {
   return "st-" + this.fileName + ".json";
-}
+};
+
 /**
  * Generate the backup file.
  */
@@ -120,7 +121,7 @@ function exportSessions() {
   
   var fileName = document.getElementById('fileName');
   
-  if (fileName.value.length == 0) {
+  if (fileName.value.length === 0) {
     window.alert(navigator.mozL10n.get("idAlertNoFileName"));
     return;
   }

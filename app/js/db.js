@@ -121,11 +121,11 @@ function deleteExercisesBySession(idSession) {
     }  catch (e) {
       console.log(e);
     }
-  }
+  };
 
   pItem.onerror = function() {
     console.lg("Deletion Exercice");
-  }
+  };
 }
 
 /**
@@ -144,13 +144,13 @@ function dbAddSession(sessionData) {
       chainExercises : sessionData.chainExercises,
       delayBetweenExercises: sessionData.delayBetweenExercises,
       created:new Date()
-    }
+    };
     
     var request = store.add(sessionRecord);
     
     request.onerror = function(e) {
       console.log("Error SportsTimer", e.target.error.name);
-    }
+    };
     
     request.onsuccess = function(event) {
       // id of the sessions.
@@ -161,7 +161,7 @@ function dbAddSession(sessionData) {
         // Add exercices for the sessions.
         dbAddExercise(exercises[j], idSession);
       }
-    } 
+    };
   } catch(e) {
     console.log(e);
   }
@@ -182,18 +182,18 @@ function dbUpdateSession(sessionData) {
       created:new Date(),
       delayBetweenExercises: sessionData.delayBetweenExercises,
       idSession : sessionData.id
-    }
+    };
     
     var request = store.put(sessionRecord);
     
     request.onerror = function(e) {
       console.log("Error SportsTimer", e.target.error.name);
-    }
+    };
     
     request.onsuccess = function(event) {
       
       dataChange(id);
-    }
+    };
 
   } catch(e) {
     console.log(e);
@@ -219,23 +219,24 @@ function dbAddExercise(exercice, idSession) {
       imagePath: exercice.imagePath,
       idSession : idSession,
       created:new Date()
-    }
+    };
 
     /* */
     var request = store.add(exerciceRecord);
     
     request.onerror = function(e) {
       console.log("Error Adding exercice", e.target.error.name);
-    }
+    };
     
     request.onsuccess = function(event) {
       
-    }
+    };
     
   } catch(e) {
     console.log(e);
   }
-}    
+}
+
 /**
  * Delete all sessions.
  */
@@ -266,7 +267,7 @@ function dbDeleteAllSessions() {
 function dbDeleteSessions(listSessions) {
 
   var i = 0;
-  for (i =0; i < listSessions.length;i++) {
+  for (i = 0; i < listSessions.length;i++) {
     dbDeleteSessionByName(listSessions[i]);
   }
 }
@@ -290,10 +291,10 @@ function dbDeleteSessionByName(sessionName) {
     }  catch (e) {
       console.log(e);
     }
-  }
+  };
 
   pItem.onerror = function() {
     console.lg("Deletion Exercice");
-  }
+  };
 
 }

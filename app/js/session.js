@@ -22,27 +22,27 @@ function Session() {
 
 Session.prototype.setIdSession = function(id) {
   this.idSession = id;
-}
+};
 
 Session.prototype.setChainExercises = function(bchainExercises) {
   this.chainExercises = bchainExercises;
-}
+};
 
 Session.prototype.isChainExercises = function() {
   return this.chainExercises;
-}
+};
 
 Session.prototype.setdelayBetweenExercises = function(delay) {
   this.delayBetweenExercises = delay;
-}
+};
 
 Session.prototype.getdelayBetweenExercises = function() {
   return this.delayBetweenExercises;
-}
+};
 
 Session.prototype.getNumExercise = function () {
   return this.numExercise;
-}
+};
 
 Session.prototype.setNumExercise = function (numExercise) {
   if (numExercise >= 0 && numExercise < this.listExercises.length) {
@@ -50,41 +50,41 @@ Session.prototype.setNumExercise = function (numExercise) {
     return true;
   }
   return false;
-}
+};
 
 Session.prototype.getNextExercise = function (numExercise) {
   if ((this.numExercise + 1) < this.listExercises.length) {
     return this.numExercise + 1;
   }
   return this.numExercise;
-}
+};
 
 Session.prototype.initListExercises = function () {
   this.numExercise = 0;
   this.listExercises = new Array();
-}
+};
 
 Session.prototype.hasNextExercise = function () {
   if (this.numExercise == this.listExercises.length -1 ) {
     return false;
   }
   return true;
-}
+};
 
 Session.prototype.addListExercises = function (exercises) {
-  this.listExercises.push(exercises)
-}
+  this.listExercises.push(exercises);
+};
 
 Session.prototype.getListExercises = function () {
   return this.listExercises;
-}
+};
 
 Session.prototype.getCurrentExercise = function () {
   if (this.listExercises.length > 0 && this.numExercise < this.listExercises.length) {
     return this.listExercises[this.numExercise];
   }
   return null;
-}
+};
 
 /**
 * Start a new Session.
@@ -94,7 +94,7 @@ Session.prototype.startSes = function() {
   
   console.log(this.beginSession);
   try {
-    if (this.flagStartSes == false) {
+    if (this.flagStartSes === false) {
       this.beginSession = new Date();
       this.timerSession = window.setInterval(this.displaySessionx.bind(this), 1000);
       this.flagStartSes = true;
@@ -103,7 +103,7 @@ Session.prototype.startSes = function() {
     var lock = null;
     console.log(e);
   }
-}
+};
 
 /**
 * Pause Session.
@@ -114,7 +114,7 @@ Session.prototype.pauseSes = function() {
     this.timerSession = window.clearInterval(this.timerSession);
     this.flagStartSes = false;
   }
-}
+};
 
 /**
  * Cancel the current Session.
@@ -128,15 +128,15 @@ Session.prototype.cancelSes = function() {
     } catch(e) {
       console.log(e);
     }
-}
+};
 
 Session.prototype.getSessionSec = function () {
   return this.sessionSec;
-}
+};
 
 Session.prototype.addSessionSec = function () {
   this.sessionSec++;
-}
+};
 
 Session.prototype.displaySessionx = function() {
   try {
@@ -145,7 +145,7 @@ Session.prototype.displaySessionx = function() {
   } catch(e) {
       console.log(e);
   }
-}
+};
 
 /**
 * Start a new Exercise
@@ -157,7 +157,7 @@ Session.prototype.startExercise = function(exercise) {
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 
 /**
@@ -171,7 +171,7 @@ Session.prototype.stopExercise = function() {
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 
 /**
@@ -197,46 +197,44 @@ Exercise.prototype.stop = function() {
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 Exercise.prototype.setName = function(name) {
   this.name = name;
-}
+};
 
 Exercise.prototype.getName = function() {
   return this.name;
-}
+};
 
 Exercise.prototype.setDuration = function(duration) {
   this.duration = duration;
-}
+};
 
 Exercise.prototype.getDuration = function() {
   return this.duration;
-}
+};
 
 Exercise.prototype.setBreakTime = function(breakTime) {
   this.breakTime = breakTime;
-}
+};
 
 Exercise.prototype.getBreakTime = function() {
   return this.breakTime;
-}
+};
 
 Exercise.prototype.setNbRetry = function(nbRetry) {
   this.nbRetry = nbRetry;
-}
+};
 
 Exercise.prototype.getNbRetry = function() {
   return this.nbRetry;
-}
+};
 
 Exercise.prototype.setImagePath = function(path) {
   this.imagePath = path;
-}
+};
 
 Exercise.prototype.getImagePath = function() {
-
   return this.imagePath;
-
-}
+};

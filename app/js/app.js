@@ -219,24 +219,27 @@ var listImages = document.getElementById('list-images');
  */
 function initListImages() {
   // List of all images.
-  var listImages = [  "gym-ab-bikes.png",
-                      "gym-crunch-abdos.png",
-                      "gym-planche.png",
-                      "gym-squat.png",
-                      "gym-allonge.png",
-                      "gym-desk.png",
-                      "gym-side-plank.png",
-                      "gym-standing-butterfly.png",
-                      "gym-arm.png",
-                      "gym-curl.png",
-                      "gym-shoulder.png",
-                      "gym-thigh.png",
-                      "gym-donkey-side-kick.png",
-                      "gym-single-leg-hip-raise.png",
-                      "gym-bridge.png",
-                      "gym-mountain.png",
-                      "gym-situps.png"];
-
+  var listImages = [
+    "gym-null.png",
+    "gym-ab-bikes.png",
+    "gym-crunch-abdos.png",
+    "gym-planche.png",
+    "gym-pump.png",
+    "gym-squat.png",
+    "gym-allonge.png",
+    "gym-desk.png",
+    "gym-side-plank.png",
+    "gym-standing-butterfly.png",
+    "gym-arm.png",
+    "gym-curl.png",
+    "gym-shoulder.png",
+    "gym-thigh.png",
+    "gym-donkey-side-kick.png",
+    "gym-single-leg-hip-raise.png",
+    "gym-bridge.png",
+    "gym-mountain.png",
+    "gym-situps.png"];
+  
   for (var i = 0; i < listImages.length; i++) {
     addImage("images/" + listImages[i]);
   }
@@ -314,7 +317,7 @@ listItemEx.onclick = function(e) {
         }
       }
     }
-  }
+  };
 
 /**
  * Select a session and display.
@@ -371,7 +374,7 @@ listItemSes.onclick = function(e) {
       }
     }
   }
-}
+};
 
 /**
  * Update image path for the exercise.
@@ -395,7 +398,7 @@ listImages.onclick = function(e) {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 function startSes() {
   session.startSes();
@@ -481,7 +484,7 @@ function storeEx() {
     var nameEx = nameId.value;
     var descEx = descId.value;
 
-    if (nameEx.length == 0) {
+    if (nameEx.length === 0) {
       window.alert(navigator.mozL10n.get("idAlertNoName"));
       return;
     }
@@ -499,18 +502,18 @@ function storeEx() {
       imagePath: path,
       idSession : parseInt(idSession.value),
       created:new Date()
-    }
+    };
 
     /* */
     var request = store.add(exerciceRecord);
     
     request.onerror = function(e) {
         console.log("Error exercice", e.target.error.name);
-    }
+    };
     
     request.onsuccess = function(event) {
       dataChange(parseInt(idSession.value));
-    }
+    };
         
     document.querySelector('#addExercise').className = 'right';
     document.querySelector('#listExercise').className = 'current';
@@ -558,17 +561,17 @@ function updateEx() {
       imagePath: path,
       idSession :parseInt(idSession.value),
       created:new Date()
-    }
+    };
         
     var request = store.put(exerciceRecord);
     
     request.onerror = function(e) {
       console.log("Error exercice", e.target.error.name);
-    }
+    };
     
     request.onsuccess = function(event) {
       dataChange(parseInt(idSession.value));
-    }
+    };
     
     document.querySelector('#updExercise').className = 'right';
     document.querySelector('#listExercise').className = 'current';
@@ -600,14 +603,14 @@ function displayListExercise() {
         var opt = document.createElement('option');
         
         opt.appendChild(
-          document.createTextNode(cursor.value.name
-                                 + " (" + cursor.value.duration
-                                 + " -  " + cursor.value.breakTime + ")"
-                                 + "*" + cursor.value.nbRetry) );
+          document.createTextNode(cursor.value.name +
+                                 " (" + cursor.value.duration +
+                                 " -  " + cursor.value.breakTime + ")" +
+                                 "*" + cursor.value.nbRetry) );
         
-        opt.value = cursor.value.duration
-                  + "," + cursor.value.breakTime
-                  + "," + cursor.value.nbRetry;
+        opt.value = cursor.value.duration +
+                  "," + cursor.value.breakTime +
+                  "," + cursor.value.nbRetry; 
         listEx.appendChild(opt);
         cursor.continue();
       }
@@ -651,7 +654,7 @@ function displayListUpdateExercise(idSession) {
   
   request.onerror = function(e) {
     console.log("listExercise ", e);
-  }
+  };
 }
 
 /**
@@ -662,10 +665,10 @@ function addExercise(list, cursor) {
   
   var a = document.createElement("a");
   a.setAttribute("id", cursor.value.id);
-  a.text = cursor.value.name
-      + " [" + cursor.value.duration
-      + " - " + cursor.value.breakTime + "]"
-      + "x" + cursor.value.nbRetry;
+  a.text = cursor.value.name +
+    " [" + cursor.value.duration +
+    " - " + cursor.value.breakTime + "]" +
+    "x" + cursor.value.nbRetry;
   a.href = "#";
   
   var checkbox = document.createElement('input');
@@ -707,7 +710,7 @@ function deleteExercises() {
     var store = transaction.objectStore("exercice");
     
     for (var i = 0; i  < chk.length;i++) {
-      if (chk[i].checked == true) {
+      if (chk[i].checked === true) {
         var request = store.delete(parseInt(chk[i].value)); 
       }
     }
@@ -861,7 +864,7 @@ function display() {
 
     if (parameters.isNextExercise() ) {
 
-      if (durationBetweenExercise == 0) {
+      if (durationBetweenExercise === 0) {
         // Pass to the next exercise.
         var ok = nextEx();
         if (!ok) {
@@ -887,7 +890,7 @@ function display() {
       break;
     }
 
-    if (durationBetweenExercise == 0) {
+    if (durationBetweenExercise === 0) {
       // Sound begin chain exercice.
       playSound('beginChangeSound');
       durationBetweenExercise++;
@@ -925,7 +928,7 @@ function displaySecond(display, nbSec) {
     minutes = '0' + minutes;
   }
 
-  if (hours == 0) {
+  if (hours === 0) {
       display.textContent = minutes + ":" + seconds;
   } else {
     display.textContent = new String(hours) + ":" + minutes + ":" + seconds;
@@ -967,12 +970,12 @@ Chronos.prototype.start = function() {
   }
 
   this.isLock = true;
-}
+};
 
 Chronos.prototype.stop = function() {
   this.timer = window.clearInterval(this.timer);
   try {
-    if (this.lock !== null && this.lock !== undefined && this.isLock == true) {
+    if (this.lock !== null && this.lock !== undefined && this.isLock === true) {
       this.lock.unlock();
       this.isLock = false;
     }
@@ -982,7 +985,7 @@ Chronos.prototype.stop = function() {
       console.log(e);
     }
   }
-}
+};
 
 
 /**
@@ -1022,7 +1025,7 @@ function updateSession(flagExercise) {
       
       request.onerror = function(e) {
         console.log("Error SportsTimer", e.target.error.name);
-      }
+      };
       
       request.onsuccess = function(event) {
         if (flagExercise) {
@@ -1040,7 +1043,7 @@ function updateSession(flagExercise) {
           document.querySelector('#updSession').className = 'right';
           document.querySelector('[data-position="current"]').className = 'current';
         }
-      }
+      };
     } else {
       // Update session
       var sessionRecord = {
@@ -1050,12 +1053,12 @@ function updateSession(flagExercise) {
         delayBetweenExercises: delayBetweenExercises,
         created:new Date(),
         idSession : id
-      }
+      };
       var request = store.put(sessionRecord);
       
       request.onerror = function(e) {
         console.log("Error SportsTimer", e.target.error.name);
-      }
+      };
       
       request.onsuccess = function(event) {
         dataChange(id);
@@ -1063,7 +1066,7 @@ function updateSession(flagExercise) {
         title.innerHTML = nameSes;
         document.querySelector('#updSession').className = 'right';
         document.querySelector('#currentSession').className = 'current';
-      } 
+      };
     }    
   } catch(e) {
     console.log(e);
@@ -1101,21 +1104,21 @@ function listSessionEx(idSession) {
 
   request.onerror = function(e) {
     console.log("listExercise ", e);
-  }
+  };
 }
 
 function displayCurrentExercise() {
   try {
     curExercise = session.getCurrentExercise();
-    if (curExercise != null) {
+    if (curExercise !== null) {
       var nameExercise = document.getElementById("idNameExercise");
       var image = document.getElementById("idImageExercise");
       var infoExercise = document.getElementById("idInfoExercise");
    
       nameExercise.textContent = curExercise.getName();
-      infoExercise.textContent = "[" + curExercise.getDuration() 
-    + " -  " + curExercise.getBreakTime() + "]"
-    + "x" + curExercise.getNbRetry();
+      infoExercise.textContent = "[" + curExercise.getDuration() + 
+        " -  " + curExercise.getBreakTime() + "]" +
+        "x" + curExercise.getNbRetry();
         image.src = curExercise.getImagePath();
 
         nbRetryCounter = 1;
@@ -1210,7 +1213,7 @@ function deleteSessions() {
         var listSession = new Array();
 
         for (var i = 0; i  < chk.length;i++) {
-            if (chk[i].checked == true) {
+            if (chk[i].checked === true) {
                 listSession.push(parseInt(chk[i].value));
             }
         }
