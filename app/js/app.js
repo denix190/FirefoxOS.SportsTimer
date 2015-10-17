@@ -31,7 +31,7 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
   document.getElementById('descEx').value = "";
   document.getElementById('duration').value = "60";
   document.getElementById('breakTime').value = "60";
-  document.getElementById('imagePath').src = "";
+  document.getElementById('imagePath').src = "images/gym-null.png";
   document.getElementById('idUpd').value = "-1";
   
   document.querySelector('#addExercise').className = 'current';
@@ -413,7 +413,7 @@ function cancelSes() {
 }
 
 /**
- * Display 
+ * Display the session
  */
 function displaySession() {
   try {
@@ -1003,7 +1003,7 @@ function updateSession(flagExercise) {
     var descSes = descId.value;
     var id = parseInt(idSession.value);
         
-    if (nameSes.length == 0) {
+    if (nameSes.length === 0) {
       window.alert(navigator.mozL10n.get("idAlertNoName"));
       return;
     }
@@ -1107,6 +1107,9 @@ function listSessionEx(idSession) {
   };
 }
 
+/**
+ * Dysplay the current exercise for the session.
+ */
 function displayCurrentExercise() {
   try {
     curExercise = session.getCurrentExercise();
@@ -1206,21 +1209,21 @@ function deleteSession() {
 
 function deleteSessions() {
     if (window.confirm(navigator.mozL10n.get("confirmDeleteSession"))) { 
-        var list = document.getElementById('list-items-ses');
-        var chk = list.getElementsByTagName('input');
-
-        // List of session to delete
-        var listSession = new Array();
-
-        for (var i = 0; i  < chk.length;i++) {
-            if (chk[i].checked === true) {
-                listSession.push(parseInt(chk[i].value));
-            }
+      var list = document.getElementById('list-items-ses');
+      var chk = list.getElementsByTagName('input');
+      
+      // List of session to delete
+      var listSession = [];
+      
+      for (var i = 0; i  < chk.length;i++) {
+        if (chk[i].checked === true) {
+          listSession.push(parseInt(chk[i].value));
         }
-        // Delete session and exercises.
-        dbDeleteSessions(listSession);
-
-        displayListSessions();
+      }
+      // Delete session and exercises.
+      dbDeleteSessions(listSession);
+      
+      displayListSessions();
     }
 }
 

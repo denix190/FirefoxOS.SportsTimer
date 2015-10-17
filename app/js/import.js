@@ -124,6 +124,10 @@ listFiles.onclick = function(e) {
           importSession.load();
           window.alert(navigator.mozL10n.get("ImportSessionFinish"));
           dataChange(0);
+
+          document.querySelector('#pnl_import').className = 'right';
+          document.querySelector('[data-position="current"]').className = 'current';
+          
         }
       };
       reader.readAsText(file, 'utf-8');

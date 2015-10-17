@@ -363,7 +363,7 @@
       <h1 data-l10n-id="idSession">Session</h1>
     </header>
     <article class="content scrollable header">
-      <p width="100%">
+      <p width="100%" style="margin-top:2px; margin-bottom:2px;">
         <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required/>
         <input type="hidden" id="idSession" value=""/>
       </p>
@@ -416,11 +416,11 @@
       <h1 data-l10n-id="idExercise">Exercise</h1>
     </header>
     <article class="content scrollable header">
-      <p width="100%">
+      <p width="100%" style="margin-top:2px; margin-bottom:2px;">
         <input id="nameEx" type="text" maxlength="20" data-l10n-id="nameEx-id"  placeholder="Name" required>
       </p>
 
-      <p width="100%">
+      <p width="100%" style="margin-top:2px; margin-bottom:2px;">
           <span data-l10n-id="idEffortTime">Effort time</span>
           <select name="duration" id="duration">
             <option value="10">10 sec</option>
@@ -441,7 +441,7 @@
          </select>
         </p>
 
-        <p width="100%">
+        <p width="100%" style="margin-top:2px; margin-bottom:2px;">
           <span data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTime">
             <option value="0">None</option>
@@ -463,22 +463,22 @@
           </select>
         </p>
 
-        <p width="100%">
+        <p width="100%" style="margin-top:2px; margin-bottom:2px;">
           <span data-l10n-id="idRounds">Rounds:</span>
           <input id="nbRetry" type="number" placeholder="1" required min="1" max="10" value="1" />
         </p>
 
         <!-- Image -->
-      <p> 
+      <p style="margin-top:2px; margin-bottom:2px;">
         <image src="" id="imagePath" style="border-width:1px; border-style:solid;"/>
         <div>
           <button id="btn-choose-img" class="recommend" data-l10n-id="idAddImages" >Choose image</button>
-      </div>
+        </div>
       </p>
     
-        <p width="100%">
-          <textarea id="descEx" data-l10n-id="descEx-id"></textarea>
-        </p>
+      <p width="100%" style="margin-top:2px; margin-bottom:2px;">
+        <textarea id="descEx" data-l10n-id="descEx-id"></textarea>
+      </p>
 
     </article>
   </section>
@@ -494,12 +494,12 @@
       <h1 data-l10n-id="idUpdExercise">Update Exercise</h1>
     </header>
     <article class="content scrollable header">
-      <p>
+      <p style="margin-top:2px; margin-bottom:2px;">
         <input id="nameExUpd" type="text" maxlength="20" data-l10n-id="nameEx-id"  placeholder="Name" required>
       </p>
-      <p>
+      <p style="margin-top:2px; margin-bottom:2px;">
         <span data-l10n-id="idEffortTime">Effort time</span> 
-        <select name="duration" id="durationUpd">
+        <select name="duration" id="durationUpd" style="margin-top:2px; margin-bottom:2px;">
           <option value="10">10 sec</option>
           <option value="15">15 sec</option>
           <option value="30">30 sec</option> 
@@ -517,9 +517,9 @@
         </select>
       </p>
 
-        <p>
+        <p style="margin-top:2px; margin-bottom:2px;">
           <span data-l10n-id="idRecovery">Recovery</span>
-          <select name="breakTime" id="breakTimeUpd">
+          <select name="breakTime" id="breakTimeUpd" style="margin-top:2px;">
             <option value="0">None</option>
             <option value="10">10 sec</option>
             <option value="15">15 sec</option>
@@ -538,20 +538,20 @@
          </select>
         </p>
 
-        <p>
+        <p style="margin-top:2px;">
           <span data-l10n-id="idRounds">Rounds:</span>
           <input id="nbRetryUpd" type="number" placeholder="1" required min="1" max="10" value="1" />
         </p>
 
         <!-- Image -->
-      <p> 
+      <p style="margin-top:2px; margin-bottom:2px;">
         <image src="" id="imagePathUpd" style="border-width:1px; border-style:solid;"/>
         <div>
           <button id="btn-chooseUpd-img" class="recommend" data-l10n-id="idAddImages" >Choose Image</button>
       </div>
       </p>
         
-       <p width="100%">
+       <p width="100%" style="margin-top:2px; margin-bottom:2px;">
           <textarea id="descExUpd" data-l10n-id="descEx-id"></textarea>
         </p>
         
