@@ -91,21 +91,20 @@ Session.prototype.getCurrentExercise = function () {
 * Change the text of the button
 */ 
 Session.prototype.startSes = function() {
-  
-  console.log(this.beginSession);
   try {
     if (this.flagStartSes === false) {
       this.beginSession = new Date();
       
       //this.timerSession = window.setInterval(this.displaySessionx.bind(this), 1000);
-      this.timerSession = window.setInterval(function() {
-                            try {
-                              session.addSessionSec();
-                              displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
-                            } catch(e) {
-                              console.log(e);
-                            } }, 1000);
-      
+      this.timerSession = window.setInterval(
+        function() {
+          try {
+            session.addSessionSec();
+            displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+          } catch(e) {
+            console.log(e);
+          } }, 1000);
+
       this.flagStartSes = true;
     }
   } catch(e) {
