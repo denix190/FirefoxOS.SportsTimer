@@ -821,10 +821,12 @@ function display() {
     }
     
     if (durationCounter >= curExercise.getDuration()) {
-      playSound('beepEndSound');
+      if (curExercise.getBreakTime() > 0) {
+        playSound('beepEndSound');
+      }
 
       if ('vibrate' in navigator) {
-        window.navigator.vibrate(1000);
+        window.navigator.vibrate(500);
       } 
 
       breakTimeCounter = 0;
@@ -1020,7 +1022,7 @@ function updateSession(flagExercise) {
         chainExercises : chkChainExercises.checked,
         delayBetweenExercises: delayBetweenExercises,
         created:new Date()
-      }
+      };
       
       var request = store.add(sessionRecord);
       
