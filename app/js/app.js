@@ -30,7 +30,7 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
   document.getElementById('nbRetry').value = "1";
   document.getElementById('descEx').value = "";
   document.getElementById('duration').value = "60";
-  document.getElementById('breakTime').value = "60";
+  document.getElementById('breakTime').value = "30";
   document.getElementById('imagePath').src = "images/gym-null.png";
   document.getElementById('idUpd').value = "-1";
   
@@ -1041,11 +1041,11 @@ function updateSession(flagExercise) {
           console.log("Update exercises");
           document.getElementById('idSession').value = event.target.result;
           document.getElementById('btn-add-sesEx').disabled = false;
-        
-          displayListSessions();
+
           document.querySelector('#updSession').className = 'right';
           document.querySelector('[data-position="current"]').className = 'current';
         }
+        displayListSessions();
       };
     } else {
       // Update session
@@ -1120,7 +1120,13 @@ function displayCurrentExercise() {
       var nameExercise = document.getElementById("idNameExercise");
       var image = document.getElementById("idImageExercise");
       var infoExercise = document.getElementById("idInfoExercise");
-   
+
+      var idCurExercise = document.getElementById("idCurExercise");
+      var idNbExercises = document.getElementById("idNbExercises");
+
+      idCurExercise.textContent = session.getNumExercise() + 1;
+      idNbExercises.textContent = session.getNbExercises();
+
       nameExercise.textContent = curExercise.getName();
       infoExercise.textContent = "[" + curExercise.getDuration() + 
         " -  " + curExercise.getBreakTime() + "]" +

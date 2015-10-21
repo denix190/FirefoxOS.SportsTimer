@@ -44,6 +44,10 @@ Session.prototype.getNumExercise = function () {
   return this.numExercise;
 };
 
+Session.prototype.getNbExercises = function () {
+  return this.listExercises.length;
+};
+
 Session.prototype.setNumExercise = function (numExercise) {
   if (numExercise >= 0 && numExercise < this.listExercises.length) {
     this.numExercise = numExercise;
