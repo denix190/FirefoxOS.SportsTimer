@@ -254,7 +254,6 @@
           <li><a id="btn-go-about-ex" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
         </ul>
       </nav>
-
       <!--/section -->
     </section>
 
@@ -264,23 +263,46 @@
         <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
         <a href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
         <menu type="toolbar">
+       <!-- <button class="icon icon-add" id="btn-go-add-session"> -->
+       <!--   <span>edit</span> -->
+       <!-- </button> -->
+      </menu>
+        <h1>Sports Timer</h1>
+      </header> 
+      <article class="scrollable header">
+        <!-- <div data-type="list"> -->
+        <!--   <ul id="list-items-ses"> -->
+        <!--   </ul>          -->
+        <!-- </div> -->
+        <div style="height:100%; hidth:100%; margin-top:10px;">
+        <button id="btn-choose-sessions" class="recommend"  >Sessions</button>
+        <button id="btn-choose-calendar" class="recommend"  >Calendar</button>
+        </div>
+      </article>
+    </section> <!-- end drawer -->
+  </section> <!-- end index -->
+
+  <!--·························· List of Sessions ··························-->
+  <section role="region" id="sessions" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-main-back" href="#"><span class="icon icon-back">back</span></a>
+     <menu type="toolbar">
        <button class="icon icon-add" id="btn-go-add-session">
          <span>edit</span>
        </button>
-      </menu>
-        <h1>Sports Timer</h1>
-      </header>
-     
-    <article class="scrollable header">
+     </menu>
+     <h1>Sessions</h1>
+     </header>
+      <article class="scrollable header">
         <div data-type="list">
           <ul id="list-items-ses">
           </ul>         
         </div>
       </article>
     </section> <!-- end drawer -->
-  </section> <!-- end index -->
+  </section>
 
-    <!--·························· Current Session ··························-->
+  <!--·························· Current Session ··························-->
   <section role="region" id="currentSession" data-position="right">
     <header class="fixed">
       <a id="btn-go-current-session-back" href="#"><span class="icon icon-back">back</span></a>
@@ -720,7 +742,7 @@
             Sports Timer
           </div>
           <div>
-            Version: 3.0
+            Version: 3.0 alpha
           </div>
           <div>
             written by Denis Minier

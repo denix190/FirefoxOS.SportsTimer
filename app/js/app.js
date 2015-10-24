@@ -51,10 +51,9 @@ document.querySelector('#btn-go-list-ex-back').addEventListener('click', functio
   document.querySelector('#updSession').className = 'current';
 });
 
-
-document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
-  document.getElementById('nameExUpd').scrollIntoView(true);
-  document.querySelector('#updExercise').className = 'right';
+document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
+//  document.getElementById('nameEx').scrollIntoView(true);
+  document.querySelector('#addExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
 
@@ -143,7 +142,8 @@ document.querySelector('#btn-go-about-ex-back').addEventListener('click', functi
 // Hide panel List sessions.
 document.querySelector('#btn-go-current-session-back').addEventListener('click', function () {
   document.querySelector('#currentSession').className = 'right';
-  document.querySelector('[data-position="current"]').className = 'current';
+  //document.querySelector('[data-position="current"]').className = 'current';
+  document.querySelector('#sessions').className = 'current';
 });
 
 
@@ -204,6 +204,18 @@ document.querySelector('#btn-go-choose-image-back').addEventListener('click', fu
   document.querySelector('#pnl-chooseImage').className = 'right';
   document.querySelector('[data-position="current"]').className = 'current';
 });
+
+// Update experimental
+document.querySelector('#btn-choose-sessions').addEventListener('click', function () {
+  document.querySelector('#sessions').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#btn-go-main-back').addEventListener('click', function () {
+  document.querySelector('#sessions').className = 'left';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
+
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
