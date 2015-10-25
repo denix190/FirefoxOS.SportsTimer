@@ -45,6 +45,12 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
   document.querySelector('#listExercise').className = 'current';
 });
 
+/* Back to list list of exercise */
+document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
+  document.querySelector('#addExercise').className = 'right';
+  document.querySelector('#listExercise').className = 'current';
+});
+
 document.querySelector('#btn-go-list-ex-back').addEventListener('click', function () {
   document.getElementById('nameSession').scrollIntoView(true);
   document.querySelector('#listExercise').className = 'right';
