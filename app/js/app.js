@@ -40,8 +40,13 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
 });
 
 document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
-//  document.getElementById('nameEx').scrollIntoView(true);
   document.querySelector('#addExercise').className = 'right';
+  document.querySelector('#listExercise').className = 'current';
+});
+
+
+document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
+  document.querySelector('#updExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
 
