@@ -36,12 +36,16 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
   
   document.querySelector('#addExercise').className = 'current';
   document.querySelector('#listExercise').className = 'right';
-  //document.getElementById('nameEx').scrollIntoView(true); 
 });
 
 document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
-//  document.getElementById('nameEx').scrollIntoView(true);
   document.querySelector('#addExercise').className = 'right';
+  document.querySelector('#listExercise').className = 'current';
+});
+
+/* Back to list list of exercise */
+document.querySelector('#btn-go-upd-ex-back').addEventListener('click', function () {
+  document.querySelector('#updExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
 
@@ -56,7 +60,6 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
   document.querySelector('#addExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
-
 
 // Display the panel updating a Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
