@@ -318,11 +318,21 @@
       <article class="scrollable header">
         <div>
           <div>
-
-            <div style="margin-left: auto; margin-right: auto; display: block; text-align: center;">
-              <span id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;"></span><span style="font-size:large;"> / <span id="idInfoExercise" style="font-size: small;"></span>
-              <img  id="idImageExercise" src="" alt="" style="margin-left: auto; margin-right: auto; display: block;margin-top:0px;margin-bottom:0px; width:250px;height:105px;"/>
-              <span id="idCurExercise" style="font-size: small; margin-top:0px;margin-bottom:0px;">1</span><span style="font-size:small;"> / <span id="idNbExercises" style="font-size: small;">1</span>
+            <!-- <div style="margin-left: auto; margin-right: auto; display: block; text-align: center;"> -->
+              <div class="chronosTotal">
+              <span class="left" id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;"></span>
+              <span class="right" id="idCurExercise" style="font-size: small; margin-top:0px;margin-bottom:0px;">1</span>
+              
+<!-- </span><span style="font-size: small; margin-top:0px;margin-bottom:0px;"> / </span><span id="idNbExercises" style="font-size: small;">1</span> -->
+                
+            </div>
+            <div>
+              <img  id="idImageExercise" src="" alt="" style="margin-left:auto; margin-right:auto; display: block;margin-top:0px;margin-bottom:0px; width:300px;height:135px;"/>
+            </div>
+            <div class="chronosTotal">
+              <span class="left"><span data-l10n-id="idSession">Session</span></span>
+              <span id="chronoSession" style="font-size:1.5rem;font-weight:bold;">00:00</span>
+              <span class="right"><span id="idInfoExercise"></span></span>
             </div>
             <div class="chronosAction" id="effortDiv">              
               <span id="chronoDisplay" >00:00</span>
@@ -359,17 +369,17 @@
 
           </div>
          
-          <div class="magneto">
-            <div style="width:45%;float:left;">
-              <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span>
-              <span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span>
-            </div>
-            <div style="width:55%; float:right;">
-              <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button>
-              <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button>
-              <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button>
-            </div>
-          </div>
+          <!-- <div class="magneto"> -->
+          <!--   <\!-- <div style="width:45%;float:left;"> -\-> -->
+          <!--   <\!--   <span style="font-size:1.5rem;text-align:center; color:white;" data-l10n-id="idSession">Session</span> -\-> -->
+          <!--   <\!--   <span id="chronoSession" style="font-size:1.5rem; color:white;font-weight:bold;">00:00</span> -\-> -->
+          <!--   <\!-- </div> -\-> -->
+          <!--   <div style="width:55%; float:right;"> -->
+          <!--     <button class="media-icon media-play icon_button" id="btn-start-ses" class="recommend"></button> -->
+          <!--     <button class="media-icon media-pause icon_button" id="btn-pause-ses" class="danger"></button> -->
+          <!--     <button class="action-icon cancel icon_button" id="btn-cancel-ses" class="danger"></button> -->
+          <!--   </div> -->
+          <!-- </div> -->
         </div>
       </article>
   </section>

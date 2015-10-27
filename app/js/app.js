@@ -160,9 +160,9 @@ document.querySelector('#btn-pause-ex').addEventListener('click', pauseEx);
 document.querySelector('#btn-cancel-ex').addEventListener('click', cancelEx);
 
 // Session
-document.querySelector('#btn-start-ses').addEventListener('click', startSes);
-document.querySelector('#btn-pause-ses').addEventListener('click', pauseSes);
-document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
+// document.querySelector('#btn-start-ses').addEventListener('click', startSes);
+// document.querySelector('#btn-pause-ses').addEventListener('click', pauseSes);
+// document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
 
 // Store new exercise.
 document.querySelector('#btn-add-ex').addEventListener('click', storeEx);
@@ -271,7 +271,8 @@ function addImage(path) {
   image.id = path;
 
   aside.appendChild(image);
-  listImages.appendChild(aside);
+  li.appendChild(aside);
+  listImages.appendChild(li);
 
 }
 
@@ -416,17 +417,17 @@ listImages.onclick = function(e) {
   }
 };
 
-function startSes() {
-  session.startSes();
-}
+// function startSes() {
+//   session.startSes();
+// }
 
-function pauseSes() {
-  session.pauseSes();
-}
+// function pauseSes() {
+//   session.pauseSes();
+// }
 
-function cancelSes() {
-  session.cancelSes();
-}
+// function cancelSes() {
+//   session.cancelSes();
+// }
 
 /**
  * Display the session
@@ -764,10 +765,12 @@ function pauseEx() {
       typeCounter = STATE_EX_PAUSE;
       chronos.stop();
     } else  {
-      chronos.start();
-      typeCounter = typeCounterPause;
+      // chronos.start();
+      // typeCounter = typeCounterPause;
     }
   }
+  // Pause the session.
+  session.pauseSes();
 }
 
 function startEx() {
@@ -788,6 +791,7 @@ function startEx() {
         
     chronos.start();
     flagStart = true;
+
     try {
       var exercise = new Exercise(name, curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
       session.startExercise(exercise);
@@ -800,6 +804,7 @@ function startEx() {
       typeCounter = typeCounterPause;
     }
   }
+  session.startSes();
 }
 
 
@@ -965,6 +970,10 @@ function cancelEx() {
   nbRetryDisplay.textContent = "0/0";
   breakTimeDisplay.style.color = "white";
   endExercise();
+
+  // Cancel the session.
+  session.cancelSes();
+
 }
 
 /**
@@ -1137,10 +1146,12 @@ function displayCurrentExercise() {
       var infoExercise = document.getElementById("idInfoExercise");
 
       var idCurExercise = document.getElementById("idCurExercise");
-      var idNbExercises = document.getElementById("idNbExercises");
+      // var idNbExercises = document.getElementById("idNbExercises");
 
-      idCurExercise.textContent = session.getNumExercise() + 1;
-      idNbExercises.textContent = session.getNbExercises();
+      idCurExercise.textContent = ""
+                                + (session.getNumExercise() + 1)
+                                +"/" + session.getNbExercises();
+      //idNbExercises.textContent = session.getNbExercises();
 
       nameExercise.textContent = curExercise.getName();
       infoExercise.textContent = "[" + curExercise.getDuration() + 
