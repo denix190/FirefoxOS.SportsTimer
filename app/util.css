@@ -172,12 +172,12 @@ ul, ol, li {
   background-color: rgba(110, 110, 110, 1.0);
   color: white /* #14FF15 */;
   text-align: center; 
-  font-size: 3rem; 
+  font-size: 2.0rem; 
   margin: 5px 10px 0px 5px;
   border-width: 0px;
   border-style: none;
   border-radius: 10px;
-  height: 4.0rem; 
+  height: 2.5rem; 
   /*float:left; */
 }
 
@@ -185,12 +185,12 @@ ul, ol, li {
   background-color: rgba(110, 110, 110, 1.0);
   color: white; /* #64A0E3 */
   text-align: ext-align: center;
-  font-size: 3rem; 
+  font-size: 2.0rem; 
   margin: 5px 10px 0px 5px; 
   border-width: 0px;
   border-style: none;
   border-radius: 10px;
-  height: 4.0rem; 
+  height: 2.5rem; 
   /* float:right; */
 }
 
