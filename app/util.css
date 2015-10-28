@@ -211,7 +211,7 @@ div.footer {
   align-content: center;
   width:100%;
   position: absolute;
-  /* bottom: 0;  */
+  bottom: 0;
 }
 
 .pack-switch, .denix {
