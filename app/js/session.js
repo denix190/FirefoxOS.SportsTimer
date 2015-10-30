@@ -142,6 +142,19 @@ Session.prototype.cancelSes = function() {
     }
 };
 
+/**
+ * Cancel the current Session.
+*/
+Session.prototype.stopSes = function() {
+  try {
+    this.timerSession = window.clearInterval(this.timerSession);
+    this.flagStartSes = false;
+    displaySecond(this.chronoSession, this.sessionSec);
+    } catch(e) {
+      console.log(e);
+    }
+};
+
 Session.prototype.getSessionSec = function () {
   return this.sessionSec;
 };

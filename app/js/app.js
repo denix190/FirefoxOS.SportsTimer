@@ -894,6 +894,7 @@ function display() {
           session.stopExercise();
           endExercise();
           chronos.stop();
+          session.stopSes();
           playSound('finalSound');
           break;
         }
