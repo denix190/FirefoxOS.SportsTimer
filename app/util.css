@@ -184,7 +184,7 @@ ul, ol, li {
 .chronosRound {
   background-color: rgba(110, 110, 110, 1.0);
   color: white; /* #64A0E3 */
-  text-align: ext-align: center;
+  text-align:  center;
   font-size: 2.0rem; 
   margin: 5px 10px 0px 5px; 
   border-width: 0px;
@@ -197,7 +197,7 @@ ul, ol, li {
 .chronosTotal {
   /* background-color: rgba(110, 110, 110, 1.0); */
   color:  #64A0E3
-  text-align: ext-align: center;
+  text-align: center;
   font-size: 1.5rem; 
   margin: 5px 10px 0px 5px; 
   border-width: 0px;
@@ -262,7 +262,7 @@ button.icon_button {
 .magneto {
   background-color: rgba(110, 110, 110, 1.0);
   color: black;
-  text-align: ext-align: center;
+  text-align: center;
   font-size: 3rem; 
   margin: 5px 10px 0px 5px; 
   border-width: 0px;
@@ -291,3 +291,17 @@ button.icon_button {
 .li.selected {
     color: red;
 }
+
+/* table {
+ border-width:1px; 
+ border-style:solid; 
+ border-color:black;
+ width:100%;
+ }
+td { 
+ border-width:1px;
+ border-style:solid; 
+ border-color:red;
+ height: 2rem;
+ }
+*/

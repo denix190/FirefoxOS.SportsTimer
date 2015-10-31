@@ -64,11 +64,9 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
 // Display the panel updating a Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
   try {
-    var idSession = document.getElementById('idSession');
-    idSession.value = "-1";
+    var id= document.getElementById('idSession');
+    id.value = "-1";
 
-    // Desactivate the button "AddExercises"
-    // document.getElementById('btn-add-sesEx').disabled = true;
     document.getElementById('btn-del-ses').disabled = true;
 
     document.getElementById('nameSession').value = "";
@@ -149,6 +147,40 @@ document.querySelector('#btn-go-current-session-back').addEventListener('click',
   document.querySelector('#sessions').className = 'current';
 });
 
+// Program
+// 
+// Display the panel updating a Session.
+document.querySelector('#btn-go-add-program').addEventListener('click', function () {
+  try {
+    var idProgram = document.getElementById('idProgram');
+    idProgram.value = "-1";
+
+    document.getElementById('btn-del-prog').disabled = true;
+
+    document.getElementById('nameProgram').value = "";
+    document.getElementById('descProgram').value = "";
+    
+    document.querySelector('#updProgram').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+  } catch(e) {
+    console.log(e);
+  }
+});
+
+document.querySelector('#btn-go-upd-program-back').addEventListener('click', function () {
+  var idProgram = document.getElementById('idProgram');
+
+  var id = parseInt(idProgram.value);
+  if (id == -1) {
+    document.querySelector('#updProgram').className = 'right';
+    document.querySelector('[data-position="current"]').className = 'current';
+  } else {
+    document.querySelector('#updProgram').className = 'right';
+    document.querySelector('#pnl-prgrams').className = 'current';
+  }
+
+});
+
 
 // Button Event.
 
@@ -159,10 +191,6 @@ document.querySelector('#btn-start-ex').addEventListener('click', startEx);
 document.querySelector('#btn-pause-ex').addEventListener('click', pauseEx);
 document.querySelector('#btn-cancel-ex').addEventListener('click', cancelEx);
 
-// Session
-// document.querySelector('#btn-start-ses').addEventListener('click', startSes);
-// document.querySelector('#btn-pause-ses').addEventListener('click', pauseSes);
-// document.querySelector('#btn-cancel-ses').addEventListener('click', cancelSes);
 
 // Store new exercise.
 document.querySelector('#btn-add-ex').addEventListener('click', storeEx);
@@ -214,11 +242,20 @@ document.querySelector('#btn-choose-sessions').addEventListener('click', functio
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
+document.querySelector('#btn-choose-programs').addEventListener('click', function () {
+  document.querySelector('#pnl-programs').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
 document.querySelector('#btn-go-main-back').addEventListener('click', function () {
   document.querySelector('#sessions').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
+document.querySelector('#btn-go-main-prog-back').addEventListener('click', function () {
+  document.querySelector('#pnl-programs').className = 'left';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
@@ -321,11 +358,6 @@ listItemEx.onclick = function(e) {
             duration.value = request.result.duration;
             desc.value = request.result.desc;
 
-            // if (request.result.imagePath == "") {
-            //   imagePath.style.display = "none";
-            // } else {
-            //   imagePath.style.display = "visible";
-            // }
             imagePath.src = request.result.imagePath;
             idUpd.value = id;
            };
@@ -1278,4 +1310,50 @@ function removeAllItems(list) {
 	while (list.firstChild) {
         list.removeChild(list.firstChild);
     }
+}
+
+// Programs 
+
+/**
+ * Display the list of Programs.
+*/
+function displayListPrograms() {
+
+  var objectStore = db.transaction("programs").objectStore("programs");
+  var listProgs = document.getElementById("list-items-progs");
+  
+  removeAllItems(listProgs);
+  
+  objectStore.openCursor().onsuccess = function(event) {
+      var cursor = event.target.result;
+    if (cursor) {
+      addProgram(listProgs, cursor);
+      cursor.continue();
+    }
+    else {
+      // alert("No more entries!");
+    }
+  };
+}
+
+/**
+ * Add an Program to the list.
+*/ 
+function addProgram(list, cursor) {
+  var li = document.createElement("li");
+  
+  var a = document.createElement("a");
+  a.setAttribute("id", cursor.value.idProgram);
+  a.href = "#";
+
+  var p0 = document.createElement("p");
+  p0.innerHTML = cursor.value.name;
+  a.appendChild(p0);
+
+  var p1 = document.createElement("p");
+  p1.innerHTML = cursor.value.desc;
+  a.appendChild(p1);
+
+  li.appendChild(a);
+  list.appendChild(li);
 }
