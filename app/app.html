@@ -263,9 +263,6 @@
         <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
         <a href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
         <menu type="toolbar">
-       <!-- <button class="icon icon-add" id="btn-go-add-session"> -->
-       <!--   <span>edit</span> -->
-       <!-- </button> -->
       </menu>
         <h1>Sports Timer</h1>
       </header> 
@@ -300,6 +297,26 @@
     </section> <!-- end drawer -->
   </section>
 
+ <!--·························· List of Programs ··························-->
+  <section role="region" id="pnl-programs" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-main-prog-back" href="#"><span class="icon icon-back">back</span></a>
+     <menu type="toolbar">
+       <button class="icon icon-add" id="btn-go-add-program">
+         <span>edit</span>
+       </button>
+     </menu>
+     <h1>Programs</h1>
+     </header>
+      <article class="scrollable header">
+        <div data-type="list">
+          <ul id="list-items-progs">
+          </ul>         
+        </div>
+      </article>
+    </section> <!-- end drawer -->
+  </section>
+    
   <!--·························· Current Session ··························-->
   <section role="region" id="currentSession" data-position="right">
     <header class="fixed">
@@ -422,6 +439,86 @@
       
     </article>
   </section>
+
+ <!-- Add/Update Program -->
+  <section role="region" id="updProgram" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-upd-program-back" href="#"><span class="icon icon-back">back</span></a>
+       <menu type="toolbar">
+         <button id="btn-upd-program" data-l10n-id="idUpdProgram">Save</button>
+       </menu>
+      
+      <h1 data-l10n-id="idProgram">Program</h1>
+    </header>
+    <article class="content scrollable header">
+      <p width="100%" style="margin-top:2px; margin-bottom:2px;">
+        <input id="nameProgram" type="text" maxlength="20" data-l10n-id="idNameProgram" placeholder="" required/>
+        <input type="hidden" id="idProgram" value=""/>
+      </p>
+
+      <div> 
+        <p></p>
+        <label data-l10n-id="idNbWeeks" class="parameters">Number of weeks</label>
+        <select name="idNbWeeks" id="idNbWeeks">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option> 
+          <option value="6">6</option>
+        </select>
+      </div>
+
+      <table width="100%">
+        <tr width="100%">
+          <th >Sun.</th>
+          <th>Mon.</th>
+          <th>Tue.</th>
+          <th>Wed.</th>
+          <th>Thu.</th>
+          <th>Fri.</th>
+          <th>Sat.</th>
+        </tr>
+        <tr>
+          <td>Sun</td>
+          <td>Mon</td>
+          <td>Tu</td>
+          <td>Wen</td>
+          <td>Thu</td>
+          <td>Fri</td>
+          <td>Sat</td>
+        </tr>
+        <tr>
+          <td>Sun</td>
+          <td>Mon</td>
+          <td>Tu</td>
+          <td>Wen</td>
+          <td>Thu</td>
+          <td>Fri</td>
+          <td>Sat</td>
+        </tr>
+        <tr>
+          <td>Sun</td>
+          <td>Mon</td>
+          <td>Tu</td>
+          <td>Wen</td>
+          <td>Thu</td>
+          <td>Fri</td>
+          <td>Sat</td>
+        </tr>
+      </table>
+      
+      <p width="100%">
+        <textarea id="descProgram" data-l10n-id="idDescProgram" placeholder=""></textarea>
+      </p>
+
+      <div>
+        <button id="btn-del-prog" class="danger" data-l10n-id="idDeleteProgram" >Delete</button>
+      </div>
+      
+    </article>
+  </section>
+    
     
   <!--·························· add Exercise ··························-->
   <section role="region" id="addExercise" data-position="right">

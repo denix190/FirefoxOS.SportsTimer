@@ -22,6 +22,8 @@ function init() {
     DBOpenRequest.onsuccess = function(event) {
       db = DBOpenRequest.result;
       displayListSessions();
+
+      // Load Programs.
       
       loadParameters();
     };
@@ -52,7 +54,15 @@ function init() {
         var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
         var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});                
       }
-      
+
+      // Programs.
+      if (thisDB.objectStoreNames.contains("programs")) {
+        thisDB.deleteObjectStore("programs");
+      }
+      var objectStore = thisDB.createObjectStore("programs", { keyPath : "idProgram" , autoIncrement: true });
+      var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
+
+      // Parameters.
       if (thisDB.objectStoreNames.contains("parameters")) {
         thisDB.deleteObjectStore("parameters");
       }
