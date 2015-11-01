@@ -10,4 +10,7 @@ const dbName = "exerciceData";
 
 const dbVersion = 34;
 
-const EFFORT_COLOR = '#F97C17'; 
+const EFFORT_COLOR = '#F97C17';
+const EFFORT_END_COLOR = '#F97C17';
+const RECOVERY_COLOR = '#A1E1E4';
+const BETWEEN_COLOR = 'white';

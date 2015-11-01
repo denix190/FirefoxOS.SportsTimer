@@ -196,9 +196,11 @@ ul, ol, li {
 
 .chronosTotal {
   /* background-color: rgba(110, 110, 110, 1.0); */
-  color:  #64A0E3
-  text-align: center;
-  font-size: 1.5rem; 
+    color:  #6E6E6E;
+ /* text-align: center;  */
+  font-size: 1.5rem;
+  font-weight:bold;
+  
   margin: 5px 10px 0px 5px; 
   border-width: 0px;
   border-style: none;
@@ -211,7 +213,7 @@ div.footer {
   align-content: center;
   width:100%;
   position: absolute;
-  bottom: 0;
+  bottom: 5px;
 }
 
 .pack-switch, .denix {

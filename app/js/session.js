@@ -98,8 +98,8 @@ Session.prototype.startSes = function() {
   try {
     if (this.flagStartSes === false) {
       this.beginSession = new Date();
-      
-      //this.timerSession = window.setInterval(this.displaySessionx.bind(this), 1000);
+      this.sessionSec = 0;
+
       this.timerSession = window.setInterval(
         function() {
           try {
@@ -116,6 +116,30 @@ Session.prototype.startSes = function() {
     console.log(e);
   }
 };
+
+/**
+ * 
+ */
+Session.prototype.continue = function() {
+  try {
+    if (this.flagStartSes === false) {
+      this.timerSession = window.setInterval(
+        function() {
+          try {
+            session.addSessionSec();
+            displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+          } catch(e) {
+            console.log(e);
+          } }, 1000);
+
+      this.flagStartSes = true;
+    }
+  } catch(e) {
+    var lock = null;
+    console.log(e);
+  }
+};
+
 
 /**
 * Pause Session.
