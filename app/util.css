@@ -46,6 +46,7 @@ section[role="region"] > header.fixed:first-child {
 .scrollable.header {
   height: calc(100% - 5rem);
   top: 5rem;
+  /* Back ground color */
   background-color: #F4F7F8;
 }
 
