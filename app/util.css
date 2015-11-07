@@ -162,7 +162,7 @@ ul, ol, li {
   text-align: center;
   font-size: 6.0rem; 
   font-weight:bold;
-  margin: 5px 10px 0px 5px;
+  margin: 5px 5px 0px 5px;
   border-width: 1px;
   border-style: none;
   border-radius: 10px;
@@ -202,7 +202,7 @@ ul, ol, li {
   font-size: 1.5rem;
   font-weight:bold;
   
-  margin: 5px 10px 0px 5px; 
+  margin: 5px 5px 0px 5px; 
   border-width: 0px;
   border-style: none;
   border-radius: 10px;
@@ -267,7 +267,7 @@ button.icon_button {
   color: black;
   text-align: center;
   font-size: 3rem; 
-  margin: 5px 10px 0px 5px; 
+  margin: 5px 5px 0px 5px; 
   border-width: 0px;
   border-style: none;
   border-radius: 10px;

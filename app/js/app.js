@@ -13,7 +13,6 @@ var typeCounterPause;
 var flagStart = false;
 
 var chronoDisplay = document.getElementById('chronoDisplay');
-//var breakTimeDisplay = document.getElementById('breakTimeDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
 var session = new Session();
@@ -272,7 +271,8 @@ var listImages = document.getElementById('list-images');
 function initListImages() {
   // List of all images.
   var listImages = [
-    "gym-null.png",
+        "gym-null.png",
+        "dessin.svg",
     "gym-ab-bikes.png",
     "gym-crunch-abdos.png",
     "gym-flexion.png",
@@ -448,18 +448,6 @@ listImages.onclick = function(e) {
     console.log(e);
   }
 };
-
-// function startSes() {
-//   session.startSes();
-// }
-
-// function pauseSes() {
-//   session.pauseSes();
-// }
-
-// function cancelSes() {
-//   session.cancelSes();
-// }
 
 /**
  * Display the session
@@ -732,6 +720,7 @@ function addExercise(list, cursor) {
   var label = document.createElement("label");
   label.className = "pack-checkbox";
   label.appendChild(checkbox);
+
   var spanlbl = document.createElement("span");
   label.appendChild(spanlbl);
   
