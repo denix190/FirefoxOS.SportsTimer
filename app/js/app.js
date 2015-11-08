@@ -848,18 +848,15 @@ function display() {
   switch (typeCounter) {
     // Duration
     case STATE_EX_EFFORT:
-    //breakTimeDisplay.style.color = 'white';
    
     var style =EFFORT_COLOR; 
     if (durationCounter === 0) {
       var effortDiv = document.getElementById('effortDiv');
-      // effortDiv.style.color = EFFORT_COLOR;
       playSound('beepBeginSound');
     }
 
     if ((curExercise.getDuration() - durationCounter) == 10) {
       var effortDiv = document.getElementById('effortDiv');
-      //effortDiv.style.color = 'red';
       style = EFFORT_END_COLOR;
     }
     
@@ -883,9 +880,6 @@ function display() {
     // Recovery
     case STATE_EX_RECOVERY:
 
-   
-    
-    // breakTimeCounter++;
     if (breakTimeCounter > curExercise.getBreakTime() || curExercise.getBreakTime() === 0) {
       nbRetryCounter++;
       if (nbRetryCounter <= curExercise.getNbRetry()) {
@@ -896,13 +890,9 @@ function display() {
       } else {
         typeCounter = STATE_EX_BETWEEN;
         durationCounter = 0;
-        //displaySecond(breakTimeDisplay, 0, RECOVRY_COLOR);
       }
     } else {
       var nbSec =  curExercise.getBreakTime() - breakTimeCounter;
-      // displaySecond(breakTimeDisplay, nbSec);
-       //var effortDiv = document.getElementById('effortDiv');
-      //effortDiv.style.color = RECOVERY_COLOR;
       displaySecond(chronoDisplay, nbSec, RECOVERY_COLOR);
     }
     
@@ -948,31 +938,26 @@ function display() {
       // Sound begin chain exercice.
       playSound('beginChangeSound');
     }
-    //   durationBetweenExercise++;
-    // } else {
-      if ( durationBetweenExercise <= session.getdelayBetweenExercises()) {
-       // breakTimeDisplay.style.color = EFFORT_COLOR;
-        // displaySecond(breakTimeDisplay, session.getdelayBetweenExercises() - durationBetweenExercise);
-        displaySecond(chronoDisplay, session.getdelayBetweenExercises() - durationBetweenExercise, BETWEEN_COLOR);
-        durationBetweenExercise++;
-      } else {
-        if (durationBetweenExercise >= session.getdelayBetweenExercises()) {
-          // Temps entre exercise depasse. Exercice suivant.
-          durationBetweenExercise = 0;
-          //breakTimeDisplay.style.color = 'white';
-          typeCounter = STATE_EX_EFFORT;
-          startEx();
-        }
+    if ( durationBetweenExercise <= session.getdelayBetweenExercises()) {
+      displaySecond(chronoDisplay, session.getdelayBetweenExercises() - durationBetweenExercise, BETWEEN_COLOR);
+      durationBetweenExercise++;
+    } else {
+      if (durationBetweenExercise >= session.getdelayBetweenExercises()) {
+        // Temps entre exercise depasse. Exercice suivant.
+        durationBetweenExercise = 0;
+        typeCounter = STATE_EX_EFFORT;
+        startEx();
       }
-    // }
+    }
     break;
   }
 }
 
 /**
- * Display the number of second (HH:MM:SS).
+ * Get a string for the number of seconds.
+ * @param nbSec number of seconds to display.
  */
-function displaySecond(display, nbSec, style) {
+function getStringTime(nbSec) {
   var seconds = new String(nbSec % 60);
   var minutes = new String(Math.floor(nbSec / 60));
   var hours = Math.floor(nbSec / 3600);
@@ -984,13 +969,24 @@ function displaySecond(display, nbSec, style) {
     minutes = '0' + minutes;
   }
   
-  display.style.color = style;
+  var ret = "";
   
   if (hours === 0) {
-      display.textContent = minutes + ":" + seconds;
+      ret = minutes + ":" + seconds;
   } else {
-    display.textContent = new String(hours) + ":" + minutes + ":" + seconds;
+    ret = new String(hours) + ":" + minutes + ":" + seconds;
   }
+  return ret;
+}
+
+
+/**
+ * Display the number of second (HH:MM:SS).
+ */
+function displaySecond(display, nbSec, style) {
+
+  display.style.color = style;
+  display.textContent = getStringTime(nbSec);
 }
 
 function endExercise() {
@@ -1169,6 +1165,8 @@ function listSessionEx(idSession) {
   };
 }
 
+
+
 /**
  * Dysplay the current exercise for the session.
  */
@@ -1187,8 +1185,8 @@ function displayCurrentExercise() {
                                 +"/" + session.getNbExercises();
 
       nameExercise.textContent = curExercise.getName();
-      infoExercise.textContent = "[" + curExercise.getDuration() + 
-        " -  " + curExercise.getBreakTime() + "]" +
+      infoExercise.textContent = "[" + getStringTime(curExercise.getDuration()) + 
+                " - " + getStringTime(curExercise.getBreakTime()) + "]" +
         "x" + curExercise.getNbRetry();
         image.src = curExercise.getImagePath();
 

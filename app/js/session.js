@@ -104,7 +104,7 @@ Session.prototype.startSes = function() {
         function() {
           try {
             session.addSessionSec();
-            displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+            displaySecond(document.getElementById('chronoSession'), session.getSessionSec(), TEXT_COLOR );
           } catch(e) {
             console.log(e);
           } }, 1000);

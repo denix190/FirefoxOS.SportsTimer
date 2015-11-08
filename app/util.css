@@ -47,7 +47,7 @@ section[role="region"] > header.fixed:first-child {
   height: calc(100% - 5rem);
   top: 5rem;
   /* Back ground color */
-  background-color: #F4F7F8;
+  background-color: white /* #F4F7F8 */;
 }
 
 /* Setting proper paddings and margins */
@@ -156,7 +156,8 @@ ul, ol, li {
 }
 
 .chronosAction {
-    background-color: rgba(110, 110, 110, 1.0);
+    /* background-color: rgba(110, 110, 110, 1.0); */
+    background-color: white;
   /*  background: linear-gradient(to bottom, #E00018, white); */
    color: #F97C17 /*#E00018 */;
   text-align: center;
