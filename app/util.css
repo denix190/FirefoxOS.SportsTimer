@@ -161,13 +161,13 @@ ul, ol, li {
   /*  background: linear-gradient(to bottom, #E00018, white); */
    color: #F97C17 /*#E00018 */;
   text-align: center;
-  font-size: 6.0rem; 
+  font-size: 7.5rem; 
   font-weight:bold;
   margin: 5px 5px 0px 5px;
   border-width: 1px;
   border-style: none;
   border-radius: 0px;
-  height: 7.0rem;
+  height: 8.0rem;
   border-top:1px solid rgb(156,156,156);
 }
 
