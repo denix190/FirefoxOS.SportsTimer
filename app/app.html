@@ -17,9 +17,10 @@
   <link rel="stylesheet" href="style/lists.css">
   <link rel="stylesheet" href="style/listsimage.css">
   <link rel="stylesheet" href="style/switches.css">
+
   <link rel="stylesheet" href="icons/styles/media_icons.css">
   <link rel="stylesheet" href="icons/styles/action_icons.css">
-  
+
   <!-- Transitions -->
   <link rel="stylesheet" href="transitions.css">
 
@@ -330,54 +331,53 @@
       <h1 id="idTitleSession">Session Title</h1>
     </header>
 
-      <article class="scrollable header">
+    <article class="scrollable header">
+      <!-- style="background-image:linear-gradient(rgb(156,156,156), white);" -->
         <div>
-          <div>
-
-              <div class="chronosTotal">
-              <span class="left" id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px;"></span>
-            
+          <div class="chronosHeader">
+            <div>
+              <span class="left" id="idNameExercise" style="font-style: oblique; font-size: large; margin-top:0px;margin-bottom:0px; margin-left:20px;"></span>
               <span id="nbRetryDisplay" class="right" style="font-size: medium;margin-top:0px;margin-bottom:0px;">0/0</span>
             </div>
-            <div>
-              <img  id="idImageExercise" src="" alt="" style="margin-left:auto; margin-right:auto; display: block;margin-top:0px;margin-bottom:0px; width:300px;height:200px;"/>
-            </div>
-            <div class="footer">
-            <div class="chronosTotal">
-              <span class="right"><span id="idInfoExercise"></span></span>
-            </div>
-                             
-            <div class="chronosAction" id="effortDiv">
-              <span class="left" id="idCurExercise" style="font-size: medium; margin-top:0px;margin-bottom:0px;color:rgb(110, 110, 110);">1</span>    
-              <span id="chronoDisplay" >00:00</span>
-              <span class="right" id="chronoSession" style="margin-left:2px;font-size:medium;color:rgb(110, 110, 110);">00:00</span>
-            </div>
+          </div>
+          <div>
+            <img  id="idImageExercise" src="" alt="" style="margin-left:auto; margin-right:auto; display: block;margin-top:0px;margin-bottom:0px; width:300px;height:200px;"/>
+          </div>
+          <div class="chronosTotal">
+            <span style="text-align:center;"><span id="idInfoExercise" style="display:block;text-align:center;"></span></span>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="chronosAction" id="effortDiv">
+            <span class="left" id="idCurExercise" style="font-size: medium; margin-top:0px;margin-bottom:0px;color:rgb(110, 110, 110);">1</span>
+            <span id="chronoDisplay" >00:00</span>
+            <span class="right" id="chronoSession" style="margin-left:2px;font-size:medium;color:rgb(110, 110, 110);">00:00</span>
+          </div>
           
-            <div class="magneto">
-              <table width=98%>
-                <th>
-                  <td style="text-align:center;">
-                    <button class="media-icon media-skipbackwards icon_button" id="btn-previous-ex" class="recommend"></button>
-                  </td>
-                  <td style="text-align:center;">
-                    <button class="media-icon media-play icon_button" id="btn-start-ex" class="recommend"></button>
-                  </td>
-                  <td>
+          <div class="magneto">
+            <table width=98%>
+              <th>
+                <td style="text-align:center;">
+                  <button class="media-icon media-skipbackwards icon_button" id="btn-previous-ex" class="recommend"></button>
+                </td>
+                <td style="text-align:center;">
+                  <button class="media-icon media-play icon_button" id="btn-start-ex" class="recommend"></button>
+                </td>
+                <td>
                   <button class="media-icon media-skipforward icon_button" id="btn-next-ex" class="recommend"></button>
-                  </td>
+                </td>
                   <td style="text-align:center;">
                     <button class="media-icon media-pause icon_button" id="btn-pause-ex" class="danger"></button>
                   </td>
-                  <td style="text-align:center;">
-                    <button class="action-icon cancel icon_button" id="btn-cancel-ex" class="danger"></button>
-                  </td>
-                </th>
-              </table>
-            </div>
+                <td style="text-align:center;">
+                  <button class="action-icon cancel icon_button" id="btn-cancel-ex" class="danger"></button>
+                </td>
+              </th>
+            </table>
           </div>
-         </div>
         </div>
-      </article>
+ 
+    </article>
   </section>
 
   <!-- Add/Update Session -->

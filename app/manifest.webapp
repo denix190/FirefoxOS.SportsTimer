@@ -19,5 +19,6 @@
             "access": "readwrite",
             "description": "Write export of all feeds on SD card as an json file."
         }
-    }
+    },
+    "orientation": ["portrait-primary"]
 }

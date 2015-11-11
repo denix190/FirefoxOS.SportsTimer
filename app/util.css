@@ -166,8 +166,9 @@ ul, ol, li {
   margin: 5px 5px 0px 5px;
   border-width: 1px;
   border-style: none;
-  border-radius: 10px;
+  border-radius: 0px;
   height: 7.0rem;
+  border-top:1px solid rgb(156,156,156);
 }
 
 .chronosRecovery {
@@ -196,6 +197,20 @@ ul, ol, li {
   /* float:right; */
 }
 
+.chronosHeader {
+  background-color: rgba(110, 110, 110, 1.0); 
+  color:  white;
+  width:100%;
+  font-size: 1.5rem;
+  font-weight:bold;
+  margin: 0px 0px 0px 0px; 
+  border-width: 0px;
+  border-style: none;
+  border-radius: 0px;
+  height: 3.0rem; 
+
+}
+
 .chronosTotal {
   /* background-color: rgba(110, 110, 110, 1.0); */
     color:  #6E6E6E;
@@ -215,7 +230,7 @@ div.footer {
   align-content: center;
   width:100%;
   position: absolute;
-  bottom: 5px;
+  bottom: 15px;
 }
 
 .pack-switch, .denix {
