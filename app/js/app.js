@@ -157,7 +157,7 @@ document.querySelector('#btn-go-add-program').addEventListener('click', function
     document.getElementById('btn-del-prog').disabled = true;
 
     document.getElementById('nameProgram').value = "";
-    document.getElementById('descProgram').value = "";
+    // document.getElementById('descProgram').value = "";
     
     document.querySelector('#updProgram').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
@@ -255,6 +255,17 @@ document.querySelector('#btn-go-main-prog-back').addEventListener('click', funct
   document.querySelector('#pnl-programs').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
 });
+
+// try {
+//   document.querySelector('#calendar').addEventListener('click', btnCalendar);
+// } catch (e) {
+//   window.alert("Calendar");
+//    }
+
+// function btnCalendar() {
+
+//   window.alert("Calendar");
+// }
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');

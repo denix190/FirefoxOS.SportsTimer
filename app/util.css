@@ -323,3 +323,54 @@ td {
  border-color:red; 
  height: 2rem;
  }*/
+
+td.selected {
+    background-color: red;
+}
+
+button.calendar {
+    border-radius:0rem;
+     background-color: red;
+}
+
+ol.horizontal {
+    -moz-box-sizing: border-box;
+    list-style-type: none;
+    width: 100%;
+}
+
+ol.horizontal li {
+    -moz-box-sizing: border-box;
+    float: left;
+    font-size:x-small;
+    width: 14.286%;
+    padding: 0px 0px;
+    border-left-width: 1px;
+    border-right-width: 0px;
+    border-style:solid;
+    border-color: white;
+    text-align:center;
+    background-color: black;
+    color:white;
+}
+
+ol.day {
+    -moz-box-sizing: border-box;
+    list-style-type: none;
+    width: 100%;
+}
+
+ol.day li {
+    -moz-box-sizing: border-box;
+    float: left;
+    font-size:x-small;
+    width: 14.286%;
+    padding: 0px 0px;
+    border-left-width: 1px;
+    border-right-width: 0px;
+    border-style:solid;
+    border-color: white;
+    text-align:center;
+    background-color: blue;
+    color:white;
+}
