@@ -337,6 +337,7 @@ ol.horizontal {
     -moz-box-sizing: border-box;
     list-style-type: none;
     width: 100%;
+    margin-bottom:1px; 
 }
 
 ol.horizontal li {
@@ -358,6 +359,7 @@ ol.day {
     -moz-box-sizing: border-box;
     list-style-type: none;
     width: 100%;
+    margin-bottom:1px;
 }
 
 ol.day li {
@@ -366,6 +368,8 @@ ol.day li {
     font-size:x-small;
     width: 14.286%;
     padding: 0px 0px;
+    border-top:1px;
+    border-bottom:1px;
     border-left-width: 1px;
     border-right-width: 0px;
     border-style:solid;
@@ -373,4 +377,8 @@ ol.day li {
     text-align:center;
     background-color: blue;
     color:white;
+}
+
+li.daySelected  {
+    background-color: green !important;
 }

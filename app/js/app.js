@@ -161,6 +161,7 @@ document.querySelector('#btn-go-add-program').addEventListener('click', function
     
     document.querySelector('#updProgram').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
+   
   } catch(e) {
     console.log(e);
   }
@@ -254,6 +255,27 @@ document.querySelector('#btn-go-main-back').addEventListener('click', function (
 document.querySelector('#btn-go-main-prog-back').addEventListener('click', function () {
   document.querySelector('#pnl-programs').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
+});
+
+/** Add a week for the program. */
+document.querySelector('#btn-add-week').addEventListener('click', function () {
+  var ol = document.createElement("ol");
+  for (var i = 0; i < 7; i++) {
+    var li = document.createElement("li");
+    li.innerHTML = "l " + i;
+    ol.appendChild(li);
+  }
+  
+  ol.addEventListener("click", function(e){
+    var t = e.target;
+    t.style.color = "red";
+    t.className = "daySelected";
+  });
+  
+  
+  ol.className = "day";
+  document.querySelector('#calendar').appendChild(ol);
+
 });
 
 // try {

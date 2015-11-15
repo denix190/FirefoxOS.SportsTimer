@@ -448,7 +448,7 @@
         <input type="hidden" id="idProgram" value=""/>
       </p>
  
-      <div style="width:100%;">
+      <div style="width:100%;" id="calendar">
         <ol class="horizontal">
           <li>Su</li>
           <li>Mo</li>
@@ -458,26 +458,13 @@
           <li>Fr</li>
           <li>Sa</li>
         </ol>
-      
-        <ol class="day">
-          <li>Xu</li>
-          <li>XMo</li>
-          <li>XTu</li>
-          <li>XWe</li>
-          <li>XTh</li>
-          <li>XFr</li>
-          <li>XSa</li>
-        </ol>
-        <ol class="day">
-          <li>Xu</li>
-          <li>XMo</li>
-          <li>XTu</li>
-          <li>XWe</li>
-          <li>XTh</li>
-          <li>XFr</li>
-          <li>XSa</li>
-        </ol>
+   
       </div>
+
+      <div>
+        <button id="btn-add-week" class="danger" data-l10n-id="idAddWeek" >Add</button>
+      </div>
+      
       <div width="100%">
         <textarea id="descProgram" data-l10n-id="idDescProgram" placeholder=""></textarea>
       </div>
