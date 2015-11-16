@@ -278,17 +278,6 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 
 });
 
-// try {
-//   document.querySelector('#calendar').addEventListener('click', btnCalendar);
-// } catch (e) {
-//   window.alert("Calendar");
-//    }
-
-// function btnCalendar() {
-
-//   window.alert("Calendar");
-// }
-
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
 
@@ -349,6 +338,7 @@ function addImage(path) {
 initListImages();
 
 /**
+ * List of exercises.
  * Select a exercice to update.
  */
 listItemEx.onclick = function(e) {
@@ -735,36 +725,48 @@ function addExercise(list, cursor) {
   
   var a = document.createElement("a");
   a.setAttribute("id", cursor.value.id);
-  a.text = cursor.value.name +
-    " [" + cursor.value.duration +
-    " - " + cursor.value.breakTime + "]" +
-    "x" + cursor.value.nbRetry;
-  a.href = "#";
-  
-  var checkbox = document.createElement('input');
-  checkbox.type = "checkbox";
-  checkbox.name = "checkBoxEx";
-  checkbox.value = cursor.value.id;
-  checkbox.id = "checkBoxEx";
-  
-  var spanl = document.createElement("span");
-  var spanr = document.createElement("span");
-  
-  var label = document.createElement("label");
-  label.className = "pack-checkbox";
-  label.appendChild(checkbox);
+  // a.text = cursor.value.name +
+  //   " [" + cursor.value.duration +
+  //   " - " + cursor.value.breakTime + "]" +
+  //   "x" + cursor.value.nbRetry;
+    a.href = "#";
+                                            
+  var pName = document.createElement("p");
+  pName.innerHTML = cursor.value.name;
 
-  var spanlbl = document.createElement("span");
-  label.appendChild(spanlbl);
+  var pInfo = document.createElement("p");
+  pInfo.innerHTML = " [" + cursor.value.duration +
+     " - " + cursor.value.breakTime + "]" +
+            "x" + cursor.value.nbRetry;
   
-  spanr.className = "rightCheckbox";
-  spanl.className = "left";
+  a.appendChild(pName);
+  a.appendChild(pInfo);
+  li.appendChild(a);
   
-  spanl.appendChild(label);
-  spanr.appendChild(a);
+  // var checkbox = document.createElement('input');
+  // checkbox.type = "checkbox";
+  // checkbox.name = "checkBoxEx";
+  // checkbox.value = cursor.value.id;
+  // checkbox.id = "checkBoxEx";
   
-  li.appendChild(spanl);
-  li.appendChild(spanr);
+  //var spanl = document.createElement("span");
+ // var spanr = document.createElement("span");
+  
+  // var label = document.createElement("label");
+  // label.className = "pack-checkbox";
+  // label.appendChild(checkbox);
+
+  // var spanlbl = document.createElement("span");
+  // label.appendChild(spanlbl);
+  
+  // spanr.className = "left";
+  // //spanl.className = "left";
+  
+  //spanl.appendChild(label);
+  //spanr.appendChild(a);
+  
+  //li.appendChild(spanl);
+  // li.appendChild(spanr);
   
   list.appendChild(li);    
 }
