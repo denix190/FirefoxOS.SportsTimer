@@ -741,7 +741,7 @@ function addExercise(list, cursor) {
   
   a.appendChild(pName);
   a.appendChild(pInfo);
-  li.appendChild(a);
+ 
   
   // var checkbox = document.createElement('input');
   // checkbox.type = "checkbox";
@@ -767,7 +767,17 @@ function addExercise(list, cursor) {
   
   //li.appendChild(spanl);
   // li.appendChild(spanr);
+
+  var aside = document.createElement("aside");
+  aside.className = "pack-end";
+  var img = document.createElement("img");
   
+  img.src = cursor.value.imagePath;
+  aside.appendChild(img);
+
+  li.appendChild(aside);
+  li.appendChild(a);
+
   list.appendChild(li);    
 }
 

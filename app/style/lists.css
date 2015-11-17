@@ -35,7 +35,7 @@
 /* List items */
 [data-type="list"] li {
   width: 100%;
-  height: 5rem;
+  height: 6rem;
   box-sizing: border-box;
   border-bottom: solid 0.1rem #e7e7e7;
   color: #333;
