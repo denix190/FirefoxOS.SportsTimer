@@ -198,7 +198,7 @@ document.querySelector('#btn-add-ex').addEventListener('click', storeEx);
 // Update an exercise.
 document.querySelector('#btn-upd-ex').addEventListener('click', updateEx);
 
-document.querySelector('#btn-del-ex').addEventListener('click', deleteExercises);
+document.querySelector('#btn-del-ex').addEventListener('click', deleteExercise);
 
 document.querySelector('#chk-sound').addEventListener('change', checkSoundHandler);
 
@@ -796,24 +796,25 @@ function addExercise(list, cursor) {
 }
 
 /**
- * Delete exercises.
+ * Delete the current exercise.
  */
-function deleteExercises() {
-  if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) { 
-    var list = document.getElementById('list-items-ex');
-    var chk = list.getElementsByTagName('input');
+function deleteExercise() {
+  if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) {
+    var idUpd = document.getElementById('idUpd');
+
+    var id = parseInt(idUpd.value);
     
     var transaction = db.transaction(["exercice"],"readwrite");
     var store = transaction.objectStore("exercice");
-    
-    for (var i = 0; i  < chk.length;i++) {
-      if (chk[i].checked === true) {
-        var request = store.delete(parseInt(chk[i].value)); 
-      }
-    }
+
+    var request = store.delete(id); 
+
     var idSession = document.getElementById('idSession');
-    
+
     dataChange(parseInt(idSession.value));
+    
+    document.querySelector('#addExercise').className = 'right';
+    document.querySelector('#listExercise').className = 'current';
   }
 }
 
