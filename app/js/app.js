@@ -60,6 +60,9 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
   document.querySelector('#listExercise').className = 'current';
 });
 
+
+
+
 // Display the panel updating a Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
   try {
@@ -146,6 +149,17 @@ document.querySelector('#btn-go-current-session-back').addEventListener('click',
   document.querySelector('#sessions').className = 'current';
 });
 
+
+document.querySelector('#imagePathUpd').addEventListener('click', function () {
+  document.querySelector('#pnl-chooseImage').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#imagePath').addEventListener('click', function () {
+    document.querySelector('#pnl-chooseImage').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+});
+
 // Program
 // 
 // Display the panel updating a Session.
@@ -198,7 +212,7 @@ document.querySelector('#btn-add-ex').addEventListener('click', storeEx);
 // Update an exercise.
 document.querySelector('#btn-upd-ex').addEventListener('click', updateEx);
 
-document.querySelector('#btn-del-ex').addEventListener('click', deleteExercises);
+document.querySelector('#btn-del-ex').addEventListener('click', deleteExercise);
 
 document.querySelector('#chk-sound').addEventListener('change', checkSoundHandler);
 
@@ -342,54 +356,68 @@ initListImages();
  * Select a exercice to update.
  */
 listItemEx.onclick = function(e) {
-    var collEnfants = e.target.parentNode.childNodes;
-   
-    var i = 0;
-    for (i = 0; i < collEnfants.length; i++)  {
-      if (collEnfants[i].tagName === 'A'){
-
-        try {
-          document.querySelector('#updExercise').className = 'current';
-          document.querySelector('[data-position="current"]').className = 'left';
-          
-          document.querySelector('#listExercise').className = 'left';
-
-          var transaction = db.transaction(["exercice"]);
-          var objectStore = transaction.objectStore("exercice", 'readonly');
-          
-          var id = parseInt(collEnfants[i].id);
-          var request = objectStore.get(id);
-
-          request.onerror = function(event) {
-            console.log("Not found for Id: " + id);
-          };
-          
-          request.onsuccess = function(evt) {
-             
-            var value = evt.target.result;
-            var name = document.getElementById('nameExUpd');
-            var desc = document.getElementById('descExUpd');
-            var nbRetry = document.getElementById('nbRetryUpd');
-            var breakTime = document.getElementById('breakTimeUpd');
-            var duration = document.getElementById('durationUpd');
-            var imagePath = document.getElementById('imagePathUpd');
-            var idUpd = document.getElementById('idUpd');
-            
-            name.value = request.result.name;
-            nbRetry.value = request.result.nbRetry;
-            breakTime.value = request.result.breakTime;
-            duration.value = request.result.duration;
-            desc.value = request.result.desc;
-
-            imagePath.src = request.result.imagePath;
-            idUpd.value = id;
-           };
-        } catch (ex) {
-          console.log(ex);
-        }
-      }
+  var collEnfants = e.target.parentNode.childNodes;
+  
+  var i = 0;
+  for (i = 0; i < collEnfants.length; i++)  {
+    if (collEnfants[i].tagName === 'A'){
+      var id = parseInt(collEnfants[i].id);
+      displayExercise(id);
+      break;
     }
-  };
+    if (collEnfants[i].tagName === 'P'){
+      var id = parseInt(collEnfants[i].parentNode.id);
+      displayExercise(id);
+      break;
+    }
+  }
+};
+
+/**
+ * Display the exercise selected.
+ * @param id id of the exercise.
+ */
+function displayExercise(id) {
+  try {
+    document.querySelector('#updExercise').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+    
+    document.querySelector('#listExercise').className = 'left';
+    
+    var transaction = db.transaction(["exercice"]);
+    var objectStore = transaction.objectStore("exercice", 'readonly');
+    
+    var request = objectStore.get(id);
+    
+    request.onerror = function(event) {
+      console.log("Not found for Id: " + id);
+    };
+    
+    request.onsuccess = function(evt) {
+
+      var value = evt.target.result;
+      var name = document.getElementById('nameExUpd');
+      var desc = document.getElementById('descExUpd');
+      var nbRetry = document.getElementById('nbRetryUpd');
+      var breakTime = document.getElementById('breakTimeUpd');
+      var duration = document.getElementById('durationUpd');
+      var imagePath = document.getElementById('imagePathUpd');
+      var idUpd = document.getElementById('idUpd');
+      
+      name.value = request.result.name;
+      nbRetry.value = request.result.nbRetry;
+      breakTime.value = request.result.breakTime;
+      duration.value = request.result.duration;
+      desc.value = request.result.desc;
+      
+      imagePath.src = request.result.imagePath;
+      idUpd.value = id;
+    };
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 
 /**
  * Select a session and display.
@@ -782,24 +810,25 @@ function addExercise(list, cursor) {
 }
 
 /**
- * Delete exercises.
+ * Delete the current exercise.
  */
-function deleteExercises() {
-  if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) { 
-    var list = document.getElementById('list-items-ex');
-    var chk = list.getElementsByTagName('input');
+function deleteExercise() {
+  if (window.confirm(navigator.mozL10n.get("confirmDeleteExercice"))) {
+    var idUpd = document.getElementById('idUpd');
+
+    var id = parseInt(idUpd.value);
     
     var transaction = db.transaction(["exercice"],"readwrite");
     var store = transaction.objectStore("exercice");
-    
-    for (var i = 0; i  < chk.length;i++) {
-      if (chk[i].checked === true) {
-        var request = store.delete(parseInt(chk[i].value)); 
-      }
-    }
+
+    var request = store.delete(id); 
+
     var idSession = document.getElementById('idSession');
-    
+
     dataChange(parseInt(idSession.value));
+    
+    document.querySelector('#updExercise').className = 'right';
+    document.querySelector('#listExercise').className = 'current';
   }
 }
 
