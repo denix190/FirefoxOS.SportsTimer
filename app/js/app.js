@@ -753,11 +753,7 @@ function addExercise(list, cursor) {
   
   var a = document.createElement("a");
   a.setAttribute("id", cursor.value.id);
-  // a.text = cursor.value.name +
-  //   " [" + cursor.value.duration +
-  //   " - " + cursor.value.breakTime + "]" +
-  //   "x" + cursor.value.nbRetry;
-    a.href = "#";
+  a.href = "#";
                                             
   var pName = document.createElement("p");
   pName.innerHTML = cursor.value.name;
@@ -770,32 +766,6 @@ function addExercise(list, cursor) {
   a.appendChild(pName);
   a.appendChild(pInfo);
  
-  
-  // var checkbox = document.createElement('input');
-  // checkbox.type = "checkbox";
-  // checkbox.name = "checkBoxEx";
-  // checkbox.value = cursor.value.id;
-  // checkbox.id = "checkBoxEx";
-  
-  //var spanl = document.createElement("span");
- // var spanr = document.createElement("span");
-  
-  // var label = document.createElement("label");
-  // label.className = "pack-checkbox";
-  // label.appendChild(checkbox);
-
-  // var spanlbl = document.createElement("span");
-  // label.appendChild(spanlbl);
-  
-  // spanr.className = "left";
-  // //spanl.className = "left";
-  
-  //spanl.appendChild(label);
-  //spanr.appendChild(a);
-  
-  //li.appendChild(spanl);
-  // li.appendChild(spanr);
-
   var aside = document.createElement("aside");
   aside.className = "pack-end";
   var img = document.createElement("img");
