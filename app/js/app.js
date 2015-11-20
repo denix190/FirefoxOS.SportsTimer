@@ -826,8 +826,9 @@ function deleteExercise() {
     var idSession = document.getElementById('idSession');
 
     dataChange(parseInt(idSession.value));
-    
-    document.querySelector('#updExercise').className = 'right';
+
+    document.querySelector('#addExercise').className = 'right';
+
     document.querySelector('#listExercise').className = 'current';
   }
 }
