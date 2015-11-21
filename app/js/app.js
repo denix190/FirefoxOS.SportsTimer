@@ -1038,18 +1038,20 @@ function endExercise() {
   flagStart = false;
 }
 
+/**
+ * Cancel the session.
+ */
 function cancelEx() {
-  chronos.stop();
-  
-  chronoDisplay.textContent = "00:00";
-  //breakTimeDisplay.textContent = "00:00";
-  nbRetryDisplay.textContent = "0/0";
-  //breakTimeDisplay.style.color = "white";
-  endExercise();
 
-  // Cancel the session.
-  session.cancelSes();
-
+  if (window.confirm(navigator.mozL10n.get("confirmCancelSession"))) { 
+    chronos.stop();
+    chronoDisplay.textContent = "00:00";
+    nbRetryDisplay.textContent = "0/0";
+    endExercise();
+    
+    // Cancel the session.
+    session.cancelSes();
+  }
 }
 
 /**
