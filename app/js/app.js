@@ -12,6 +12,9 @@ var typeCounterPause;
 
 var flagStart = false;
 
+// The session selected in the calendar of the program.
+var slctSession;
+
 var chronoDisplay = document.getElementById('chronoDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
@@ -271,32 +274,22 @@ document.querySelector('#btn-go-main-prog-back').addEventListener('click', funct
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
-/** Add a week for the program. */
-document.querySelector('#btn-add-week').addEventListener('click', function () {
-  var ol = document.createElement("ol");
-  for (var i = 0; i < 7; i++) {
-    var li = document.createElement("li");
-    li.innerHTML = "l " + i;
-    ol.appendChild(li);
-  }
-  
-  ol.addEventListener("click", function(e){
-    var t = e.target;
-    t.style.color = "red";
-    t.className = "daySelected";
-  });
-  
-  
-  ol.className = "day";
-  document.querySelector('#calendar').appendChild(ol);
-
+document.querySelector('#btn-go-program-back').addEventListener('click', function () {
+  document.querySelector('#listSessions').className = 'left';
+  document.querySelector('[data-position="current"]').className = 'current';
 });
+
+
+
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
 
-// List Session.
+// List Session 
 var listItemSes = document.getElementById('list-items-ses');
+
+// List Session for program
+var listSlctSes = document.getElementById('list-select-session');
 
 // List All images.
 var listImages = document.getElementById('list-images');
@@ -894,13 +887,13 @@ function display() {
     // Duration
     case STATE_EX_EFFORT:
    
-    var style =EFFORT_COLOR; 
+    var style = EFFORT_COLOR; 
     if (durationCounter === 0) {
       var effortDiv = document.getElementById('effortDiv');
       playSound('beepBeginSound');
     }
 
-    if ((curExercise.getDuration() - durationCounter) == 10) {
+    if ((curExercise.getDuration() - durationCounter) <= 10) {
       var effortDiv = document.getElementById('effortDiv');
       style = EFFORT_END_COLOR;
     }
@@ -1045,7 +1038,9 @@ function cancelEx() {
 
   if (window.confirm(navigator.mozL10n.get("confirmCancelSession"))) { 
     chronos.stop();
-    chronoDisplay.textContent = "00:00";
+    // chronoDisplay.textContent = "00:00";
+
+    displaySecond(chronoDisplay, 0, EFFORT_COLOR);
     nbRetryDisplay.textContent = "0/0";
     endExercise();
     
@@ -1402,3 +1397,114 @@ function addProgram(list, cursor) {
   li.appendChild(a);
   list.appendChild(li);
 }
+
+/** 
+ * Add a week for the program. 
+ * 
+ * */
+document.querySelector('#btn-add-week').addEventListener('click', function () {
+  var ol = document.createElement("ol");
+  for (var i = 0; i < 7; i++) {
+    var li = document.createElement("li");
+    li.innerHTML = "l " + i;
+    ol.appendChild(li);
+  }
+
+  // Select to add or display a Session.
+  ol.addEventListener("click", function(e) {
+    try {
+      var objectStore = db.transaction("sessions").objectStore("sessions");
+      var listSes = document.getElementById("list-select-session");
+
+      removeAllItems(listSes);
+
+      // Load the list of sessions.
+      objectStore.openCursor().onsuccess = function(event) {
+        try {
+          var cursor = event.target.result;
+          if (cursor) {
+            addSession(listSes, cursor);
+            cursor.continue();
+          }
+          else {
+            // End of list of sessions.
+            document.querySelector('#listSessions').className = 'current';
+            document.querySelector('[data-position="current"]').className = 'left';
+
+            slctSession = e.target;
+          }
+        } catch(e) {
+          window.alert(e);
+        }
+      };
+    } catch(e) {
+      window.alert(e);
+    }
+    /* var t = e.target;
+    t.style.color = "red";
+    t.className = "daySelected";
+     */
+  });
+
+  ol.className = "day";
+  document.querySelector('#calendar').appendChild(ol);
+
+});
+
+/**
+ * Select a session for a program
+ */
+listSlctSes.onclick = function(e) {
+  
+  var collEnfants = e.target.parentNode.childNodes;
+  var i = 0;
+  for (i = 0; i < collEnfants.length; i++)  {
+    
+    if (collEnfants[i].tagName === 'P') {
+      try {
+        document.querySelector('#updProgram').className = 'current';
+        document.querySelector('#listSessions').className = 'left';
+
+        slctSession.style.color = "red";
+        slctSession.className = "daySelected";
+          //        document.querySelector('[data-position="current"]').className = 'left';
+        
+        // var id = parseInt(e.target.parentNode.id);
+        
+        // var idSession = document.getElementById('idSession');
+        // idSession.value = id;
+        
+        // session.setIdSession(id);
+        
+        // var title = document.getElementById('idTitleSession');
+        // title.innerHTML = collEnfants[i].innerHTML;
+        // listSessionEx(id);
+
+        // var transaction = db.transaction(["sessions"]);
+        // var objectStore = transaction.objectStore("sessions", 'readonly');
+        // var request = objectStore.get(id);
+
+        // request.onerror = function(event) {
+        //   console.log("Not found for Id: " + id);
+        // };
+        
+        // request.onsuccess = function(evt) {
+      
+        //   try {
+        //     if (request.result.hasOwnProperty("chainExercises")) {
+        //       session.setChainExercises( request.result.chainExercises);
+        //     } else {
+        //       session.setChainExercises(false);
+        //     }
+        //     session.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
+        //   } catch (e) {
+        //     console.log(e);
+        //   }
+        // };
+        break;
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+  }
+};
