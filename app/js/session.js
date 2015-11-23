@@ -65,7 +65,7 @@ Session.prototype.getNextExercise = function (numExercise) {
 
 Session.prototype.initListExercises = function () {
   this.numExercise = 0;
-  this.listExercises = new Array();
+  this.listExercises = [];
 };
 
 Session.prototype.hasNextExercise = function () {
