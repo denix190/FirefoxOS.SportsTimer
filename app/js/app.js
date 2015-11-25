@@ -24,6 +24,8 @@ var chronos = new Chronos();
 // Parameters
 var parameters = new Parameters();
 
+// Program
+var Program = new Program();
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -1406,7 +1408,8 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
   var ol = document.createElement("ol");
   for (var i = 0; i < 7; i++) {
     var li = document.createElement("li");
-    li.innerHTML = "l " + i;
+    li.innerHTML = "X";
+    li.id = i;
     ol.appendChild(li);
   }
 
@@ -1467,40 +1470,7 @@ listSlctSes.onclick = function(e) {
 
         slctSession.style.color = "red";
         slctSession.className = "daySelected";
-          //        document.querySelector('[data-position="current"]').className = 'left';
-        
-        // var id = parseInt(e.target.parentNode.id);
-        
-        // var idSession = document.getElementById('idSession');
-        // idSession.value = id;
-        
-        // session.setIdSession(id);
-        
-        // var title = document.getElementById('idTitleSession');
-        // title.innerHTML = collEnfants[i].innerHTML;
-        // listSessionEx(id);
 
-        // var transaction = db.transaction(["sessions"]);
-        // var objectStore = transaction.objectStore("sessions", 'readonly');
-        // var request = objectStore.get(id);
-
-        // request.onerror = function(event) {
-        //   console.log("Not found for Id: " + id);
-        // };
-        
-        // request.onsuccess = function(evt) {
-      
-        //   try {
-        //     if (request.result.hasOwnProperty("chainExercises")) {
-        //       session.setChainExercises( request.result.chainExercises);
-        //     } else {
-        //       session.setChainExercises(false);
-        //     }
-        //     session.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
-        //   } catch (e) {
-        //     console.log(e);
-        //   }
-        // };
         break;
       } catch (ex) {
         console.log(ex);

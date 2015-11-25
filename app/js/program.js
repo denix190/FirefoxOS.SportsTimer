@@ -2,6 +2,14 @@
  * Class Program.
 */
 
+function Week() {
+  this.week = [];
+  for (var i = 0; i < 7;i++) {
+    this.week[i] = new Session();
+  }
+  
+}
+
 function Program() {
   this.name;
   this.idProgram;
@@ -36,3 +44,7 @@ Program.prototype.setIdProgram = function(idProgram) {
 Program.prototype.getIdProgram = function() {
   return this.idProgram;
 };
+
+Program.prototype.addWeek = function () {
+  this.session.push(new Week());
+}; 
