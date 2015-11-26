@@ -47,4 +47,6 @@ Program.prototype.getIdProgram = function() {
 
 Program.prototype.addWeek = function () {
   this.session.push(new Week());
-}; 
+};
+
+

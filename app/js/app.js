@@ -1403,7 +1403,8 @@ function addProgram(list, cursor) {
 /** 
  * Add a week for the program. 
  * 
- * */
+ *
+ */
 document.querySelector('#btn-add-week').addEventListener('click', function () {
   var ol = document.createElement("ol");
   for (var i = 0; i < 7; i++) {
@@ -1443,10 +1444,6 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
     } catch(e) {
       window.alert(e);
     }
-    /* var t = e.target;
-    t.style.color = "red";
-    t.className = "daySelected";
-     */
   });
 
   ol.className = "day";
@@ -1460,6 +1457,7 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 listSlctSes.onclick = function(e) {
   
   var collEnfants = e.target.parentNode.childNodes;
+  //var collEnfants = e.currentTarget.childNodes;
   var i = 0;
   for (i = 0; i < collEnfants.length; i++)  {
     
@@ -1468,9 +1466,11 @@ listSlctSes.onclick = function(e) {
         document.querySelector('#updProgram').className = 'current';
         document.querySelector('#listSessions').className = 'left';
 
+        var id = parseInt(e.target.parentNode.id);
+
         slctSession.style.color = "red";
         slctSession.className = "daySelected";
-
+        slctSession.innerHTML = id;
         break;
       } catch (ex) {
         console.log(ex);
