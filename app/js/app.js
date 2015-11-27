@@ -25,7 +25,7 @@ var chronos = new Chronos();
 var parameters = new Parameters();
 
 // Program
-var Program = new Program();
+var program = new Program();
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -1407,13 +1407,18 @@ function addProgram(list, cursor) {
  */
 document.querySelector('#btn-add-week').addEventListener('click', function () {
   var ol = document.createElement("ol");
-  for (var i = 0; i < 7; i++) {
-    var li = document.createElement("li");
-    li.innerHTML = "X";
-    li.id = i;
-    ol.appendChild(li);
-  }
+  try {
+    program.addWeek();
 
+    for (var i = 0; i < 7; i++) {
+      var li = document.createElement("li");
+      li.innerHTML = "&nbsp;";
+      li.id = "" + i + "/" + program.getWeek().length;
+      ol.appendChild(li);
+    }
+  } catch(e) {
+    window.alert(e);
+  }
   // Select to add or display a Session.
   ol.addEventListener("click", function(e) {
     try {
@@ -1471,6 +1476,7 @@ listSlctSes.onclick = function(e) {
         slctSession.style.color = "red";
         slctSession.className = "daySelected";
         slctSession.innerHTML = id;
+        slctSession.id = id;
         break;
       } catch (ex) {
         console.log(ex);
