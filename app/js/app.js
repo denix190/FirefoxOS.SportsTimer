@@ -26,6 +26,7 @@ var parameters = new Parameters();
 
 // Program
 var program = new Program();
+var isProgramDisplay = false;
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -89,15 +90,19 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
 document.querySelector('#btn-go-upd-session-back').addEventListener('click', function () {
   var idSession = document.getElementById('idSession');
 
-  var id = parseInt(idSession.value);
-  if (id == -1) {
-    document.querySelector('#updSession').className = 'right';
-    document.querySelector('[data-position="current"]').className = 'current';
+  if (isProgramDisplay) {
+      document.querySelector('#updSession').className = 'right';
+      document.querySelector('#updProgram').className = 'current';
   } else {
-    document.querySelector('#updSession').className = 'right';
-    document.querySelector('#currentSession').className = 'current';
+    var id = parseInt(idSession.value);
+    if (id == -1) {
+      document.querySelector('#updSession').className = 'right';
+      document.querySelector('[data-position="current"]').className = 'current';
+    } else {
+      document.querySelector('#updSession').className = 'right';
+      document.querySelector('#currentSession').className = 'current';
+    }
   }
-
 });
 
 // Display the panel Parameters.
@@ -150,7 +155,6 @@ document.querySelector('#btn-go-about-ex-back').addEventListener('click', functi
 // Hide panel List sessions.
 document.querySelector('#btn-go-current-session-back').addEventListener('click', function () {
   document.querySelector('#currentSession').className = 'right';
-  //document.querySelector('[data-position="current"]').className = 'current';
   document.querySelector('#sessions').className = 'current';
 });
 
@@ -174,10 +178,9 @@ document.querySelector('#btn-go-add-program').addEventListener('click', function
     idProgram.value = "-1";
 
     document.getElementById('btn-del-prog').disabled = true;
-
     document.getElementById('nameProgram').value = "";
-    // document.getElementById('descProgram').value = "";
-    
+    document.getElementById('descProgram').value = "";
+
     document.querySelector('#updProgram').className = 'current';
     document.querySelector('[data-position="current"]').className = 'left';
    
@@ -255,13 +258,19 @@ document.querySelector('#btn-go-choose-image-back').addEventListener('click', fu
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
-// Update experimental
+// Choose sessions
 document.querySelector('#btn-choose-sessions').addEventListener('click', function () {
+  isProgramDisplay = false;
   document.querySelector('#sessions').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
+// Choose program
 document.querySelector('#btn-choose-programs').addEventListener('click', function () {
+  isProgramDisplay = true;
+
+  displayListPrograms();
+  
   document.querySelector('#pnl-programs').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
 });
@@ -281,7 +290,8 @@ document.querySelector('#btn-go-program-back').addEventListener('click', functio
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
-
+// Update an exercise.
+document.querySelector('#btn-upd-program').addEventListener('click', updateProgram);
 
 
 // List Exercises.
@@ -292,6 +302,9 @@ var listItemSes = document.getElementById('list-items-ses');
 
 // List Session for program
 var listSlctSes = document.getElementById('list-select-session');
+
+// List Program
+var listItemProgram = document.getElementById('list-items-progs');
 
 // List All images.
 var listImages = document.getElementById('list-images');
@@ -1429,21 +1442,24 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 
       // Load the list of sessions.
       objectStore.openCursor().onsuccess = function(event) {
-        try {
-          var cursor = event.target.result;
-          if (cursor) {
-            addSession(listSes, cursor);
-            cursor.continue();
+        if (e.target.value != "") {
+          displayProgramSession(e.target.value)
+        } else {
+          try {
+            var cursor = event.target.result;
+            if (cursor) {
+              addSession(listSes, cursor);
+              cursor.continue();
+            }
+            else {
+              // End of list of sessions.
+              document.querySelector('#listSessions').className = 'current';
+              document.querySelector('[data-position="current"]').className = 'left';
+              slctSession = e.target;
+            }
+          } catch(e) {
+            window.alert(e);
           }
-          else {
-            // End of list of sessions.
-            document.querySelector('#listSessions').className = 'current';
-            document.querySelector('[data-position="current"]').className = 'left';
-
-            slctSession = e.target;
-          }
-        } catch(e) {
-          window.alert(e);
         }
       };
     } catch(e) {
@@ -1457,12 +1473,67 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 });
 
 /**
+ * Display the session.
+ */
+function displayProgramSession(value) {
+
+  try {
+    document.querySelector('#updSession').className = 'current';
+    document.querySelector('#updProgram').className = 'right';
+    
+    var id = parseInt(value);
+    
+    var idSession = document.getElementById('idSession');
+    idSession.value = id;
+    
+    session.setIdSession(id);
+    
+    var title = document.getElementById('idTitleSession');
+
+    listSessionEx(id);
+    
+    var transaction = db.transaction(["sessions"]);
+    var objectStore = transaction.objectStore("sessions", 'readonly');
+    var request = objectStore.get(id);
+    
+    request.onerror = function(event) {
+      console.log("Not found for Id: " + id);
+    };
+    
+    request.onsuccess = function(evt) {
+      var value = evt.target.result;
+      var name = document.getElementById('nameSession');
+      var desc = document.getElementById('descSession');
+      var check = document.getElementById('chk-chainExercises');
+      var delayBetweenExercises = document.getElementById('idDelayBetweenExercises');
+      try {
+        var idSession = request.result.idSession;
+      } catch (e) {
+        console.log(e);
+      }
+      name.value = request.result.name;
+      desc.value = request.result.desc;
+      delayBetweenExercises.value = request.result.delayBetweenExercises;
+      if (request.result.hasOwnProperty("chainExercises")) {
+        check.checked = request.result.chainExercises;
+      } else {
+        check.checked = false;
+      }
+      
+      idSession.value = id;
+    };
+  } catch (ex) {
+    console.log(ex);
+  } 
+}
+
+/**
  * Select a session for a program
  */
 listSlctSes.onclick = function(e) {
   
   var collEnfants = e.target.parentNode.childNodes;
-  //var collEnfants = e.currentTarget.childNodes;
+
   var i = 0;
   for (i = 0; i < collEnfants.length; i++)  {
     
@@ -1475,9 +1546,95 @@ listSlctSes.onclick = function(e) {
 
         slctSession.style.color = "red";
         slctSession.className = "daySelected";
-        slctSession.innerHTML = id;
-        slctSession.id = id;
+        slctSession.innerHTML = "&#10003";
+        
+        // Session selected
+        slctSession.value = id;
+
         break;
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+  }
+};
+
+/**
+ * Update a Program and return to the list of programs.
+ */
+function updateProgram() {
+  var nameProgram = document.getElementById("nameProgram").value;
+  var descProgram = document.getElementById("descProgram").value;
+
+  var transaction = db.transaction(["programs"],"readwrite");
+  var store = transaction.objectStore("programs");
+        
+  //Define a new programRecord
+    var programRecord = {
+      name: nameProgram,
+      desc: descProgram,
+      created:new Date()
+    };
+
+    /* */
+  var request = store.add(programRecord);
+  request.onerror = function(e) {
+    console.log("Error program", e.target.error.name);
+  };
+  
+  request.onsuccess = function(event) {
+
+    document.querySelector('#pnl-programs').className = 'current';
+    document.querySelector('#updProgram').className = 'right';
+
+    displayListPrograms();
+  };
+  
+}
+
+/**
+ * Display the program selected.
+ */
+listItemProgram.onclick = function(e) {
+
+
+  
+  var collEnfants = e.target.parentNode.childNodes;
+  var i = 0;
+  for (i = 0; i < collEnfants.length; i++)  {
+    
+    if (collEnfants[i].tagName === 'P') {
+      try {
+        document.querySelector('#updProgram').className = 'current';
+        document.querySelector('[data-position="current"]').className = 'left';
+        document.getElementById('btn-del-prog').disabled = false;
+        var id = parseInt(e.target.parentNode.id);
+        
+        var transaction = db.transaction(["programs"]);
+        var objectStore = transaction.objectStore("programs", 'readonly');
+    
+        var request = objectStore.get(parseInt(id));
+        
+        request.onerror = function(event) {
+          console.log("Not found for Id: " + id);
+        };
+
+        request.onsuccess = function(evt) {
+          var value = evt.target.result;
+          var name = document.getElementById('nameProgram');
+          var desc = document.getElementById('descProgram');
+
+          try {
+            var idProgram = request.result.idProgram;
+          } catch (e) {
+            console.log(e);
+          }
+          name.value = request.result.name;
+          desc.value = request.result.desc;
+
+        };
+        // idSession.value = id;
+        // break;
       } catch (ex) {
         console.log(ex);
       }

@@ -381,4 +381,5 @@ ol.day li {
 
 li.daySelected  {
     background-color: #cad4ca !important;
+    font-size: large !important;
 }

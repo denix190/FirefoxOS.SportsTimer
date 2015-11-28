@@ -5,7 +5,7 @@
 function Week() {
   this.week = [];
   for (var i = 0; i < 7;i++) {
-    this.week[i] = new Session();
+    this.week[i] = 0;
   }
   
 }
