@@ -1442,8 +1442,8 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 
       // Load the list of sessions.
       objectStore.openCursor().onsuccess = function(event) {
-        if (e.target.value != "") {
-          displayProgramSession(e.target.value)
+        if (e.target.value != '') {
+          displayProgramSession(e.target.value);
         } else {
           try {
             var cursor = event.target.result;
@@ -1573,6 +1573,7 @@ function updateProgram() {
     var programRecord = {
       name: nameProgram,
       desc: descProgram,
+      week: program.sessions,
       created:new Date()
     };
 
@@ -1593,51 +1594,56 @@ function updateProgram() {
 }
 
 /**
- * Display the program selected.
+ * 
  */
 listItemProgram.onclick = function(e) {
 
-
-  
   var collEnfants = e.target.parentNode.childNodes;
   var i = 0;
   for (i = 0; i < collEnfants.length; i++)  {
     
     if (collEnfants[i].tagName === 'P') {
-      try {
-        document.querySelector('#updProgram').className = 'current';
-        document.querySelector('[data-position="current"]').className = 'left';
-        document.getElementById('btn-del-prog').disabled = false;
-        var id = parseInt(e.target.parentNode.id);
-        
-        var transaction = db.transaction(["programs"]);
-        var objectStore = transaction.objectStore("programs", 'readonly');
-    
-        var request = objectStore.get(parseInt(id));
-        
-        request.onerror = function(event) {
-          console.log("Not found for Id: " + id);
-        };
-
-        request.onsuccess = function(evt) {
-          var value = evt.target.result;
-          var name = document.getElementById('nameProgram');
-          var desc = document.getElementById('descProgram');
-
-          try {
-            var idProgram = request.result.idProgram;
-          } catch (e) {
-            console.log(e);
-          }
-          name.value = request.result.name;
-          desc.value = request.result.desc;
-
-        };
-        // idSession.value = id;
-        // break;
-      } catch (ex) {
-        console.log(ex);
-      }
+      var id = parseInt(e.target.parentNode.id);
+      displayProgram(id);
     }
   }
 };
+
+/**
+ * Display the program selected.
+ */
+function displayProgram(id) {
+  try {
+    document.querySelector('#updProgram').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+    document.getElementById('btn-del-prog').disabled = false;
+     
+    var transaction = db.transaction(["programs"]);
+    var objectStore = transaction.objectStore("programs", 'readonly');
+    
+    var request = objectStore.get(parseInt(id));
+    
+    request.onerror = function(event) {
+      console.log("Not found for Id: " + id);
+    };
+    
+    request.onsuccess = function(evt) {
+      var value = evt.target.result;
+      var name = document.getElementById('nameProgram');
+      var desc = document.getElementById('descProgram');
+      
+      try {
+        var idProgram = request.result.idProgram;
+      } catch (e) {
+        console.log(e);
+      }
+      name.value = request.result.name;
+      desc.value = request.result.desc;
+      
+    };
+    // idSession.value = id;
+    // break;
+  } catch (ex) {
+    console.log(ex);
+  }
+}
