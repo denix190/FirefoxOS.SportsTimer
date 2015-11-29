@@ -3,11 +3,7 @@
 */
 
 function Week() {
-  this.week = [];
-  for (var i = 0; i < 7;i++) {
-    this.week[i] = 0;
-  }
-  
+  this.week = [0,0,0,0,0,0,0];
 }
 
 function Program() {
@@ -49,6 +45,20 @@ Program.prototype.addWeek = function () {
   this.sessions.push(new Week());
 };
 
-Program.prototype.getWeek = function () {
+Program.prototype.getCalendar = function () {
   return this.sessions;
+};
+
+/**
+ * Affect the session for a day.
+ *
+ * @param week the week.
+ * @param day the day in the week.
+ * @param session id of the session.
+ */
+Program.prototype.setSession = function (week, day, session) {
+
+  var w = this.sessions[week];
+  w.week[day] = session;
+  console.log(this.sessions);
 };

@@ -515,46 +515,55 @@ function displaySession() {
   try {
     document.querySelector('#currentSession').className = 'left';
     document.querySelector('#updSession').className = 'current'; 
-    
-    var transaction = db.transaction(["sessions"]);
-    var objectStore = transaction.objectStore("sessions", 'readonly');
-    
+
     var idSession = document.getElementById('idSession');
     var id = idSession.value;
-    var request = objectStore.get(parseInt(id));
-
-    request.onerror = function(event) {
-      console.log("Not found for Id: " + id);
-    };
-
-    request.onsuccess = function(evt) {
-                        
-      var value = evt.target.result;
-      var name = document.getElementById('nameSession');
-      var desc = document.getElementById('descSession');
-      var check = document.getElementById('chk-chainExercises');
-      var delayBetweenExercises = document.getElementById('idDelayBetweenExercises');
-      try {
-        var idSession = request.result.idSession;
-      } catch (e) {
-        console.log(e);
-      }
-      name.value = request.result.name;
-      desc.value = request.result.desc;
-      delayBetweenExercises.value = request.result.delayBetweenExercises;
-      if (request.result.hasOwnProperty("chainExercises")) {
-        check.checked = request.result.chainExercises;
-      } else {
-        check.checked = false;
-      }
-      
-      idSession.value = id;
-    };
+    loadSession(id);
+    
   } catch (ex) {
     console.log(ex);
   }
 }
 
+/**
+ * Load the data the session in the panel.
+ */
+function loadSession( id )  {
+  var transaction = db.transaction(["sessions"]);
+  var objectStore = transaction.objectStore("sessions", 'readonly');
+  
+  var request = objectStore.get(parseInt(id));
+  
+  request.onerror = function(event) {
+    console.log("Not found for Id: " + id);
+  };
+  
+  request.onsuccess = function(evt) {
+
+    var value = evt.target.result;
+    var name = document.getElementById('nameSession');
+    var desc = document.getElementById('descSession');
+    var check = document.getElementById('chk-chainExercises');
+    var delayBetweenExercises = document.getElementById('idDelayBetweenExercises');
+    try {
+      var idSession = request.result.idSession;
+    } catch (e) {
+      console.log(e);
+    }
+    name.value = request.result.name;
+    desc.value = request.result.desc;
+    delayBetweenExercises.value = request.result.delayBetweenExercises;
+    if (request.result.hasOwnProperty("chainExercises")) {
+      check.checked = request.result.chainExercises;
+    } else {
+      check.checked = false;
+    }
+    
+   // idSession.value = id;
+  };
+} 
+    
+    
 /**
  * Add a new Exercise.
  */
@@ -1154,8 +1163,13 @@ function updateSession(flagExercise) {
           document.getElementById('idSession').value = event.target.result;
           document.getElementById('btn-add-sesEx').disabled = false;
 
-          document.querySelector('#updSession').className = 'right';
-          document.querySelector('[data-position="current"]').className = 'current';
+          if (isProgramDisplay) {
+            document.querySelector('#updSession').className = 'right';
+            document.querySelector('#updProgram').className = 'current';
+          } else {
+            document.querySelector('#updSession').className = 'right';
+            document.querySelector('[data-position="current"]').className = 'current';
+          }
         }
         displayListSessions();
       };
@@ -1179,8 +1193,14 @@ function updateSession(flagExercise) {
         dataChange(id);
         var title = document.getElementById('idTitleSession');
         title.innerHTML = nameSes;
-        document.querySelector('#updSession').className = 'right';
-        document.querySelector('#currentSession').className = 'current';
+
+        if (isProgramDisplay) {
+          document.querySelector('#updSession').className = 'right';
+          document.querySelector('#updProgram').className = 'current';
+        } else {
+          document.querySelector('#updSession').className = 'right';
+          document.querySelector('#currentSession').className = 'current';
+        }
       };
     }    
   } catch(e) {
@@ -1426,7 +1446,7 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
     for (var i = 0; i < 7; i++) {
       var li = document.createElement("li");
       li.innerHTML = "&nbsp;";
-      li.id = "" + i + "/" + program.getWeek().length;
+      li.id = "" + i + "/" + (program.getCalendar().length - 1);
       ol.appendChild(li);
     }
   } catch(e) {
@@ -1473,7 +1493,7 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 });
 
 /**
- * Display the session.
+ * Display the session selected in the calendar.
  */
 function displayProgramSession(value) {
 
@@ -1487,41 +1507,10 @@ function displayProgramSession(value) {
     idSession.value = id;
     
     session.setIdSession(id);
-    
-    var title = document.getElementById('idTitleSession');
-
+ 
     listSessionEx(id);
-    
-    var transaction = db.transaction(["sessions"]);
-    var objectStore = transaction.objectStore("sessions", 'readonly');
-    var request = objectStore.get(id);
-    
-    request.onerror = function(event) {
-      console.log("Not found for Id: " + id);
-    };
-    
-    request.onsuccess = function(evt) {
-      var value = evt.target.result;
-      var name = document.getElementById('nameSession');
-      var desc = document.getElementById('descSession');
-      var check = document.getElementById('chk-chainExercises');
-      var delayBetweenExercises = document.getElementById('idDelayBetweenExercises');
-      try {
-        var idSession = request.result.idSession;
-      } catch (e) {
-        console.log(e);
-      }
-      name.value = request.result.name;
-      desc.value = request.result.desc;
-      delayBetweenExercises.value = request.result.delayBetweenExercises;
-      if (request.result.hasOwnProperty("chainExercises")) {
-        check.checked = request.result.chainExercises;
-      } else {
-        check.checked = false;
-      }
-      
-      idSession.value = id;
-    };
+    loadSession(id);
+
   } catch (ex) {
     console.log(ex);
   } 
@@ -1544,11 +1533,18 @@ listSlctSes.onclick = function(e) {
 
         var id = parseInt(e.target.parentNode.id);
 
+        // The session select on the calendar.
         slctSession.style.color = "red";
         slctSession.className = "daySelected";
         slctSession.innerHTML = "&#10003";
         
-        // Session selected
+        // Session selected id :  column / row 
+        // 
+        var values = slctSession.id.split("/");
+        var week = parseInt(values[1]);
+        var day = parseInt(values[0]);
+        program.setSession(week, day, id);
+
         slctSession.value = id;
 
         break;
@@ -1560,7 +1556,7 @@ listSlctSes.onclick = function(e) {
 };
 
 /**
- * Update a Program and return to the list of programs.
+ * Update or Add a program and return to the list of programs.
  */
 function updateProgram() {
   var nameProgram = document.getElementById("nameProgram").value;
@@ -1573,7 +1569,7 @@ function updateProgram() {
     var programRecord = {
       name: nameProgram,
       desc: descProgram,
-      week: program.sessions,
+      week: program.getCalendar(),
       created:new Date()
     };
 
@@ -1584,7 +1580,6 @@ function updateProgram() {
   };
   
   request.onsuccess = function(event) {
-
     document.querySelector('#pnl-programs').className = 'current';
     document.querySelector('#updProgram').className = 'right';
 
@@ -1594,7 +1589,7 @@ function updateProgram() {
 }
 
 /**
- * 
+ * Display the program selected in the list of programs.
  */
 listItemProgram.onclick = function(e) {
 
@@ -1610,7 +1605,8 @@ listItemProgram.onclick = function(e) {
 };
 
 /**
- * Display the program selected.
+ * Display a program.
+ * @param id Id of the program.
  */
 function displayProgram(id) {
   try {
@@ -1639,10 +1635,9 @@ function displayProgram(id) {
       }
       name.value = request.result.name;
       desc.value = request.result.desc;
-      
+      var calendar = request.result.week;
+      console.log(calendar);
     };
-    // idSession.value = id;
-    // break;
   } catch (ex) {
     console.log(ex);
   }
