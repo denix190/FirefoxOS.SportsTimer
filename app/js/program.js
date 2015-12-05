@@ -49,6 +49,18 @@ Program.prototype.getCalendar = function () {
   return this.sessions;
 };
 
+Program.prototype.setCalendar = function (calendar) {
+  this.sessions = calendar;
+};
+
+Program.prototype.getSession = function(week, day) {
+  if (week >= this.sessions.length || day > 7) {
+    return -1;
+  } 
+  var w = this.sessions[week];
+  return w.week[day];
+}
+
 /**
  * Affect the session for a day.
  *
@@ -57,8 +69,6 @@ Program.prototype.getCalendar = function () {
  * @param session id of the session.
  */
 Program.prototype.setSession = function (week, day, session) {
-
   var w = this.sessions[week];
   w.week[day] = session;
-  console.log(this.sessions);
 };
