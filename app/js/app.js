@@ -24,8 +24,8 @@ var chronos = new Chronos();
 // Parameters
 var parameters = new Parameters();
 
-// Program
-var program = new Program();
+// The current program to display.
+var currentProg = new Program();
 var isProgramDisplay = false;
 
 // Display the panel adding a Exercise.
@@ -76,7 +76,10 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
     id.value = "-1";
 
     document.getElementById('btn-del-ses').disabled = true;
-
+    document.getElementById('btn-del-ses').disabled = true;
+    
+    document.getElementById('btn-remove-progses').disabled = true;
+    
     document.getElementById('nameSession').value = "";
     document.getElementById('descSession').value = "";
     
@@ -180,6 +183,9 @@ document.querySelector('#btn-go-add-program').addEventListener('click', function
     var listWeeks= document.getElementById("weeks");
     removeAllItems(listWeeks);
 
+    currentProg.setIdProgram(id);
+    currentProg.resetCalendar();
+    
     document.getElementById('btn-del-prog').disabled = true;
     document.getElementById('nameProgram').value = "";
     document.getElementById('descProgram').value = "";
@@ -297,6 +303,10 @@ document.querySelector('#btn-go-program-back').addEventListener('click', functio
 document.querySelector('#btn-upd-program').addEventListener('click', updateProgram);
 
 document.querySelector('#btn-del-prog').addEventListener('click', deleteProgram);
+
+
+document.querySelector('#btn-remove-progses').addEventListener('click', removeProgSession);
+
 
 // List Exercises.
 var listItemEx = document.getElementById('list-items-ex');
@@ -518,7 +528,10 @@ listImages.onclick = function(e) {
 function displaySession() {
   try {
     document.querySelector('#currentSession').className = 'left';
-    document.querySelector('#updSession').className = 'current'; 
+    document.querySelector('#updSession').className = 'current';
+    
+    document.getElementById('btn-remove-progses').disabled = true;
+    document.getElementById('btn-del-ses').disabled = false;
 
     var idSession = document.getElementById('idSession');
     var id = idSession.value;
@@ -617,7 +630,7 @@ function storeEx() {
     var request = store.add(exerciceRecord);
     
     request.onerror = function(e) {
-        console.log("Error exercice", e.target.error.name);
+      console.log("Error exercice", e.target.error.name);
     };
     
     request.onsuccess = function(event) {
@@ -867,7 +880,6 @@ function startEx() {
     breakTimeCounter = 0;
     nbRetryCounter = 1;
     durationBetweenExercise = 0;
-    //breakTimeDisplay.style.color = 'white';
     nbRetryDisplay.textContent = nbRetryCounter + "/" + curExercise.getNbRetry();
     typeCounter = STATE_EX_EFFORT;
 
@@ -1391,8 +1403,9 @@ function removeAllItems(list) {
     }
 }
 
-// Programs 
-
+/*====================================================
+* Programs 
+* ==================================================== */
 /**
  * Display the list of Programs.
 */
@@ -1445,12 +1458,12 @@ function addProgram(list, cursor) {
 document.querySelector('#btn-add-week').addEventListener('click', function () {
   var ol = document.createElement("ol");
   try {
-    program.addWeek();
+    currentProg.addWeek();
 
     for (var i = 0; i < 7; i++) {
       var li = document.createElement("li");
       li.innerHTML = "&nbsp;";
-      li.id = "" + i + "/" + (program.getCalendar().length - 1);
+      li.id = "" + i + "/" + (currentProg.getCalendar().length - 1);
       ol.appendChild(li);
     }
   } catch(e) {
@@ -1477,6 +1490,11 @@ function clickOnProgramSession(e) {
     // Load the list of sessions.
     objectStore.openCursor().onsuccess = function(event) {
       if (e.target.value != '') {
+        console.log(e.target.id);
+        var values = e.target.id.split("/");
+        var week = parseInt(values[1]);
+        var day = parseInt(values[0]);
+        currentProg.sessionSelected(week, day);
         displayProgramSession(e.target.value);
       } else {
         try {
@@ -1509,7 +1527,10 @@ function displayProgramSession(value) {
   try {
     document.querySelector('#updSession').className = 'current';
     document.querySelector('#updProgram').className = 'right';
-    
+
+    document.getElementById('btn-remove-progses').disabled = false;
+    document.getElementById('btn-del-ses').disabled = true;
+
     var id = parseInt(value);
     
     var idSession = document.getElementById('idSession');
@@ -1552,7 +1573,8 @@ listSlctSes.onclick = function(e) {
         var values = slctSession.id.split("/");
         var week = parseInt(values[1]);
         var day = parseInt(values[0]);
-        program.setSession(week, day, id);
+        console.log("week" + week + " day " + day + " id " + id);
+        currentProg.setSession(week, day, id);
 
         slctSession.value = id;
 
@@ -1575,13 +1597,16 @@ function updateProgram() {
   
   var transaction = db.transaction(["programs"],"readwrite");
   var store = transaction.objectStore("programs");
-
+  console.log("Udpate program id: " + id + " name " + nameProgram +
+              " desc " + descProgram);
+  console.log(currentProg.getCalendar());
+  
   if (id == -1) {
     //Define a new programRecord
     var programRecord = {
       name: nameProgram,
       desc: descProgram,
-      week: program.getCalendar(),
+      week: currentProg.getCalendar(),
       created:new Date()
     };
     
@@ -1601,7 +1626,7 @@ function updateProgram() {
     var programRecord = {
       name: nameProgram,
       desc: descProgram,
-      week: program.getCalendar(),
+      week: currentProg.getCalendar(),
       created:new Date(),
       idProgram: id
     };
@@ -1679,7 +1704,7 @@ function loadProgram(id, callback) {
 }
 
 /**
- * Display a program.
+ * Display a the current Program.
  * @param prog The program to display.
  */
 function displayProgram(prog) {
@@ -1692,6 +1717,12 @@ function displayProgram(prog) {
     desc.value = prog.getDescription();
 
     var calendar = prog.getCalendar();
+
+    /** Load the current Program */
+    currentProg.setCalendar(calendar);
+    currentProg.setIdProgram(prog.getIdProgram());
+    currentProg.setName(prog.getName());
+    currentProg.setDescription(prog.getDescription());
     
     var listWeeks= document.getElementById("weeks");
     removeAllItems(listWeeks);
@@ -1737,10 +1768,7 @@ function deleteProgram() {
 
     var id = parseInt(idUpd.value);
     
-    var transaction = db.transaction(["programs"],"readwrite");
-    var store = transaction.objectStore("programs");
-
-    var request = store.delete(id); 
+    dbDeleteProgram(id) ;
 
     document.querySelector('#pnl-programs').className = 'current';
     document.querySelector('#updProgram').className = 'right';
@@ -1749,3 +1777,17 @@ function deleteProgram() {
   }
 }
 
+/**
+ * Remove the session for the program
+ */
+function removeProgSession() {
+  if (window.confirm(navigator.mozL10n.get("confirmDeleteProgram"))) {
+    currentProg.removeSession();
+
+    // Reload the current program.
+    displayProgram(currentProg);
+    
+    document.querySelector('#updSession').className = 'right';
+    document.querySelector('#updProgram').className = 'current';
+  }
+}

@@ -11,6 +11,9 @@ function Program() {
   this.idProgram;
   this.description;
 
+  this.week = 0;
+  this.day = 0;
+
   /**
    * List of sessions for the program.
    */
@@ -53,6 +56,10 @@ Program.prototype.setCalendar = function (calendar) {
   this.sessions = calendar;
 };
 
+Program.prototype.resetCalendar = function () {
+  this.sessions = [];
+};
+
 Program.prototype.getSession = function(week, day) {
   if (week >= this.sessions.length || day > 7) {
     return -1;
@@ -71,4 +78,14 @@ Program.prototype.getSession = function(week, day) {
 Program.prototype.setSession = function (week, day, session) {
   var w = this.sessions[week];
   w.week[day] = session;
+};
+
+Program.prototype.removeSession = function () {
+  var w = this.sessions[this.week];
+  w.week[this.day] = 0;
+};
+
+Program.prototype.sessionSelected = function (w, d) {
+  this.week = w;
+  this.day = d;
 };
