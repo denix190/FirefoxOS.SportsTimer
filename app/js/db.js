@@ -308,3 +308,15 @@ function dbDeleteSessionByName(sessionName) {
   };
 
 }
+
+function dbDeleteProgram(id) {
+  try {
+    var transaction = db.transaction(["programs"],"readwrite");
+    var store = transaction.objectStore("programs");
+  
+    var request = store.delete(id);
+  } catch(e) {
+    consol.log(e);
+  }
+  
+}
