@@ -320,3 +320,46 @@ function dbDeleteProgram(id) {
   }
   
 }
+
+function dbUpdateProgram(program, callbackRet) {
+
+ var transaction = db.transaction(["programs"],"readwrite");
+  var store = transaction.objectStore("programs");
+  
+  if (program.getIdProgram() == -1) {
+    //Define a new programRecord
+    var programRecord = {
+      name: program.getName(),
+      desc: program.getDescription(),
+      week: program.getCalendar(),
+      created:new Date()
+    };
+    
+    /* */
+    var request = store.add(programRecord);
+    request.onerror = function(e) {
+      console.log("Error program", e.target.error.name);
+    };
+    
+    request.onsuccess = function(event) {
+      callbackRet();
+    };
+  } else {
+    var programRecord = {
+      name: program.getName(),
+      desc: program.getDescription(),
+      week: program.getCalendar(),
+      created:new Date(),
+      idProgram: program.getIdProgram()
+    };
+    var request = store.put(programRecord);
+    request.onerror = function(e) {
+        console.log("Error SportsTimer", e.target.error.name);
+      };
+      
+    request.onsuccess = function(event) {
+      callbackRet();
+    };
+
+  }
+}

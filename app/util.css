@@ -383,3 +383,7 @@ li.daySelected  {
     background-color: #cad4ca !important;
     font-size: large !important;
 }
+
+.invisible {
+    display: none!important;
+}
