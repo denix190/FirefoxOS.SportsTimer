@@ -179,7 +179,7 @@ document.querySelector('#btn-go-add-program').addEventListener('click', function
     var listWeeks= document.getElementById("weeks");
     removeAllItems(listWeeks);
 
-    currentProg.setIdProgram(id);
+    currentProg.setIdProgram(-1);
     currentProg.resetCalendar();
     
     document.getElementById('btn-del-prog').disabled = true;
@@ -208,6 +208,25 @@ document.querySelector('#btn-go-upd-program-back').addEventListener('click', fun
 
 });
 
+document.querySelector('#btn-start-prog').addEventListener('click', function () {
+  var myDate  = new Date("Dec 12, 2015 22:31:00");
+
+  // This is arbitrary data pass to the alarm
+  var data    = {
+    foo: "bar"
+  };
+  
+  // The "ignoreTimezone" string is what make the alarm ignoring it
+  var request = navigator.mozAlarms.add(myDate, "honorTimezone", data);
+  
+  request.onsuccess = function () {
+    console.log("The alarm has been scheduled");
+  };
+  
+  request.onerror = function () { 
+    console.log("An error occurred: " + this.error.name);
+  };
+});
 
 // Button Event.
 
@@ -1487,7 +1506,8 @@ function clickOnProgramSession(e) {
     
     // Load the list of sessions.
     objectStore.openCursor().onsuccess = function(event) {
-      if (e.target.value != '') {
+      var id = e.target.value;
+      if (id !== 0) {
         console.log(e.target.id);
         var values = e.target.id.split("/");
         var week = parseInt(values[1]);
@@ -1695,6 +1715,9 @@ function displayProgram(prog) {
     
     var listWeeks= document.getElementById("weeks");
     removeAllItems(listWeeks);
+    if (calendar === undefined) {
+      return;
+    }
 
     for (var j = 0; j < calendar.length; j++) {
       var ol = document.createElement("ol");
@@ -1706,7 +1729,7 @@ function displayProgram(prog) {
           li.innerHTML = "&nbsp;";
           li.id = "" + i + "/" + "" + j;
           var session = prog.getSession(j, i);
-          if (session != -1 && session != 0) {
+          if (session != -1 && session !== 0) {
             li.style.color = "red";
             li.className = "daySelected";
             li.innerHTML = "&#10003";
