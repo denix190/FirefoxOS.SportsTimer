@@ -60,12 +60,54 @@ document.querySelector('#btn-go-list-ex-back').addEventListener('click', functio
   document.querySelector('#updSession').className = 'current';
 });
 
+function launchSelf() {
+  console.log("launchSelf");
+  var request = window.navigator.mozApps.getSelf();
+  request.onsuccess = function() {
+    if (request.result) {
+      request.result.launch();
+    }
+  };
+}
+
 document.querySelector('#btn-go-add-ex-back').addEventListener('click', function () {
-//  document.getElementById('nameEx').scrollIntoView(true);
   document.querySelector('#addExercise').className = 'right';
   document.querySelector('#listExercise').className = 'current';
 });
 
+if (navigator.mozSetMessageHandler) {
+  navigator.mozSetMessageHandler("alarm", function (alarm) {
+    // only launch a notification if the Alarm is of the right type for this app 
+    if(alarm.data.task) {
+      console.log(alarm.data.task);
+      launchSelf();
+      // Create a notification when the alarm is due
+      try {
+        new Notification("Your task " + alarm.data.task + " is now due!");
+     } catch(e) {
+       console.log(e);
+     }
+    }
+  });
+
+
+
+  
+  // This should open the application when the user touches the notification
+  // but it only works on later FxOS versions, e.g. 2.0/2.1
+  navigator.mozSetMessageHandler("notification", function (message) {
+    if (!message.clicked) {
+      console.log("clicked");
+      return;
+    }
+    
+    navigator.mozApps.getSelf().onsuccess = function (evt) {
+      console.log("app");
+      var app = this.result;
+      app.launch();
+    };
+  });
+}
 
 // Add a new Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
@@ -208,24 +250,82 @@ document.querySelector('#btn-go-upd-program-back').addEventListener('click', fun
 
 });
 
-document.querySelector('#btn-start-prog').addEventListener('click', function () {
-  var myDate  = new Date("Dec 12, 2015 22:31:00");
+// Update the Session/date for a program.
+document.querySelector('#btn-go-upd-session-prog').addEventListener('click', function () {
 
-  // This is arbitrary data pass to the alarm
-  var data    = {
-    foo: "bar"
-  };
-  
-  // The "ignoreTimezone" string is what make the alarm ignoring it
-  var request = navigator.mozAlarms.add(myDate, "honorTimezone", data);
-  
-  request.onsuccess = function () {
-    console.log("The alarm has been scheduled");
-  };
-  
-  request.onerror = function () { 
-    console.log("An error occurred: " + this.error.name);
-  };
+  try {
+    document.querySelector('#updProgram').className = 'current';
+    document.querySelector('#listSessions').className = 'left';
+
+    var session = document.getElementById('list-select-session');
+    var id = parseInt(session.options[session.selectedIndex].value);
+
+    var startTime = document.getElementById('startTime');
+
+    var valueAsNumber = startTime.valueAsNumber;
+    var h = new Date(valueAsNumber);
+
+    //The session select on the calendar.
+    slctSession.style.color = "red";
+    slctSession.className = "daySelected";
+    slctSession.innerHTML = h.getHours() + ":" + h.getMinutes(); // "&#10003";
+    
+    // Session selected id :  column / row 
+    // 
+    var values = slctSession.id.split("/");
+    var week = parseInt(values[1]);
+    var day = parseInt(values[0]);
+    console.log("week" + week + " day " + day + " id " + id);
+
+    var hour = new Hour();
+    hour.setTime(h.getHours(), h.getMinutes());
+ 
+    currentProg.setSession(week, day, id, hour);
+    
+    slctSession.value = id;
+   
+  } catch (ex) {
+    console.log(ex);
+  }
+ 
+});
+
+document.querySelector('#btn-start-prog').addEventListener('click', function () {
+
+  if(navigator.mozAlarms) {
+    //build a date object out of the user-provided time and date information from the form submission
+    try {
+      var myDate = new Date();
+      var minute = myDate.getMinutes();
+      myDate.setMinutes(minute + 1);
+      console.log("" + myDate);
+      // The data object can contain any arbitrary data you want to pass to the alarm. Here I'm passing the name of the task
+      var data = {
+        task: "title.value"
+      };
+      
+      // The "ignoreTimezone" string makes the alarm ignore timezones and always go off at the same time wherever you are
+      var alarmRequest = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
+      
+      alarmRequest.onsuccess = function () {
+        console.log("Alarm sucessfully scheduled");
+        
+        var allAlarmsRequest = navigator.mozAlarms.getAll();
+        allAlarmsRequest.onsuccess = function() {
+          newAlarmId = this.result[(this.result.length)-1].id;
+        };
+      };
+      
+      alarmRequest.onerror = function () { 
+        console.log("An error occurred: " + this.error.name);
+      };
+    } catch(e) {
+      console.log(e);
+    }
+  } else {
+    console.log('<li>Alarm not created - your browser does not support the Alarm API.</li>');
+  }
+      
 });
 
 // Button Event.
@@ -312,6 +412,7 @@ document.querySelector('#btn-go-main-prog-back').addEventListener('click', funct
 document.querySelector('#btn-go-program-back').addEventListener('click', function () {
   document.querySelector('#listSessions').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
+ 
 });
 
 // Update an exercise.
@@ -1354,6 +1455,23 @@ function addSession(list, cursor) {
   list.appendChild(li);
 }
 
+
+/**
+ * Add an Session to the list.
+*/ 
+function addSessionProg(list, cursor, id) {
+
+  var opt = document.createElement("option");
+  opt.value = cursor.value.idSession;
+
+  if (cursor.value.idSession === id) {
+    opt.selected = true;
+  }
+  opt.innerHTML = cursor.value.name
+  
+  list.appendChild(opt);
+}
+
 // Add Exercises to Session.
 function addExercisesToSession() {
   var idSession = document.getElementById('idSession');
@@ -1507,18 +1625,19 @@ function clickOnProgramSession(e) {
     // Load the list of sessions.
     objectStore.openCursor().onsuccess = function(event) {
       var id = e.target.value;
-      if (id !== 0) {
-        console.log(e.target.id);
-        var values = e.target.id.split("/");
-        var week = parseInt(values[1]);
-        var day = parseInt(values[0]);
-        currentProg.sessionSelected(week, day);
-        displayProgramSession(e.target.value);
-      } else {
+      // if (id !== 0) {
+      //   console.log(e.target.id);
+      //   var values = e.target.id.split("/");
+      //   var week = parseInt(values[1]);
+      //   var day = parseInt(values[0]);
+      //   currentProg.sessionSelected(week, day);
+      //   // displayProgramSession(e.target.value);
+        
+      // } else {
         try {
           var cursor = event.target.result;
           if (cursor) {
-            addSession(listSes, cursor);
+            addSessionProg(listSes, cursor, id);
             cursor.continue();
           }
           else {
@@ -1526,10 +1645,29 @@ function clickOnProgramSession(e) {
             document.querySelector('#listSessions').className = 'current';
             document.querySelector('[data-position="current"]').className = 'left';
             slctSession = e.target;
+            var startTime = document.getElementById('startTime');
+            if (id !== 0) {
+              console.log(e.target.id);
+              var values = e.target.id.split("/");
+              var week = parseInt(values[1]);
+              var day = parseInt(values[0]);
+              currentProg.sessionSelected(week, day);
+              var hour = currentProg.getHour(week, day);
+              console.log(hour);
+              startTime.valueAsDate = new Date(1970, 1, 1, hour.hours, hour.minutes);
+            } else {
+              try {
+
+                startTime.valueAsDate = new Date(1970, 1, 1, 12, 0);
+                startTime.innerHTML = "12:0";
+              } catch(e) {
+                console.log(e);
+              }
+            }
           }
         } catch(e) {
           window.alert(e);
-        }
+     //   }
       }
     };
   } catch(e) {
@@ -1626,8 +1764,8 @@ function updateProgram() {
 
   // Update the program, return to the list of programs.
   dbUpdateProgram(prog, function() {
-        document.querySelector('#pnl-programs').className = 'current';
-      document.querySelector('#updProgram').className = 'right';
+    document.querySelector('#pnl-programs').className = 'current';
+    document.querySelector('#updProgram').className = 'right';
 
     displayListPrograms();
   });
@@ -1732,10 +1870,12 @@ function displayProgram(prog) {
           if (session != -1 && session !== 0) {
             li.style.color = "red";
             li.className = "daySelected";
-            li.innerHTML = "&#10003";
+            var h = prog.getHour(j, i);
+            li.innerHTML = h.hours + ":" + h.minutes; //"&#10003";
             li.value = session;
           }
-
+          
+          
           ol.appendChild(li);
           ol.addEventListener("click", clickOnProgramSession);
         }

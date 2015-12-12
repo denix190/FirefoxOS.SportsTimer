@@ -2,8 +2,19 @@
  * Class Program.
 */
 
+function Hour() {
+  this.hours = 0;
+  this.minutes = 0;
+}
+
+Hour.prototype.setTime = function (hours, minutes) {
+  this.hours = hours;
+  this.minutes = minutes;
+};
+
 function Week() {
   this.week = [0,0,0,0,0,0,0];
+  this.hour = [new Hour(), new Hour(), new Hour(), new Hour(), new Hour(), new Hour(), new Hour()];
 }
 
 function Program() {
@@ -68,6 +79,14 @@ Program.prototype.getSession = function(week, day) {
   return w.week[day];
 }
 
+Program.prototype.getHour = function(week, day) {
+  if (week >= this.sessions.length || day > 7) {
+    return -1;
+  } 
+  var w = this.sessions[week];
+  return w.hour[day];
+}
+
 /**
  * Affect the session for a day.
  *
@@ -75,9 +94,10 @@ Program.prototype.getSession = function(week, day) {
  * @param day the day in the week.
  * @param session id of the session.
  */
-Program.prototype.setSession = function (week, day, session) {
+Program.prototype.setSession = function (week, day, session, hour) {
   var w = this.sessions[week];
   w.week[day] = session;
+  w.hour[day] = hour;
 };
 
 Program.prototype.removeSession = function () {

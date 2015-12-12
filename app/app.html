@@ -394,8 +394,19 @@
       <p width="100%" style="margin-top:2px; margin-bottom:2px;">
         <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required/>
         <input type="hidden" id="idSession" value=""/>
+       
       </p>
 
+      <!-- <ol> -->
+      <!--     <li class="start-date"> -->
+      <!--       <span class="button icon icon-dialog"> -->
+      <!--         <label> -->
+              <!-- </label> -->
+              <!-- <span class="datetime" id="start-date-locale">12/12/2015</span> -->
+         <!--    </span> -->
+         <!--  </li> -->
+         <!-- </ol> -->
+      
       <p width="100%">
         <textarea id="descSession" data-l10n-id="idDescSession" placeholder=""></textarea>
       </p>
@@ -484,16 +495,17 @@
     <header class="fixed">
       <a id="btn-go-program-back" href="#"><span class="icon icon-back">back</span></a>
      <menu type="toolbar">
-       <button class="icon icon-add" id="btn-go-add-session">
-         <span>edit</span>
-       </button>
+       <button id="btn-go-upd-session-prog" data-l10n-id="idUpdProgram">Save</button>
      </menu>
-     <h1>List of Sessions</h1>
+     <h1>Sessions</h1>
      </header>
       <article class="scrollable header">
-        <div data-type="list">
-          <ul id="list-select-session">
-          </ul>         
+        <div>
+  
+          <span data-l10n-id="idSession">Session</span>
+          <select id="list-select-session" />
+          <span data-l10n-id="idHourSession">Hour</span>
+          <input id="startTime" data-l10n-id="event-start-date" placeholder="Heure de début" class="hidden-input" type="time">
         </div>
       </article>
     </section> <!-- end drawer -->
