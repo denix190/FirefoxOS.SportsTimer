@@ -1552,13 +1552,17 @@ function displayListPrograms() {
   removeAllItems(listProgs);
   
   objectStore.openCursor().onsuccess = function(event) {
+    try {
       var cursor = event.target.result;
-    if (cursor) {
-      addProgram(listProgs, cursor);
-      cursor.continue();
-    }
-    else {
-      // alert("No more entries!");
+      if (cursor) {
+        addProgram(listProgs, cursor);
+        cursor.continue();
+      }
+      else {
+        // alert("No more entries!");
+      }
+    } catch(e) {
+      console.log(e);
     }
   };
 }
@@ -1896,16 +1900,25 @@ function displayProgram(prog) {
  */
 function deleteProgram() {
   if (window.confirm(navigator.mozL10n.get("confirmDeleteProgram"))) {
-    var idUpd = document.getElementById('idProgram');
+    try {
+      var idUpd = document.getElementById('idProgram');
 
-    var id = parseInt(idUpd.value);
+      var id = parseInt(idUpd.value);
     
-    dbDeleteProgram(id) ;
+      //dbDeleteProgram(id) ;
 
-    document.querySelector('#pnl-programs').className = 'current';
-    document.querySelector('#updProgram').className = 'right';
-
-    displayListPrograms();
+      var transaction = db.transaction(["programs"],"readwrite");
+      var store = transaction.objectStore("programs");
+      console.log(id);
+      var request = store.delete(id);
+      
+      document.querySelector('#pnl-programs').className = 'current';
+      document.querySelector('#updProgram').className = 'right';
+      
+      displayListPrograms();
+    } catch(e) {
+      console.log(e);
+    }
   }
 }
 

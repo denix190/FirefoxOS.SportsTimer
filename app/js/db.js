@@ -313,10 +313,10 @@ function dbDeleteProgram(id) {
   try {
     var transaction = db.transaction(["programs"],"readwrite");
     var store = transaction.objectStore("programs");
-  
+    console.log(id);
     var request = store.delete(id);
   } catch(e) {
-    consol.log(e);
+    console.log(e);
   }
   
 }
@@ -338,7 +338,7 @@ function dbUpdateProgram(program, callbackRet) {
     /* */
     var request = store.add(programRecord);
     request.onerror = function(e) {
-      console.log("Error program", e.target.error.name);
+      console.log("Error program" + e.target.error.name);
     };
     
     request.onsuccess = function(event) {
@@ -354,8 +354,8 @@ function dbUpdateProgram(program, callbackRet) {
     };
     var request = store.put(programRecord);
     request.onerror = function(e) {
-        console.log("Error SportsTimer", e.target.error.name);
-      };
+      console.log("Error SportsTimer", e.target.error.name);
+    };
       
     request.onsuccess = function(event) {
       callbackRet();
