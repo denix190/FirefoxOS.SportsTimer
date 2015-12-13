@@ -91,7 +91,7 @@ Program.prototype.getSession = function(week, day) {
   } 
   var w = this.sessions[week];
   return w.week[day];
-}
+};
 
 Program.prototype.getHour = function(week, day) {
   if (week >= this.sessions.length || day > 7) {
@@ -103,7 +103,7 @@ Program.prototype.getHour = function(week, day) {
   hour.hours = h.hours;
   hour.minutes = h.minutes;
   return hour;
-}
+};
 
 /**
  * Affect the session for a day.

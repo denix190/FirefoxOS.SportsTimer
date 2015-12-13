@@ -90,7 +90,7 @@ if (navigator.mozSetMessageHandler) {
       try {
         // new Notification("Your task " + alarm.data.task + " is now due!");
         console.log("notifyMe");
-        notifyMe();
+        notifyMe(alarm.data.task);
     
       } catch(e) {
         console.log(e);
@@ -99,25 +99,22 @@ if (navigator.mozSetMessageHandler) {
   });
 }
 
-  
-function notifyMe() {
+/**
+ * Notify
+ */
+function notifyMe(task) {
   // Voyons si le navigateur supporte les notifications
   if (!("Notification" in window)) {
     window.alert("Ce navigateur ne supporte pas les notifications desktop");
   }
-
   // Voyons si l'utilisateur est OK pour recevoir des notifications
   else if (Notification.permission === "granted") {
     // Si c'est ok, créons une notification
     console.log("granted");
-    var notification = new Notification("Début de la séance SportsTimer!");
+    var notification = new Notification("SportsTimer:" + task);
   }
-
-  // Sinon, nous avons besoin de la permission de l'utilisateur
-  // Note : Chrome n'implémente pas la propriété statique permission
-  // Donc, nous devons vérifier s'il n'y a pas 'denied' à la place de 'default'
   else if (Notification.permission !== 'denied') {
-    console.log("denied");
+    window.alert("Access denied !");
     Notification.requestPermission(function (permission) {
 
       // Quelque soit la réponse de l'utilisateur, nous nous assurons de stocker cette information
@@ -127,13 +124,10 @@ function notifyMe() {
 
       // Si l'utilisateur est OK, on crée une notification
       if (permission === "granted") {
-        var notification = new Notification("Salut toi !");
+        var notification = new Notification("SportsTimer:" + task);
       }
     });
   }
-
-  // Comme ça, si l'utlisateur a refusé toute notification, et que vous respectez ce choix,
-  // il n'y a pas besoin de l'ennuyer à nouveau.
 }
   
   
@@ -332,6 +326,9 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
  
 });
 
+/**
+ * Start the program.
+ */
 document.querySelector('#btn-start-prog').addEventListener('click', function () {
 
   if(navigator.mozAlarms) {
@@ -339,11 +336,32 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
     try {
       var myDate = new Date();
       var seconds = myDate.getSeconds();
-      myDate.setSeconds(seconds + 20);
+      // myDate.setSeconds(seconds);
       console.log("" + myDate);
-      // The data object can contain any arbitrary data you want to pass to the alarm. Here I'm passing the name of the task
+      var day = myDate.getDay();
+      var firstDay = 0;
+      for (var i = 0; i < 7;i++) {
+        var session = currentProg.getSession(0, i);
+        if (session !== 0) {
+          firstDay = i;
+        }
+      }
+
+      console.log("day " + day + " firstDay " + firstDay);
+
+      // Compute the day of the first session for the program.
+      if (firstDay > day) {
+        console.log("day " + day + " firstDay " + firstDay);
+        myDate.setDate(myDate.getDate() + (firstDay - day) );
+      } else {
+        myDate.setDate(myDate.getDate() + (6 - firstDay + day) );
+      }
+
+      var x = currentProg;
+
+      // Pass the name of the program to the the alarm.
       var data = {
-        task: "title.value"
+        task: currentProg.getName()
       };
  
       var alarmRequest = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
