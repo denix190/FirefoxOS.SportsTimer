@@ -287,7 +287,7 @@
          <span>edit</span>
        </button>
      </menu>
-     <h1>Sessions</h1>
+     <h1 data-l10n-id="idTitleSessions">Sessions</h1>
      </header>
       <article class="scrollable header">
         <div data-type="list">
@@ -307,7 +307,7 @@
          <span>edit</span>
        </button>
      </menu>
-     <h1>Programs</h1>
+     <h1 data-l10n-id="idTitlePrograms">Programs</h1>
      </header>
       <article class="scrollable header">
         <div data-type="list">
@@ -394,18 +394,7 @@
       <p width="100%" style="margin-top:2px; margin-bottom:2px;">
         <input id="nameSession" type="text" maxlength="20" data-l10n-id="idNameSession" placeholder="" required/>
         <input type="hidden" id="idSession" value=""/>
-       
       </p>
-
-      <!-- <ol> -->
-      <!--     <li class="start-date"> -->
-      <!--       <span class="button icon icon-dialog"> -->
-      <!--         <label> -->
-              <!-- </label> -->
-              <!-- <span class="datetime" id="start-date-locale">12/12/2015</span> -->
-         <!--    </span> -->
-         <!--  </li> -->
-         <!-- </ol> -->
       
       <p width="100%">
         <textarea id="descSession" data-l10n-id="idDescSession" placeholder=""></textarea>
@@ -439,7 +428,6 @@
 
       <div>
         <button id="btn-del-ses" class="danger" data-l10n-id="idDeleteExercise" >Delete</button>
-        <button id="btn-remove-progses" class="danger" data-l10n-id="idRemoveSession" >Remove</button>
       </div>
       
     </article>
@@ -460,8 +448,11 @@
         <input id="nameProgram" type="text" maxlength="20" data-l10n-id="idNameProgram" placeholder="" required/>
         <input type="hidden" id="idProgram" value=""/>
       </p>
- 
+
       <div style="width:100%;" id="calendar">
+        <p style="margin-top:2px; margin-bottom:2px;">
+          <span data-l10n-id="idCalendar">Calendar</span>
+        </p>
         <ol class="horizontal">
           <li>Su</li>
           <li>Mo</li>
@@ -483,8 +474,8 @@
       </div>
 
       <div>
-        <button id="btn-del-prog" class="danger" data-l10n-id="idDeleteProgram" >Delete</button>
         <button id="btn-start-prog" class="recommend" data-l10n-id="idStartProgram" >Start</button>
+        <button id="btn-del-prog" class="danger" data-l10n-id="idDeleteProgram" >Delete</button>
       </div>
       
     </article>
@@ -494,24 +485,27 @@
   <section role="region" id="listSessions" data-position="right">
     <header class="fixed">
       <a id="btn-go-program-back" href="#"><span class="icon icon-back">back</span></a>
-     <menu type="toolbar">
-       <button id="btn-go-upd-session-prog" data-l10n-id="idUpdProgram">Save</button>
-     </menu>
-     <h1>Sessions</h1>
-     </header>
-      <article class="scrollable header">
-        <div>
-  
-          <span data-l10n-id="idSession">Session</span>
-          <select id="list-select-session" />
-          <span data-l10n-id="idHourSession">Hour</span>
-          <input id="startTime" data-l10n-id="event-start-date" placeholder="Heure de début" class="hidden-input" type="time">
-        </div>
-      </article>
-    </section> <!-- end drawer -->
-  </section>
+      <menu type="toolbar">
+        <button id="btn-go-upd-session-prog" data-l10n-id="idUpdProgram">Save</button>
+      </menu>
+      <h1>Sessions</h1>
+    </header>
+    <article class="content scrollable header">
+ 
+      <p style="margin-top:2px; margin-bottom:2px;">
+        <span data-l10n-id="idSession">Session</span>
+        <select id="list-select-session"></select>
+      </p>
+      <p style="margin-top:2px; margin-bottom:2px;">
+        <span data-l10n-id="idStartTime">Hour</span>
+        <input id="startTime" style="width:50%;float:right;" placeholder="" type="time"/>
+      </p>
+      <div>
+        <button id="btn-remove-progses" class="danger" data-l10n-id="idRemoveSession" >Remove</button>
+      </div>
+    </article>
+  </section> <!-- end drawer -->
 
-    
   <!--·························· add Exercise ··························-->
   <section role="region" id="addExercise" data-position="right">
     <header class="fixed">

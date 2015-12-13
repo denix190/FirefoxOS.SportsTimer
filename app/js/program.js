@@ -12,6 +12,20 @@ Hour.prototype.setTime = function (hours, minutes) {
   this.minutes = minutes;
 };
 
+Hour.prototype.getDisplay = function () {
+  var d = "";
+  if (this.hours < 10) {
+    d = "0";
+  }
+  d += this.hours + ":";
+
+  if (this.minutes < 10) {
+    d += "0";
+  }
+  d += this.minutes;
+  return d;
+};
+
 function Week() {
   this.week = [0,0,0,0,0,0,0];
   this.hour = [new Hour(), new Hour(), new Hour(), new Hour(), new Hour(), new Hour(), new Hour()];
@@ -84,7 +98,11 @@ Program.prototype.getHour = function(week, day) {
     return -1;
   } 
   var w = this.sessions[week];
-  return w.hour[day];
+  var h = w.hour[day];
+  var hour = new Hour();
+  hour.hours = h.hours;
+  hour.minutes = h.minutes;
+  return hour;
 }
 
 /**

@@ -18,7 +18,16 @@
         "device-storage:sdcard" : {
             "access": "readwrite",
             "description": "Write export of all feeds on SD card as an json file."
+        },
+        "alarms": {
+            "description": "Required to schedule alarms. Start application."
+        },
+        "desktop-notification": {
+            "description": "Needed for creating system notifications."
         }
     },
+    "messages": [
+        { "alarm": "/app.html" }
+    ],
     "orientation": ["portrait-primary"]
 }
