@@ -133,7 +133,7 @@ function notifyMe(task) {
   
   // This should open the application when the user touches the notification
   // but it only works on later FxOS versions, e.g. 2.0/2.1
-  /* navigator.mozSetMessageHandler("notification", function (message) {
+  navigator.mozSetMessageHandler("notification", function (message) {
     if (!message.clicked) {
       console.log("clicked");
       return;
@@ -144,8 +144,7 @@ function notifyMe(task) {
       var app = this.result;
       app.launch();
     };
-  }); */
-
+  }); 
 
 // Add a new Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
@@ -342,21 +341,28 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
       var firstDay = 0;
       for (var i = 0; i < 7;i++) {
         var session = currentProg.getSession(0, i);
+        console.log("i " + i + " session " + session);
         if (session !== 0) {
           firstDay = i;
+          break;
         }
       }
 
       console.log("day " + day + " firstDay " + firstDay);
 
+      var hour = currentProg.getHour(0, firstDay);
       // Compute the day of the first session for the program.
-      if (firstDay > day) {
+      if (firstDay >= day) {
         console.log("day " + day + " firstDay " + firstDay);
         myDate.setDate(myDate.getDate() + (firstDay - day) );
       } else {
         myDate.setDate(myDate.getDate() + (6 - firstDay + day) );
-      }
 
+      }
+      myDate.setMinutes(hour.minutes);
+      myDate.setHours(hour.hours);
+      myDate.setSeconds(0);
+      console.log("Date alarm:" + myDate);
       var x = currentProg;
 
       // Pass the name of the program to the the alarm.
@@ -367,13 +373,13 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
       var alarmRequest = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
       
       alarmRequest.onsuccess = function () {
-        console.log('operation successful:' + this.result.length + 'alarms pending');
+        // console.log('operation successful:' + this.result.length + 'alarms pending');
 
         var allAlarmsRequest = navigator.mozAlarms.getAll();
         allAlarmsRequest.onsuccess = function() {
 
           this.result.forEach(function (alarm) {
-            console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone);    
+            console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone + ' :' + alarm.data.task);    
           });
         };
       };
