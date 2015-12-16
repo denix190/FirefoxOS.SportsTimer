@@ -341,22 +341,21 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
       var firstDay = 0;
       for (var i = 0; i < 7;i++) {
         var session = currentProg.getSession(0, i);
-        console.log("i " + i + " session " + session);
         if (session !== 0) {
           firstDay = i;
           break;
         }
       }
 
-      console.log("day " + day + " firstDay " + firstDay);
+      console.log("day " + day + " firstDay " + firstDay + " Date " + myDate.getDate());
 
       var hour = currentProg.getHour(0, firstDay);
       // Compute the day of the first session for the program.
       if (firstDay >= day) {
-        console.log("day " + day + " firstDay " + firstDay);
         myDate.setDate(myDate.getDate() + (firstDay - day) );
+
       } else {
-        myDate.setDate(myDate.getDate() + (6 - firstDay + day) );
+        myDate.setDate(myDate.getDate() + (7 + firstDay - day) );
 
       }
       myDate.setMinutes(hour.minutes);
@@ -369,12 +368,10 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
       var data = {
         task: currentProg.getName()
       };
- 
+
       var alarmRequest = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
       
       alarmRequest.onsuccess = function () {
-        // console.log('operation successful:' + this.result.length + 'alarms pending');
-
         var allAlarmsRequest = navigator.mozAlarms.getAll();
         allAlarmsRequest.onsuccess = function() {
 
