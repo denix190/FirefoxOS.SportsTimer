@@ -377,6 +377,7 @@ ol.day li {
     text-align:center;
     background-color: white;
     color:white;
+    line-height:3.5rem;
 }
 
 li.daySelected  {
@@ -386,4 +387,18 @@ li.daySelected  {
 
 .invisible {
     display: none!important;
+}
+
+span.day {
+    line-height: 1.0rem;
+    vertical-align: top;
+    float:right;
+    color:grey;
+    margin-right:2px;
+}
+
+span.hour {
+    line-height: 0.5rem;
+    font-size:1.0rem;
+    color:black;
 }

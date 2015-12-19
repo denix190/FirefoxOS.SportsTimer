@@ -133,7 +133,8 @@ function notifyMe(task) {
   
   // This should open the application when the user touches the notification
   // but it only works on later FxOS versions, e.g. 2.0/2.1
-  navigator.mozSetMessageHandler("notification", function (message) {
+/*
+navigator.mozSetMessageHandler("notification", function (message) {
     if (!message.clicked) {
       console.log("clicked");
       return;
@@ -145,7 +146,7 @@ function notifyMe(task) {
       app.launch();
     };
   }); 
-
+*/
 // Add a new Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
   try {
@@ -162,7 +163,6 @@ document.querySelector('#btn-go-add-session').addEventListener('click', function
     console.log(e);
   }
 });
-
 document.querySelector('#btn-go-upd-session-back').addEventListener('click', function () {
   var idSession = document.getElementById('idSession');
 
@@ -306,7 +306,7 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
     //The session select on the calendar.
     slctSession.style.color = "red";
     slctSession.className = "daySelected";
-    slctSession.innerHTML = hour.getDisplay(); // "&#10003";
+    slctSession.childNodes[1].innerHTML = hour.getDisplay(); // "&#10003";
     
     // Session selected id :  column / row 
 
@@ -1670,7 +1670,7 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
       ol.appendChild(li);
     }
   } catch(e) {
-    window.alert(e);
+    console.log(e);
   }
   // Select to add or display a Session.
   ol.addEventListener("click", clickOnProgramSession);
@@ -1692,7 +1692,7 @@ function clickOnProgramSession(e) {
     
     // Load the list of sessions.
     objectStore.openCursor().onsuccess = function(event) {
-      var id = e.target.value;
+      var id = e.target.parentNode.value;
 
         try {
           var cursor = event.target.result;
@@ -1704,11 +1704,11 @@ function clickOnProgramSession(e) {
             // End of list of sessions.
             document.querySelector('#listSessions').className = 'current';
             document.querySelector('[data-position="current"]').className = 'left';
-            slctSession = e.target;
+            slctSession = e.target.parentNode;
             var startTime = document.getElementById('startTime');
             if (id !== 0) {
               // New session for a program
-              console.log(e.target.id);
+              console.log(e);
               var values = e.target.id.split("/");
               var week = parseInt(values[1]);
               var day = parseInt(values[0]);
@@ -1729,12 +1729,12 @@ function clickOnProgramSession(e) {
             }
           }
         } catch(e) {
-          window.alert(e);
+          console.log(e);
      //   }
       }
     };
   } catch(e) {
-    window.alert(e);
+    console.log(e);
   }
 }
 
@@ -1926,22 +1926,38 @@ function displayProgram(prog) {
 
         for (var i = 0; i < 7; i++) {
           var li = document.createElement("li");
-          li.innerHTML = "&nbsp;";
           li.id = "" + i + "/" + "" + j;
+
           var session = prog.getSession(j, i);
+
+          var span = document.createElement("span");
+          span.textContent = i;
+          span.className ="day";
+          span.id = "" + i + "/" + "" + j;
+         
+          var pHour = document.createElement("span");
+          pHour.id = "" + i + "/" + "" + j;
+          pHour.className ="hour";
+          
           if (session != -1 && session !== 0) {
             li.style.color = "red";
             li.className = "daySelected";
             var h = prog.getHour(j, i);
-            li.innerHTML = h.getDisplay(); //"&#10003";
+
             li.value = session;
+            pHour.innerHTML = h.getDisplay();
+          } else {
+            pHour.innerHTML ="&nbsp;";
           }
 
+          li.appendChild(span);
+          li.appendChild(pHour);
+    
           ol.appendChild(li);
           ol.addEventListener("click", clickOnProgramSession);
         }
       } catch(e) {
-        window.alert(e);
+        console.log(e);
       }
       
       ol.className = "day";

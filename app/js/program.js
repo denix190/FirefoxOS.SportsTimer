@@ -94,9 +94,11 @@ Program.prototype.getSession = function(week, day) {
 };
 
 Program.prototype.getHour = function(week, day) {
+  console.log("week " + week +
+              " day " + day);
   if (week >= this.sessions.length || day > 7) {
     return -1;
-  } 
+  }
   var w = this.sessions[week];
   var h = w.hour[day];
   var hour = new Hour();
