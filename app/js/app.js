@@ -1705,6 +1705,11 @@ function clickOnProgramSession(e) {
             document.querySelector('#listSessions').className = 'current';
             document.querySelector('[data-position="current"]').className = 'left';
             slctSession = e.target.parentNode;
+            console.log(slctSession);
+            if (slctSession.id === "") {
+              slctSession = slctSession.parentNode;
+              console.log(slctSession);
+            }
             var startTime = document.getElementById('startTime');
             if (id !== 0) {
               // New session for a program
