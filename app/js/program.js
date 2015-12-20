@@ -93,9 +93,13 @@ Program.prototype.getSession = function(week, day) {
   return w.week[day];
 };
 
+/**
+ * Find the hour for day and the week.
+ * @param week The week find.
+ * @param day The day in the week
+ */
 Program.prototype.getHour = function(week, day) {
-  console.log("week " + week +
-              " day " + day);
+
   if (week >= this.sessions.length || day > 7) {
     return -1;
   }

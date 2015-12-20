@@ -302,7 +302,7 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
 
     var hour = new Hour();
     hour.setTime(h.getHours(), h.getMinutes());
-
+    console.log(slctSession);
     //The session select on the calendar.
     slctSession.style.color = "red";
     slctSession.className = "daySelected";
@@ -331,44 +331,68 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
 document.querySelector('#btn-start-prog').addEventListener('click', function () {
 
   if(navigator.mozAlarms) {
-    //build a date object out of the user-provided time and date information from the form submission
+
     try {
       var myDate = new Date();
       var seconds = myDate.getSeconds();
-      // myDate.setSeconds(seconds);
-      console.log("" + myDate);
+
       var day = myDate.getDay();
       var firstDay = 0;
+      
+      var calendar = currentProg.getCalendar();
+      console.log(calendar);
+      // Select the first day.
       for (var i = 0; i < 7;i++) {
         var session = currentProg.getSession(0, i);
+       
         if (session !== 0) {
-          firstDay = i;
-          break;
+          var hour = currentProg.getHour(0, i);
+          if (hour.hours >= myDate.getHours()) {
+            if (hour.hours == myDate.getHours()) {
+              if (hour.minutes > myDate.getMinutes()) {
+                firstDay = i;
+                break;
+              }
+            } else {
+              firstDay = i;
+              break;
+            }
+          }
         }
       }
 
       console.log("day " + day + " firstDay " + firstDay + " Date " + myDate.getDate());
 
       var hour = currentProg.getHour(0, firstDay);
-      // Compute the day of the first session for the program.
+      // Compute the first day for the session of the program.
       if (firstDay >= day) {
         myDate.setDate(myDate.getDate() + (firstDay - day) );
-
       } else {
         myDate.setDate(myDate.getDate() + (7 + firstDay - day) );
-
       }
+
       myDate.setMinutes(hour.minutes);
       myDate.setHours(hour.hours);
       myDate.setSeconds(0);
       console.log("Date alarm:" + myDate);
-      var x = currentProg;
 
       // Pass the name of the program to the the alarm.
       var data = {
-        task: currentProg.getName()
+        task: currentProg.getName(),
+        session: currentProg.getSession(0, firstDay)
       };
 
+      console.log(data);
+
+      var allAlarmsRequest = navigator.mozAlarms.getAll();
+      allAlarmsRequest.onsuccess = function() {
+        
+        this.result.forEach(function (alarm) {
+          console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone + ' :' + alarm.data.task);
+        });
+      };
+
+      /*
       var alarmRequest = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
       
       alarmRequest.onsuccess = function () {
@@ -384,6 +408,7 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
       alarmRequest.onerror = function () { 
         console.log("An error occurred: " + this.error.name);
       };
+       */
     } catch(e) {
       console.log(e);
     }
@@ -1665,8 +1690,23 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
 
     for (var i = 0; i < 7; i++) {
       var li = document.createElement("li");
-      li.innerHTML = "&nbsp;";
-      li.id = "" + i + "/" + (currentProg.getCalendar().length - 1);
+
+      var j = (currentProg.getCalendar().length - 1)
+      li.id = "" + i + "/" + j;
+      var span = document.createElement("span");
+      span.textContent = i;
+      span.className ="day";
+      span.id = "" + i + "/" + "" + j;
+      
+      var pHour = document.createElement("span");
+      pHour.id = "" + i + "/" + "" + j;
+      pHour.className ="hour";
+    
+      pHour.innerHTML ="&nbsp;";
+
+      li.appendChild(span);
+      li.appendChild(pHour);
+
       ol.appendChild(li);
     }
   } catch(e) {
@@ -1694,48 +1734,51 @@ function clickOnProgramSession(e) {
     objectStore.openCursor().onsuccess = function(event) {
       var id = e.target.parentNode.value;
 
-        try {
-          var cursor = event.target.result;
-          if (cursor) {
-            addSessionProg(listSes, cursor, id);
-            cursor.continue();
+      try {
+        var cursor = event.target.result;
+        if (cursor) {
+          addSessionProg(listSes, cursor, id);
+          cursor.continue();
+        }
+        else {
+          // End of list of sessions.
+          document.querySelector('#listSessions').className = 'current';
+          document.querySelector('[data-position="current"]').className = 'left';
+
+          if (e.target.nodeName === 'OL') {
+            slctSession = e.target;
+          } else if (e.target.nodeName === 'LI') {
+            slctSession = e.target; 
+          } else if (e.target.nodeName === 'SPAN') {
+            slctSession = e.target.parentNode; 
           }
-          else {
-            // End of list of sessions.
-            document.querySelector('#listSessions').className = 'current';
-            document.querySelector('[data-position="current"]').className = 'left';
-            slctSession = e.target.parentNode;
-            console.log(slctSession);
-            if (slctSession.id === "") {
-              slctSession = slctSession.parentNode;
-              console.log(slctSession);
-            }
-            var startTime = document.getElementById('startTime');
-            if (id !== 0) {
-              // New session for a program
+          console.log(slctSession);
+          
+          var startTime = document.getElementById('startTime');
+          if (id !== undefined) {
+            // New session for a program
+            console.log("Id " + e.target.id);
+            var values = e.target.id.split("/");
+            var week = parseInt(values[1]);
+            var day = parseInt(values[0]);
+            currentProg.sessionSelected(week, day);
+            var hour = currentProg.getHour(week, day);
+            console.log(hour);
+            startTime.valueAsDate = new Date(1970, 1, 1, hour.hours, hour.minutes);
+            document.getElementById('btn-remove-progses').className= "danger";
+          } else {
+            // display an existing session
+            try {
+              document.getElementById('btn-remove-progses').className= "invisible";
+              startTime.valueAsDate = new Date(1970, 1, 1, 12, 0);
+              startTime.innerHTML = "12:0";
+            } catch(e) {
               console.log(e);
-              var values = e.target.id.split("/");
-              var week = parseInt(values[1]);
-              var day = parseInt(values[0]);
-              currentProg.sessionSelected(week, day);
-              var hour = currentProg.getHour(week, day);
-              console.log(hour);
-              startTime.valueAsDate = new Date(1970, 1, 1, hour.hours, hour.minutes);
-              document.getElementById('btn-remove-progses').className= "danger";
-            } else {
-              // display an existing session
-              try {
-                document.getElementById('btn-remove-progses').className= "invisible";
-                startTime.valueAsDate = new Date(1970, 1, 1, 12, 0);
-                startTime.innerHTML = "12:0";
-              } catch(e) {
-                console.log(e);
-              }
             }
           }
-        } catch(e) {
-          console.log(e);
-     //   }
+        }
+      } catch(e) {
+        console.log(e);
       }
     };
   } catch(e) {
@@ -1898,7 +1941,7 @@ function loadProgram(id, callback) {
 }
 
 /**
- * Display a the current Program.
+ * Display the current Program.
  * @param prog The program to display.
  */
 function displayProgram(prog) {
@@ -1923,27 +1966,36 @@ function displayProgram(prog) {
     if (calendar === undefined) {
       return;
     }
-
+    var now =  new Date();
+    var day = now.getDay();
+    var date = now.getDate();
+    console.log("now " + now  +
+                " day " + day + " date " + date);
     for (var j = 0; j < calendar.length; j++) {
       var ol = document.createElement("ol");
-
       try {
 
         for (var i = 0; i < 7; i++) {
           var li = document.createElement("li");
           li.id = "" + i + "/" + "" + j;
 
-          var session = prog.getSession(j, i);
-
           var span = document.createElement("span");
-          span.textContent = i;
+
+          var newDate = ((date + i - day) + (7*j) );
+          now.setDate(newDate);
+          if (i < day) {
+            span.textContent = now.getDate();
+          } else {
+            span.textContent = now.getDate();
+          }
           span.className ="day";
           span.id = "" + i + "/" + "" + j;
          
           var pHour = document.createElement("span");
           pHour.id = "" + i + "/" + "" + j;
           pHour.className ="hour";
-          
+
+          var session = prog.getSession(j, i);
           if (session != -1 && session !== 0) {
             li.style.color = "red";
             li.className = "daySelected";
@@ -1951,6 +2003,8 @@ function displayProgram(prog) {
 
             li.value = session;
             pHour.innerHTML = h.getDisplay();
+            pHour.value = session;
+            span.value = session;
           } else {
             pHour.innerHTML ="&nbsp;";
           }
