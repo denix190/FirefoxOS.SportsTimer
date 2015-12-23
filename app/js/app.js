@@ -69,7 +69,6 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
  * Launch SportsTimer.
  */
 function launchSelf() {
-  console.log("launchSelf");
   var request = window.navigator.mozApps.getSelf();
   request.onsuccess = function() {
     if (request.result) {
@@ -81,17 +80,12 @@ function launchSelf() {
 
 if (navigator.mozSetMessageHandler) {
   navigator.mozSetMessageHandler("alarm", function (alarm) {
-    console.log("mozSetMessageHandler");
     // only launch a notification if the Alarm is of the right type for this app 
-    if(alarm.data.task) {
-      console.log(alarm.data.task);
-      // launchSelf();
+    if(alarm.data.program) {
+      launchSelf();
       // Create a notification when the alarm is due
       try {
-        // new Notification("Your task " + alarm.data.task + " is now due!");
-        console.log("notifyMe");
-        notifyMe(alarm.data.task);
-    
+        notifyMe(alarm.data.program + "/" +  alarm.data.session);
       } catch(e) {
         console.log(e);
       }
@@ -103,14 +97,13 @@ if (navigator.mozSetMessageHandler) {
  * Notify
  */
 function notifyMe(task) {
-  // Voyons si le navigateur supporte les notifications
+
   if (!("Notification" in window)) {
     window.alert("Ce navigateur ne supporte pas les notifications desktop");
   }
   // Voyons si l'utilisateur est OK pour recevoir des notifications
   else if (Notification.permission === "granted") {
-    // Si c'est ok, créons une notification
-    console.log("granted");
+    // Ok create a Notification.
     var notification = new Notification("SportsTimer:" + task);
   }
   else if (Notification.permission !== 'denied') {
@@ -326,6 +319,39 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
 });
 
 /**
+ * List all the alarms for SportsTimer.
+ */
+document.querySelector('#btn-list-alarm').addEventListener('click', function () {
+  var allAlarmsRequest = navigator.mozAlarms.getAll();
+  allAlarmsRequest.onsuccess = function() {
+    
+    this.result.forEach(function (alarm) {
+      console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone);
+      console.log( alarm);
+    });
+  };
+});
+
+/**
+ * Remove all the alarms for SportsTimer.
+ */
+document.querySelector('#btn-remove-Allalarm').addEventListener('click', function () {
+  var request = navigator.mozAlarms.getAll();
+
+  request.onsuccess = function () {
+    // Remove all pending alarms
+    this.result.forEach(function (alarm) {
+      navigator.mozAlarms.remove(alarm.id);
+    });
+  }
+
+  request.onerror = function () {
+    console.log('operation failed: ' + this.error);
+  }
+  
+});
+
+/**
  * Start the program.
  */
 document.querySelector('#btn-start-prog').addEventListener('click', function () {
@@ -333,82 +359,38 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
   if(navigator.mozAlarms) {
 
     try {
-      var myDate = new Date();
-      var seconds = myDate.getSeconds();
-
-      var day = myDate.getDay();
-      var firstDay = 0;
-      
+      var dateEvent =  new Date();
+      dateEvent.setSeconds(0);
+      var now =  new Date();
+      var day = dateEvent.getDay();
+      var date = dateEvent.getDate();
       var calendar = currentProg.getCalendar();
-      console.log(calendar);
-      // Select the first day.
-      for (var i = 0; i < 7;i++) {
-        var session = currentProg.getSession(0, i);
-       
-        if (session !== 0) {
-          var hour = currentProg.getHour(0, i);
-          if (hour.hours >= myDate.getHours()) {
-            if (hour.hours == myDate.getHours()) {
-              if (hour.minutes > myDate.getMinutes()) {
-                firstDay = i;
-                break;
+
+      for (var j = 0; j < calendar.length; j++) {
+        try {
+          for (var i = 0; i < 7; i++) {
+            var newDate = ((date + i - day) + (7*j) );
+            dateEvent.setDate(newDate);
+
+            var session = currentProg.getSession(j, i);
+            if (session != -1 && session !== 0) {
+              var h = currentProg.getHour(j, i);
+              dateEvent.setHours(h.hours);
+              dateEvent.setMinutes(h.minutes);
+
+              if (dateEvent.getTime() > now.getTime()) {
+                var d = new Date();
+                d.setTime(dateEvent.getTime());
+
+                var sessionName = getSession( currentProg.getSession(j, i), d, currentProg.getName(), sendAlarm );
               }
-            } else {
-              firstDay = i;
-              break;
-            }
+            } 
           }
+        } catch(e) {
+          console.log(e);
         }
       }
 
-      console.log("day " + day + " firstDay " + firstDay + " Date " + myDate.getDate());
-
-      var hour = currentProg.getHour(0, firstDay);
-      // Compute the first day for the session of the program.
-      if (firstDay >= day) {
-        myDate.setDate(myDate.getDate() + (firstDay - day) );
-      } else {
-        myDate.setDate(myDate.getDate() + (7 + firstDay - day) );
-      }
-
-      myDate.setMinutes(hour.minutes);
-      myDate.setHours(hour.hours);
-      myDate.setSeconds(0);
-      console.log("Date alarm:" + myDate);
-
-      // Pass the name of the program to the the alarm.
-      var data = {
-        task: currentProg.getName(),
-        session: currentProg.getSession(0, firstDay)
-      };
-
-      console.log(data);
-
-      var allAlarmsRequest = navigator.mozAlarms.getAll();
-      allAlarmsRequest.onsuccess = function() {
-        
-        this.result.forEach(function (alarm) {
-          console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone + ' :' + alarm.data.task);
-        });
-      };
-
-      /*
-      var alarmRequest = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
-      
-      alarmRequest.onsuccess = function () {
-        var allAlarmsRequest = navigator.mozAlarms.getAll();
-        allAlarmsRequest.onsuccess = function() {
-
-          this.result.forEach(function (alarm) {
-            console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone + ' :' + alarm.data.task);    
-          });
-        };
-      };
-
-      alarmRequest.onerror = function () { 
-        console.log("An error occurred: " + this.error.name);
-      };
-       */
     } catch(e) {
       console.log(e);
     }
@@ -417,6 +399,39 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
   }
       
 });
+
+/**
+ * Send the alarm.
+ * @param date The date of the alarm
+ * @param data the data to send to the alarm
+ */
+function sendAlarm(date, programName, sessionId, sessionName) {
+
+  console.log("sendAlarm Date " + date +
+              " programName " + programName +
+              " sessionName " + sessionName);
+  var data = {
+    program: programName, 
+    session: sessionName,
+    idSession: sessionId
+  };
+
+  try {
+    var alarmRequest = navigator.mozAlarms.add(date, "ignoreTimezone", data);
+    
+    alarmRequest.onsuccess = function () {
+      console.log("onsuccess alarm:" + date);
+    };
+    
+    alarmRequest.onerror = function () { 
+      console.log("An error occurred: " + this.error.name);
+    };
+    
+  } catch(e) {
+    console.log(e);
+  }
+}
+      
 
 // Button Event.
 
@@ -786,7 +801,37 @@ function loadSession( id )  {
    // idSession.value = id;
   };
 } 
-    
+
+
+/**
+ * Get the session and launch the callback for the alarm.
+ * @param id id of the session.
+ */
+function getSession( id , dateEvent, programName, Callback)  {
+
+
+  var transaction = db.transaction(["sessions"]);
+  var objectStore = transaction.objectStore("sessions", 'readonly');
+  
+  var request = objectStore.get(parseInt(id));
+  var session =null;
+  request.onerror = function(event) {
+    console.log("Not found for Id: " + id);
+  };
+  
+  request.onsuccess = function(evt) {
+    try {
+      var result = evt.target.result;
+      session = result.name;
+      Callback(dateEvent, programName, id, session);
+
+      return;
+    } catch(e) {
+      console.log(e);
+    }
+  };
+  
+} 
     
 /**
  * Add a new Exercise.

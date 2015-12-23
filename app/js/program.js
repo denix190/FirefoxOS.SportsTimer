@@ -52,7 +52,9 @@ Program.prototype.setName = function(name) {
 Program.prototype.getName = function() {
   return this.name;
 };
-
+/*
+ * @param description the description of the program.
+ */
 Program.prototype.setDescription = function(description) {
   this.description = description;
 };
