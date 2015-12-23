@@ -86,6 +86,8 @@ if (navigator.mozSetMessageHandler) {
       // Create a notification when the alarm is due
       try {
         notifyMe(alarm.data.program + "/" +  alarm.data.session);
+        // Display the session.
+        displaySession(alarm.data.idSession);
       } catch(e) {
         console.log(e);
       }
@@ -124,10 +126,10 @@ function notifyMe(task) {
 }
   
   
-  // This should open the application when the user touches the notification
-  // but it only works on later FxOS versions, e.g. 2.0/2.1
-/*
-navigator.mozSetMessageHandler("notification", function (message) {
+// This should open the application when the user touches the notification
+// but it only works on later FxOS versions, e.g. 2.0/2.1
+if (navigator.mozSetMessageHandler) {
+  navigator.mozSetMessageHandler("notification", function (message) {
     if (!message.clicked) {
       console.log("clicked");
       return;
@@ -139,7 +141,7 @@ navigator.mozSetMessageHandler("notification", function (message) {
       app.launch();
     };
   }); 
-*/
+}
 // Add a new Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
   try {
@@ -326,7 +328,6 @@ document.querySelector('#btn-list-alarm').addEventListener('click', function () 
   allAlarmsRequest.onsuccess = function() {
     
     this.result.forEach(function (alarm) {
-      console.log(alarm.id + ' : ' + alarm.date.toString() + ' : ' + alarm.respectTimezone);
       console.log( alarm);
     });
   };
@@ -343,11 +344,11 @@ document.querySelector('#btn-remove-Allalarm').addEventListener('click', functio
     this.result.forEach(function (alarm) {
       navigator.mozAlarms.remove(alarm.id);
     });
-  }
+  };
 
   request.onerror = function () {
     console.log('operation failed: ' + this.error);
-  }
+  };
   
 });
 
@@ -459,7 +460,7 @@ document.querySelector('#chk-next-exercice').addEventListener('change', checkNex
 document.querySelector('#btn-upd-session').addEventListener('click', updateSession);
 
 // Display an Session.
-document.querySelector('#btn-go-upd-session').addEventListener('click', displaySession);
+document.querySelector('#btn-go-upd-session').addEventListener('click', displayUpdateSession);
 
 // Configuration Exercises to Session
 document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesToSession);
@@ -677,41 +678,8 @@ listItemSes.onclick = function(e) {
     
     if (collEnfants[i].tagName === 'P') {
       try {
-        document.querySelector('#currentSession').className = 'current';
-        document.querySelector('[data-position="current"]').className = 'left';
-        
         var id = parseInt(e.target.parentNode.id);
-        
-        var idSession = document.getElementById('idSession');
-        idSession.value = id;
-        
-        session.setIdSession(id);
-        
-        var title = document.getElementById('idTitleSession');
-        title.innerHTML = collEnfants[i].innerHTML;
-        listSessionEx(id);
-
-        var transaction = db.transaction(["sessions"]);
-        var objectStore = transaction.objectStore("sessions", 'readonly');
-        var request = objectStore.get(id);
-
-        request.onerror = function(event) {
-          console.log("Not found for Id: " + id);
-        };
-        
-        request.onsuccess = function(evt) {
-      
-          try {
-            if (request.result.hasOwnProperty("chainExercises")) {
-              session.setChainExercises( request.result.chainExercises);
-            } else {
-              session.setChainExercises(false);
-            }
-            session.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
-          } catch (e) {
-            console.log(e);
-          }
-        };
+        displaySession(id);
         break;
       } catch (ex) {
         console.log(ex);
@@ -719,6 +687,47 @@ listItemSes.onclick = function(e) {
     }
   }
 };
+
+/**
+ * Display the session
+ * @param id id of the session.
+ */
+function displaySession(id) {
+  document.querySelector('#currentSession').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+       
+  var idSession = document.getElementById('idSession');
+  idSession.value = id;
+  
+  session.setIdSession(id);
+  
+  var title = document.getElementById('idTitleSession');
+  
+  listSessionEx(id);
+  
+  var transaction = db.transaction(["sessions"]);
+  var objectStore = transaction.objectStore("sessions", 'readonly');
+  var request = objectStore.get(id);
+  
+  request.onerror = function(event) {
+    console.log("Not found for Id: " + id);
+  };
+  
+  request.onsuccess = function(evt) {
+    try {
+      title.innerHTML = request.result.name;
+      if (request.result.hasOwnProperty("chainExercises")) {
+        session.setChainExercises( request.result.chainExercises);
+      } else {
+        session.setChainExercises(false);
+      }
+      session.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+
 
 /**
  * Update image path for the exercise.
@@ -747,12 +756,10 @@ listImages.onclick = function(e) {
 /**
  * Display the session
  */
-function displaySession() {
+function displayUpdateSession() {
   try {
     document.querySelector('#currentSession').className = 'left';
     document.querySelector('#updSession').className = 'current';
-    
-    //document.getElementById('btn-remove-progses').className = "invisible";
     document.getElementById('btn-del-ses').className = "danger";
 
     var idSession = document.getElementById('idSession');

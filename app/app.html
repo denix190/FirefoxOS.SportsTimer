@@ -449,10 +449,12 @@
         <input type="hidden" id="idProgram" value=""/>
       </p>
 
+      <div style="width:100%">
+        <span style="float:left;width:49%;margin-top:1.0rem;font-size:medium;" data-l10n-id="idCalendar">Calendar</span> 
+        <button id="btn-add-week" class="recommend" style="margin-top:1px;width:49%;line-height:2rem;height:2.0rem;" data-l10n-id="idAddWeek" >Add</button>
+      </div>
+
       <div style="width:100%;" id="calendar">
-        <p style="margin-top:2px; margin-bottom:2px;">
-          <span data-l10n-id="idCalendar">Calendar</span>
-        </p>
         <ol class="horizontal">
           <li>Su</li>
           <li>Mo</li>
@@ -466,7 +468,8 @@
       </div>
 
       <div style="border-top:5px;">
-        <button id="btn-add-week" class="recommend" style="margin-top:5px;" data-l10n-id="idAddWeek" >Add</button>
+         <button id="btn-start-prog" class="recommend" data-l10n-id="idStartProgram" >Start</button>
+        
       </div>
       
       <div width="100%">
@@ -474,7 +477,7 @@
       </div>
 
       <div>
-        <button id="btn-start-prog" class="recommend" data-l10n-id="idStartProgram" >Start</button>
+        
         <button id="btn-del-prog" class="danger" data-l10n-id="idDeleteProgram" >Delete</button>
       </div>
 
