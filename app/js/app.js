@@ -65,83 +65,7 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
   document.querySelector('#listExercise').className = 'current';
 });
 
-/**
- * Launch SportsTimer.
- */
-function launchSelf() {
-  var request = window.navigator.mozApps.getSelf();
-  request.onsuccess = function() {
-    if (request.result) {
-      request.result.launch();
-    }
-  };
-}
 
-
-if (navigator.mozSetMessageHandler) {
-  navigator.mozSetMessageHandler("alarm", function (alarm) {
-    // only launch a notification if the Alarm is of the right type for this app 
-    if(alarm.data.program) {
-      launchSelf();
-      // Create a notification when the alarm is due
-      try {
-        notifyMe(alarm.data.program + "/" +  alarm.data.session);
-        // Display the session.
-        displaySession(alarm.data.idSession);
-      } catch(e) {
-        console.log(e);
-      }
-    }
-  });
-}
-
-/**
- * Notify
- */
-function notifyMe(task) {
-
-  if (!("Notification" in window)) {
-    window.alert("Ce navigateur ne supporte pas les notifications desktop");
-  }
-  // Voyons si l'utilisateur est OK pour recevoir des notifications
-  else if (Notification.permission === "granted") {
-    // Ok create a Notification.
-    var notification = new Notification("SportsTimer:" + task);
-  }
-  else if (Notification.permission !== 'denied') {
-    window.alert("Access denied !");
-    Notification.requestPermission(function (permission) {
-
-      // Quelque soit la réponse de l'utilisateur, nous nous assurons de stocker cette information
-      if(!('permission' in Notification)) {
-        Notification.permission = permission;
-      }
-
-      // Si l'utilisateur est OK, on crée une notification
-      if (permission === "granted") {
-        var notification = new Notification("SportsTimer:" + task);
-      }
-    });
-  }
-}
-  
-  
-// This should open the application when the user touches the notification
-// but it only works on later FxOS versions, e.g. 2.0/2.1
-if (navigator.mozSetMessageHandler) {
-  navigator.mozSetMessageHandler("notification", function (message) {
-    if (!message.clicked) {
-      console.log("clicked");
-      return;
-    }
-    
-    navigator.mozApps.getSelf().onsuccess = function (evt) {
-      console.log("app");
-      var app = this.result;
-      app.launch();
-    };
-  }); 
-}
 // Add a new Session.
 document.querySelector('#btn-go-add-session').addEventListener('click', function () {
   try {
@@ -308,7 +232,6 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
     var values = slctSession.id.split("/");
     var week = parseInt(values[1]);
     var day = parseInt(values[0]);
-    console.log("week" + week + " day " + day + " id " + id);
 
     currentProg.setSession(week, day, id, hour);
     
@@ -319,6 +242,86 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
   }
  
 });
+
+/**
+ * Launch SportsTimer.
+ */
+function launchSelf() {
+  var request = window.navigator.mozApps.getSelf();
+  request.onsuccess = function() {
+    if (request.result) {
+      request.result.launch();
+    }
+  };
+}
+
+/**
+ * Launch the application and display the session.
+ */
+if (navigator.mozSetMessageHandler) {
+  navigator.mozSetMessageHandler("alarm", function (alarm) {
+    // only launch a notification if the Alarm is of the right type for this app 
+    if(alarm.data.program) {
+      launchSelf();
+      // Create a notification when the alarm is due
+      try {
+        notifyMe(alarm.data.program + "/" +  alarm.data.session);
+        // Display the session.
+        displaySession(alarm.data.idSession);
+      } catch(e) {
+        console.log(e);
+      }
+    }
+  });
+}
+
+/**
+ * Notify
+ */
+function notifyMe(msg) {
+
+  if (!("Notification" in window)) {
+    window.alert("Ce navigateur ne supporte pas les notifications desktop");
+  }
+  // Voyons si l'utilisateur est OK pour recevoir des notifications
+  else if (Notification.permission === "granted") {
+    // Ok create a Notification.
+    var notification = new Notification("SportsTimer:" + msg);
+  }
+  else if (Notification.permission !== 'denied') {
+    window.alert("Access denied !");
+    Notification.requestPermission(function (permission) {
+
+      // Quelque soit la réponse de l'utilisateur, nous nous assurons de stocker cette information
+      if(!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+
+      // Si l'utilisateur est OK, on crée une notification
+      if (permission === "granted") {
+        var notification = new Notification("SportsTimer:" + msg);
+      }
+    });
+  }
+}
+  
+
+// This should open the application when the user touches the notification
+// but it only works on later FxOS versions, e.g. 2.0/2.1
+if (navigator.mozSetMessageHandler) {
+  navigator.mozSetMessageHandler("notification", function (message) {
+    if (!message.clicked) {
+      console.log("clicked");
+      return;
+    }
+    
+    navigator.mozApps.getSelf().onsuccess = function (evt) {
+      console.log("app");
+      var app = this.result;
+      app.launch();
+    };
+  }); 
+}
 
 /**
  * List all the alarms for SportsTimer.
@@ -352,10 +355,15 @@ document.querySelector('#btn-remove-Allalarm').addEventListener('click', functio
   
 });
 
-/**
- * Start the program.
- */
 document.querySelector('#btn-start-prog').addEventListener('click', function () {
+  updateProgram( startProgram);
+});
+
+/**
+ * Start the current program.
+ * Send alarms for each exercise.
+ */
+function startProgram () {
 
   if(navigator.mozAlarms) {
 
@@ -398,8 +406,7 @@ document.querySelector('#btn-start-prog').addEventListener('click', function () 
   } else {
     console.log("Alarm not created - your browser does not support the Alarm API.");
   }
-      
-});
+}
 
 /**
  * Send the alarm.
@@ -521,8 +528,17 @@ document.querySelector('#btn-go-program-back').addEventListener('click', functio
  
 });
 
-// Update an exercise.
-document.querySelector('#btn-upd-program').addEventListener('click', updateProgram);
+// Update an exercise and back to the list of programs
+document.querySelector('#btn-upd-program').addEventListener('click', function () {
+ // Update the program, return to the list of programs.
+  updateProgram( function() {
+    document.querySelector('#pnl-programs').className = 'current';
+    document.querySelector('#updProgram').className = 'right';
+
+    displayListPrograms();
+  });
+  
+});
 
 document.querySelector('#btn-del-prog').addEventListener('click', deleteProgram);
 
@@ -1740,13 +1756,23 @@ document.querySelector('#btn-add-week').addEventListener('click', function () {
   try {
     currentProg.addWeek();
 
+    var now =  new Date();
+    var day = now.getDay();
+    var date = now.getDate();
+   
     for (var i = 0; i < 7; i++) {
       var li = document.createElement("li");
 
-      var j = (currentProg.getCalendar().length - 1)
+      var j = (currentProg.getCalendar().length - 1);
       li.id = "" + i + "/" + j;
       var span = document.createElement("span");
-      span.textContent = i;
+      
+      var newDate = ((date + i - day) + (7*j) );
+
+      now.setDate(newDate);
+
+      span.textContent = now.getDate();
+
       span.className ="day";
       span.id = "" + i + "/" + "" + j;
       
@@ -1804,12 +1830,10 @@ function clickOnProgramSession(e) {
           } else if (e.target.nodeName === 'SPAN') {
             slctSession = e.target.parentNode; 
           }
-          console.log(slctSession);
-          
+
           var startTime = document.getElementById('startTime');
           if (id !== undefined) {
             // New session for a program
-            console.log("Id " + e.target.id);
             var values = e.target.id.split("/");
             var week = parseInt(values[1]);
             var day = parseInt(values[0]);
@@ -1906,16 +1930,16 @@ listSlctSes.onclick = function(e) {
   }
 };
 
+
+
 /**
- * Update or Add a program and return to the list of programs.
+ * Update or Add a program and execute the callback.
  */
-function updateProgram() {
+function updateProgram(callback) {
 
   var idProgram = document.getElementById('idProgram');
   var id = parseInt(idProgram.value);
 
-  console.log("Udpate program id: " + id + " name " + nameProgram +
-              " desc " + descProgram);
   console.log(currentProg.getCalendar());
 
   var prog = new Program();
@@ -1925,14 +1949,10 @@ function updateProgram() {
   prog.setCalendar(currentProg.getCalendar());
 
   // Update the program, return to the list of programs.
-  dbUpdateProgram(prog, function() {
-    document.querySelector('#pnl-programs').className = 'current';
-    document.querySelector('#updProgram').className = 'right';
-
-    displayListPrograms();
-  });
+  dbUpdateProgram(prog, callback);
 
 }
+
 
 /**
  * Display the program selected in the list of programs.
@@ -2021,8 +2041,7 @@ function displayProgram(prog) {
     var now =  new Date();
     var day = now.getDay();
     var date = now.getDate();
-    console.log("now " + now  +
-                " day " + day + " date " + date);
+
     for (var j = 0; j < calendar.length; j++) {
       var ol = document.createElement("ol");
       try {
