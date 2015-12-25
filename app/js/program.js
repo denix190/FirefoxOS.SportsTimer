@@ -5,6 +5,11 @@
 function Hour() {
   this.hours = 0;
   this.minutes = 0;
+  // The session is executed.
+  this.executed = false;
+
+  // Date of the session.
+  this.date = null;
 }
 
 Hour.prototype.setTime = function (hours, minutes) {
@@ -38,6 +43,8 @@ function Program() {
 
   this.week = 0;
   this.day = 0;
+  this.started = false;
+  this.startAt = null;
 
   /**
    * List of sessions for the program.
@@ -95,6 +102,23 @@ Program.prototype.getSession = function(week, day) {
   return w.week[day];
 };
 
+Program.prototype.isStarted = function() {
+  return this.started;
+};
+
+Program.prototype.setStarted = function(started) {
+  this.started = started;
+};
+
+Program.prototype.getStartAt = function() {
+  return this.startAt;
+};
+
+Program.prototype.setStartAt = function(date) {
+  this.startAt = date;
+};
+
+
 /**
  * Find the hour for day and the week.
  * @param week The week find.
@@ -110,6 +134,9 @@ Program.prototype.getHour = function(week, day) {
   var hour = new Hour();
   hour.hours = h.hours;
   hour.minutes = h.minutes;
+  hour.executed = h.executed;
+  hour.date = h.date;
+  
   return hour;
 };
 

@@ -380,8 +380,21 @@ ol.day li {
     line-height:3.5rem;
 }
 
+/** Day with a session. */
 li.daySelected  {
     background-color: #cad4ca !important;
+    font-size: xsmall !important;
+}
+
+/* The current Date */
+li.dayCurrent  {
+    background-color: rgb(98, 102, 98) !important;
+    font-size: xsmall !important;
+}
+
+/* Desactivate Date */
+li.dayDesactivate  {
+    background-color: rgb(209, 212, 209) !important;
     font-size: xsmall !important;
 }
 

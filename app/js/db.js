@@ -318,9 +318,12 @@ function dbDeleteProgram(id) {
   } catch(e) {
     console.log(e);
   }
-  
+
 }
 
+/**
+ * Update the program.
+ */
 function dbUpdateProgram(program, callbackRet) {
 
  var transaction = db.transaction(["programs"],"readwrite");
@@ -332,6 +335,8 @@ function dbUpdateProgram(program, callbackRet) {
       name: program.getName(),
       desc: program.getDescription(),
       week: program.getCalendar(),
+      started: program.isStarted(),
+      startAt: program.getStartAt(),
       created:new Date()
     };
     
@@ -350,7 +355,9 @@ function dbUpdateProgram(program, callbackRet) {
       desc: program.getDescription(),
       week: program.getCalendar(),
       created:new Date(),
-      idProgram: program.getIdProgram()
+      idProgram: program.getIdProgram(),
+      started: program.isStarted(),
+      startAt: program.getStartAt()
     };
     var request = store.put(programRecord);
     request.onerror = function(e) {
