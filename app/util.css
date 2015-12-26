@@ -382,7 +382,7 @@ ol.day li {
 
 /** Day with a session. */
 li.daySelected  {
-    background-color: #cad4ca !important;
+    background-color: rgb(19, 236, 60) !important;
     font-size: xsmall !important;
 }
 
@@ -407,7 +407,7 @@ span.day {
     font-size: 0.6rem;
     vertical-align: top;
     float:right;
-    color:grey;
+    color:white;
     margin-right:2px;
 }
 

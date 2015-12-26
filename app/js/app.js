@@ -222,14 +222,12 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
     var hour = new Hour();
     hour.setTime(h.getUTCHours(), h.getUTCMinutes());
 
-    console.log(h);
-    console.log(h.getUTCHours());
-    
     console.log(slctSession);
     //The session select on the calendar.
-    slctSession.style.color = "red";
-    slctSession.className = "daySelected";
+
+    // slctSession.className = "daySelected";
     slctSession.childNodes[1].innerHTML = hour.getDisplay(); // "&#10003";
+    // slctSession.childNodes[1].className = 
     
     // Session selected id :  column / row 
 
@@ -245,6 +243,19 @@ document.querySelector('#btn-go-upd-session-prog').addEventListener('click', fun
     console.log(ex);
   }
  
+});
+
+
+document.querySelector('#btn-execute-session').addEventListener('click', function () {
+  try {
+    var session = document.getElementById('list-select-session');
+    var id = parseInt(session.options[session.selectedIndex].value);
+    document.querySelector('#updProgram').className = 'right';
+    document.querySelector('#listSessions').className = 'right';
+    displaySession(id);
+  } catch(e) {
+    console.log(e);
+  }
 });
 
 /**
@@ -1838,13 +1849,25 @@ function clickOnProgramSession(e) {
           var startTime = document.getElementById('startTime');
           if (slctSession.value !== 0) {
             // New session for a program
+
             var values = e.target.id.split("/");
             var week = parseInt(values[1]);
             var day = parseInt(values[0]);
-            console.log("week " + week + " day " + day);
+
+            var now =  new Date();
+            var date = now.getDate();
+            var newDate = ((date + day - now.getDay()) + (7*week) );
+            
+            console.log("week " + week + " day " + day + " newDate " + newDate);
             currentProg.sessionSelected(week, day);
             var hour = currentProg.getHour(week, day);
-        
+
+            if (newDate == date) {
+              document.getElementById('btn-execute-session').className= "recommend";
+            } else {
+              document.getElementById('btn-execute-session').className= "invisible";
+            }
+            
             // Start of the session.
             var start = Date.UTC(1970, 1, 1, hour.hours, hour.minutes);
             startTime.valueAsNumber = start;
@@ -2116,15 +2139,16 @@ function displayProgram(prog) {
           } else {
             pHour.innerHTML ="&nbsp;";
           }
+          li.appendChild(span);
+          li.appendChild(pHour);
           console.log("now:" + now.getDate() + " currentDate:" + currentDate.getDate());
           if (currentDate.getDate() == now.getDate()) {
             li.className = "dayCurrent";
-          } else if ( now.getDate() > currentDate.getDate() ) {
+          } else if ( now.getDate() > currentDate.getDate() && now.getMonth() == currentDate.getMonth() ) {
             li.className = "dayDesactivate";
           }
           
-          li.appendChild(span);
-          li.appendChild(pHour);
+
     
           ol.appendChild(li);
           ol.addEventListener("click", clickOnProgramSession);

@@ -98,6 +98,9 @@ function saveParameters(id, value) {
   }
 }
 
+/**
+ * Load the parameters.
+ */
 function loadParameters() {
   try {
     var cpt = 0;
@@ -120,6 +123,7 @@ function loadParameters() {
             var chk = document.getElementById("chk-next-exercice");
             chk.checked = parameters.isNextExercise();
           }
+
           cursor.continue();
         } else {
           if (cpt == 0) {

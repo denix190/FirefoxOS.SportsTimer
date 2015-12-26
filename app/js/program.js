@@ -23,7 +23,6 @@ Hour.prototype.getDisplay = function () {
     d = "0";
   }
   d += this.hours + ":";
-
   if (this.minutes < 10) {
     d += "0";
   }
