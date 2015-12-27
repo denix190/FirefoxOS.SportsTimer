@@ -382,13 +382,13 @@ ol.day li {
 
 /** Day with a session. */
 li.daySelected  {
-    background-color: rgb(19, 236, 60) !important;
+    background-color: rgb(118, 209, 26) !important;
     font-size: xsmall !important;
 }
 
 /* The current Date */
 li.dayCurrent  {
-    background-color: rgb(98, 102, 98) !important;
+    background-color: rgb(91, 92, 98) !important;
     font-size: xsmall !important;
 }
 
@@ -404,11 +404,12 @@ li.dayDesactivate  {
 
 span.day {
     line-height: 1.0rem;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     vertical-align: top;
     float:right;
-    color:white;
+    color:black;
     margin-right:2px;
+    width:0.95rem;
 }
 
 span.hour {

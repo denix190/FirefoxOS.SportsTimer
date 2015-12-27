@@ -199,7 +199,7 @@ document.querySelector('#btn-go-upd-program-back').addEventListener('click', fun
     document.querySelector('[data-position="current"]').className = 'current';
   } else {
     document.querySelector('#updProgram').className = 'right';
-    document.querySelector('#pnl-programs').className = 'current';
+    document.querySelector('#pnl-calendar').className = 'current';
   }
 
 });
@@ -518,12 +518,12 @@ document.querySelector('#btn-choose-sessions').addEventListener('click', functio
 });
 
 // Choose program
-document.querySelector('#btn-choose-programs').addEventListener('click', function () {
+document.querySelector('#btn-choose-calendar').addEventListener('click', function () {
   isProgramDisplay = true;
 
   displayListPrograms();
   
-  document.querySelector('#pnl-programs').className = 'current';
+  document.querySelector('#pnl-calendar').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
@@ -533,7 +533,7 @@ document.querySelector('#btn-go-main-back').addEventListener('click', function (
 });
 
 document.querySelector('#btn-go-main-prog-back').addEventListener('click', function () {
-  document.querySelector('#pnl-programs').className = 'left';
+  document.querySelector('#pnl-calendar').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
@@ -547,7 +547,7 @@ document.querySelector('#btn-go-program-back').addEventListener('click', functio
 document.querySelector('#btn-upd-program').addEventListener('click', function () {
  // Update the program, return to the list of programs.
   updateProgram( function() {
-    document.querySelector('#pnl-programs').className = 'current';
+    document.querySelector('#pnl-calendar').className = 'current';
     document.querySelector('#updProgram').className = 'right';
 
     displayListPrograms();
@@ -2147,9 +2147,7 @@ function displayProgram(prog) {
           } else if ( now.getDate() > currentDate.getDate() && now.getMonth() == currentDate.getMonth() ) {
             li.className = "dayDesactivate";
           }
-          
 
-    
           ol.appendChild(li);
           ol.addEventListener("click", clickOnProgramSession);
         }
@@ -2193,7 +2191,7 @@ function deleteProgram() {
 
       request.onsuccess = function(event) {
         console.log("Delete program succes");
-        document.querySelector('#pnl-programs').className = 'current';
+        document.querySelector('#pnl-calendar').className = 'current';
         document.querySelector('#updProgram').className = 'right';
       
         displayListPrograms();
