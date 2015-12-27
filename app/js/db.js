@@ -59,9 +59,12 @@ function init() {
       if (thisDB.objectStoreNames.contains("programs")) {
         thisDB.deleteObjectStore("programs");
       }
-      var objectStore = thisDB.createObjectStore("programs", { keyPath : "idProgram" , autoIncrement: true });
-      var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
 
+      // Calendar.
+      if (thisDB.objectStoreNames.contains("calendar")) {
+        var objectStore = thisDB.createObjectStore("calendar", { keyPath : "idCalendar" , autoIncrement: true });
+        objectStore.createIndex("dateSession", "dSession", {unique:false});
+      }
       // Parameters.
       if (thisDB.objectStoreNames.contains("parameters")) {
         thisDB.deleteObjectStore("parameters");

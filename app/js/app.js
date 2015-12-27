@@ -521,7 +521,7 @@ document.querySelector('#btn-choose-sessions').addEventListener('click', functio
 document.querySelector('#btn-choose-calendar').addEventListener('click', function () {
   isProgramDisplay = true;
 
-  displayListPrograms();
+  displayCalendar();
   
   document.querySelector('#pnl-calendar').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
@@ -550,7 +550,7 @@ document.querySelector('#btn-upd-program').addEventListener('click', function ()
     document.querySelector('#pnl-calendar').className = 'current';
     document.querySelector('#updProgram').className = 'right';
 
-    displayListPrograms();
+    displayCalendar();
   }, false);
   
 });
@@ -1711,23 +1711,23 @@ function removeAllItems(list) {
 }
 
 /*====================================================
-* Programs 
+* Calendar
 * ==================================================== */
 /**
- * Display the list of Programs.
+ * Display the calendar.
 */
-function displayListPrograms() {
+function displayCalendar() {
 
-  var objectStore = db.transaction("programs").objectStore("programs");
-  var listProgs = document.getElementById("list-items-progs");
+  var objectStore = db.transaction("calendar").objectStore("calendar");
+  var listCalendar = document.getElementById("list-calendar");
   
-  removeAllItems(listProgs);
+  removeAllItems(listCalendar);
   
   objectStore.openCursor().onsuccess = function(event) {
     try {
       var cursor = event.target.result;
       if (cursor) {
-        addProgram(listProgs, cursor);
+        displayDay(listCalendar, cursor);
         cursor.continue();
       }
       else {
@@ -1740,9 +1740,9 @@ function displayListPrograms() {
 }
 
 /**
- * Add an Program to the list.
+ * Display a day.
 */ 
-function addProgram(list, cursor) {
+function displayDay(list, cursor) {
   var li = document.createElement("li");
   
   var a = document.createElement("a");
@@ -2194,7 +2194,7 @@ function deleteProgram() {
         document.querySelector('#pnl-calendar').className = 'current';
         document.querySelector('#updProgram').className = 'right';
       
-        displayListPrograms();
+        displayCalendar();
       };
 
       request.onerror = function(event) {
