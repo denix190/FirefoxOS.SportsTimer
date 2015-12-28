@@ -66,22 +66,6 @@ document.querySelector('#btn-go-add-ex-back').addEventListener('click', function
 });
 
 
-// Add a new Session.
-document.querySelector('#btn-go-add-session').addEventListener('click', function () {
-  try {
-    var id= document.getElementById('idSession');
-    id.value = "-1";
-
-    document.getElementById('btn-del-ses').className = "invisible";
-    document.getElementById('nameSession').value = "";
-    document.getElementById('descSession').value = "";
-    
-    document.querySelector('#updSession').className = 'current';
-    document.querySelector('[data-position="current"]').className = 'left';
-  } catch(e) {
-    console.log(e);
-  }
-});
 document.querySelector('#btn-go-upd-session-back').addEventListener('click', function () {
   var idSession = document.getElementById('idSession');
 
@@ -164,99 +148,35 @@ document.querySelector('#imagePath').addEventListener('click', function () {
     document.querySelector('[data-position="current"]').className = 'left';
 });
 
-// Program
-// 
-// Display the panel updating a Session.
-document.querySelector('#btn-go-add-program').addEventListener('click', function () {
-  try {
-    var idProgram = document.getElementById('idProgram');
-    idProgram.value = "-1";
 
-    var listWeeks= document.getElementById("weeks");
-    removeAllItems(listWeeks);
+// document.querySelector('#btn-go-upd-program-back').addEventListener('click', function () {
+//   var idProgram = document.getElementById('idProgram');
 
-    currentProg.setIdProgram(-1);
-    currentProg.resetCalendar();
-    
-    document.getElementById('btn-del-prog').disabled = true;
-    document.getElementById('nameProgram').value = "";
-    document.getElementById('descProgram').value = "";
+//   var id = parseInt(idProgram.value);
+//   if (id == -1) {
+//     document.querySelector('#updProgram').className = 'right';
+//     document.querySelector('[data-position="current"]').className = 'current';
+//   } else {
+//     document.querySelector('#updProgram').className = 'right';
+//     document.querySelector('#pnl-calendar').className = 'current';
+//   }
 
-    document.querySelector('#updProgram').className = 'current';
-    document.querySelector('[data-position="current"]').className = 'left';
-   
-  } catch(e) {
-    console.log(e);
-  }
-});
-
-document.querySelector('#btn-go-upd-program-back').addEventListener('click', function () {
-  var idProgram = document.getElementById('idProgram');
-
-  var id = parseInt(idProgram.value);
-  if (id == -1) {
-    document.querySelector('#updProgram').className = 'right';
-    document.querySelector('[data-position="current"]').className = 'current';
-  } else {
-    document.querySelector('#updProgram').className = 'right';
-    document.querySelector('#pnl-calendar').className = 'current';
-  }
-
-});
-
-// Update the Session/date for a program return to the current program.
-document.querySelector('#btn-go-upd-session-prog').addEventListener('click', function () {
-
-  try {
-    document.querySelector('#updProgram').className = 'current';
-    document.querySelector('#listSessions').className = 'left';
-
-    var session = document.getElementById('list-select-session');
-    var id = parseInt(session.options[session.selectedIndex].value);
-
-    var startTime = document.getElementById('startTime');
-
-    var valueAsNumber = startTime.valueAsNumber;
-    var h = new Date(valueAsNumber);
-  
-    var hour = new Hour();
-    hour.setTime(h.getUTCHours(), h.getUTCMinutes());
-
-    console.log(slctSession);
-    //The session select on the calendar.
-
-    // slctSession.className = "daySelected";
-    slctSession.childNodes[1].innerHTML = hour.getDisplay(); // "&#10003";
-    // slctSession.childNodes[1].className = 
-    
-    // Session selected id :  column / row 
-
-    var values = slctSession.id.split("/");
-    var week = parseInt(values[1]);
-    var day = parseInt(values[0]);
-
-    currentProg.setSession(week, day, id, hour);
-    
-    slctSession.value = id;
-   
-  } catch (ex) {
-    console.log(ex);
-  }
- 
-});
+// });
 
 
-document.querySelector('#btn-execute-session').addEventListener('click', function () {
-  try {
-    var session = document.getElementById('list-select-session');
-    var id = parseInt(session.options[session.selectedIndex].value);
-    document.querySelector('#updProgram').className = 'right';
-    document.querySelector('#listSessions').className = 'right';
-    displaySession(id);
-  } catch(e) {
-    console.log(e);
-  }
-});
+
+// document.querySelector('#btn-execute-session').addEventListener('click', function () {
+//   try {
+//     var session = document.getElementById('list-select-session');
+//     var id = parseInt(session.options[session.selectedIndex].value);
+//     document.querySelector('#updProgram').className = 'right';
+//     document.querySelector('#listSessions').className = 'right';
+//     displaySession(id);
+//   } catch(e) {
+//     console.log(e);
+//   }
+// });
+
 
 /**
  * Launch SportsTimer.
@@ -320,7 +240,6 @@ function notifyMe(msg) {
     });
   }
 }
-  
 
 // This should open the application when the user touches the notification
 // but it only works on later FxOS versions, e.g. 2.0/2.1
@@ -342,38 +261,39 @@ if (navigator.mozSetMessageHandler) {
 /**
  * List all the alarms for SportsTimer.
  */
-document.querySelector('#btn-list-alarm').addEventListener('click', function () {
-  var allAlarmsRequest = navigator.mozAlarms.getAll();
-  allAlarmsRequest.onsuccess = function() {
+// document.querySelector('#btn-list-alarm').addEventListener('click', function () {
+//   var allAlarmsRequest = navigator.mozAlarms.getAll();
+//   allAlarmsRequest.onsuccess = function() {
     
-    this.result.forEach(function (alarm) {
-      console.log( alarm);
-    });
-  };
-});
+//     this.result.forEach(function (alarm) {
+//       console.log( alarm);
+//     });
+//   };
+// });
+
 
 /**
  * Remove all the alarms for SportsTimer.
  */
-document.querySelector('#btn-remove-Allalarm').addEventListener('click', function () {
-  var request = navigator.mozAlarms.getAll();
+// document.querySelector('#btn-remove-Allalarm').addEventListener('click', function () {
+//   var request = navigator.mozAlarms.getAll();
 
-  request.onsuccess = function () {
-    // Remove all pending alarms
-    this.result.forEach(function (alarm) {
-      navigator.mozAlarms.remove(alarm.id);
-    });
-  };
+//   request.onsuccess = function () {
+//     // Remove all pending alarms
+//     this.result.forEach(function (alarm) {
+//       navigator.mozAlarms.remove(alarm.id);
+//     });
+//   };
 
-  request.onerror = function () {
-    console.log('operation failed: ' + this.error);
-  };
+//   request.onerror = function () {
+//     console.log('operation failed: ' + this.error);
+//   };
   
-});
+// });
 
-document.querySelector('#btn-start-prog').addEventListener('click', function () {
-  updateProgram( startProgram, true);
-});
+// document.querySelector('#btn-start-prog').addEventListener('click', function () {
+//   updateProgram( startProgram, true);
+// });
 
 /**
  * Start the current program.
@@ -510,6 +430,10 @@ document.querySelector('#btn-go-choose-image-back').addEventListener('click', fu
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
+///////////////////////////////////////////////////////////////////
+// Main panel
+///////////////////////////////////////////////////////////////////
+
 // Choose sessions
 document.querySelector('#btn-choose-sessions').addEventListener('click', function () {
   isProgramDisplay = false;
@@ -517,7 +441,7 @@ document.querySelector('#btn-choose-sessions').addEventListener('click', functio
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
-// Choose program
+// Choose calendar
 document.querySelector('#btn-choose-calendar').addEventListener('click', function () {
   isProgramDisplay = true;
 
@@ -527,38 +451,131 @@ document.querySelector('#btn-choose-calendar').addEventListener('click', functio
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
+///////////////////////////////////////////////////////////////////
+// Panel: sessions.
+///////////////////////////////////////////////////////////////////
+
+// Return to the main panel
 document.querySelector('#btn-go-main-back').addEventListener('click', function () {
-  document.querySelector('#sessions').className = 'left';
-  document.querySelector('[data-position="current"]').className = 'current';
+   document.querySelector('#sessions').className = 'left';
+   document.querySelector('[data-position="current"]').className = 'current';
 });
 
-document.querySelector('#btn-go-main-prog-back').addEventListener('click', function () {
+// Add a new Session.
+document.querySelector('#btn-go-add-session').addEventListener('click', function () {
+  try {
+    var id= document.getElementById('idSession');
+    id.value = "-1";
+
+    document.getElementById('btn-del-ses').className = "invisible";
+    document.getElementById('nameSession').value = "";
+    document.getElementById('descSession').value = "";
+    
+    document.querySelector('#updSession').className = 'current';
+    document.querySelector('[data-position="current"]').className = 'left';
+  } catch(e) {
+    console.log(e);
+  }
+});
+
+///////////////////////////////////////////////////////////////////
+// Panel: pnl-calendar.
+///////////////////////////////////////////////////////////////////
+
+document.querySelector('#btn-go-main-calendar-back').addEventListener('click', function () {
   document.querySelector('#pnl-calendar').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
-document.querySelector('#btn-go-program-back').addEventListener('click', function () {
-  document.querySelector('#listSessions').className = 'left';
+///////////////////////////////////////////////////////////////////
+// Panel: pnl-calendar
+///////////////////////////////////////////////////////////////////
+
+function returnToCalendar() {
+
+  document.querySelector('#pnl-day').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+}
+
+// Add a new day of exercices.
+document.querySelector('#btn-go-add-day').addEventListener('click', function () {
+
+  document.querySelector('#pnl-day').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+  
+  //displayCalendar();
+  initPnlDay();
+});
+
+
+
+
+///////////////////////////////////////////////////////////////////
+// Panel: pnl-day.
+///////////////////////////////////////////////////////////////////
+
+
+document.querySelector('#btn-go-day-back').addEventListener('click', function () {
+  document.querySelector('#pnl-day').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
  
 });
 
-// Update an exercise and back to the list of programs
-document.querySelector('#btn-upd-program').addEventListener('click', function () {
- // Update the program, return to the list of programs.
-  updateProgram( function() {
-    document.querySelector('#pnl-calendar').className = 'current';
-    document.querySelector('#updProgram').className = 'right';
+// Update a day for the calendar.
+document.querySelector('#btn-go-upd-day').addEventListener('click', function () {
 
-    displayCalendar();
-  }, false);
+  try {
+    document.querySelector('#pnl-calendar').className = 'current';
+    document.querySelector('#pnl-day').className = 'left';
+    //document.querySelector('[data-position="current"]').className = 'left';
+
+    var session = document.getElementById('list-select-session');
+   
+    var idSession = parseInt(session.options[session.selectedIndex].value);
+
+    var startTime = document.getElementById('startTime');
+    var startDay = document.getElementById('startDay');
+
+    var valueAsNumber = startTime.valueAsNumber;
+    var h = new Date(valueAsNumber);
   
+    var hour = new Hour();
+    hour.setTime(h.getUTCHours(), h.getUTCMinutes());
+    
+    var day = startDay.valueAsNumber;
+    var d = new Date(day);
+    d.setHours(h.getHours());
+    d.setMinutes(h.getMinutes());
+
+    var doe = new DayOfExercice();
+    doe.day = d;
+    doe.idSession = idSession;
+
+    console.log(""+ d);
+    console.log(doe);
+    dbStoreCalendar(doe, displayCalendar);
+  } catch (ex) {
+    console.log(ex);
+  }
+ 
 });
 
-document.querySelector('#btn-del-prog').addEventListener('click', deleteProgram);
 
+// Remove the current day in the calendar.
+document.querySelector('#btn-remove-day').addEventListener('click', removeDay);
 
-document.querySelector('#btn-remove-progses').addEventListener('click', removeProgSession);
+// Update an exercise and back to the list of programs
+// document.querySelector('#btn-upd-program').addEventListener('click', function () {
+//  // Update the program, return to the list of programs.
+//   updateProgram( function() {
+//     document.querySelector('#pnl-calendar').className = 'current';
+//     document.querySelector('#updProgram').className = 'right';
+
+//     displayCalendar();
+//   }, false);
+  
+// });
+
 
 
 // List Exercises.
@@ -1717,7 +1734,7 @@ function removeAllItems(list) {
  * Display the calendar.
 */
 function displayCalendar() {
-
+  try {
   var objectStore = db.transaction("calendar").objectStore("calendar");
   var listCalendar = document.getElementById("list-calendar");
   
@@ -1737,80 +1754,36 @@ function displayCalendar() {
       console.log(e);
     }
   };
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 /**
  * Display a day.
 */ 
 function displayDay(list, cursor) {
+  console.log(cursor.value);
   var li = document.createElement("li");
   
   var a = document.createElement("a");
-  a.setAttribute("id", cursor.value.idProgram);
+  a.setAttribute("id", cursor.value.idSession);
   a.href = "#";
 
   var p0 = document.createElement("p");
-  p0.innerHTML = cursor.value.name;
+  p0.innerHTML = cursor.value.dSession.toLocaleDateString() +
+            " " + cursor.value.dSession.toLocaleTimeString();
   a.appendChild(p0);
 
   var p1 = document.createElement("p");
-  p1.innerHTML = cursor.value.desc;
+  p1.innerHTML = cursor.value.idSession;
   a.appendChild(p1);
 
   li.appendChild(a);
   list.appendChild(li);
 }
 
-/** 
- * Add a week for the program. 
- * 
- *
- */
-document.querySelector('#btn-add-week').addEventListener('click', function () {
-  var ol = document.createElement("ol");
-  try {
-    currentProg.addWeek();
 
-    var now =  new Date();
-    var day = now.getDay();
-    var date = now.getDate();
-   
-    for (var i = 0; i < 7; i++) {
-      var li = document.createElement("li");
-
-      var j = (currentProg.getCalendar().length - 1);
-      li.id = "" + i + "/" + j;
-      var span = document.createElement("span");
-      
-      var newDate = ((date + i - day) + (7*j) );
-
-      now.setDate(newDate);
-
-      span.textContent = now.getDate();
-
-      span.className ="day";
-      span.id = "" + i + "/" + "" + j;
-      
-      var pHour = document.createElement("span");
-      pHour.id = "" + i + "/" + "" + j;
-      pHour.className ="hour";
-    
-      pHour.innerHTML ="&nbsp;";
-
-      li.appendChild(span);
-      li.appendChild(pHour);
-
-      ol.appendChild(li);
-    }
-  } catch(e) {
-    console.log(e);
-  }
-  // Select to add or display a Session.
-  ol.addEventListener("click", clickOnProgramSession);
-
-  ol.className = "day";
-  document.querySelector('#weeks').appendChild(ol);
-});
 
 /**
  * callback function call when you click on a cell of the calendar.
@@ -1964,263 +1937,51 @@ listSlctSes.onclick = function(e) {
 
 
 
-/**
- * Update or Add a program and execute the callback.
- */
-function updateProgram(callback, started) {
-  try {
-    console.log("started:" + started);
-    var idProgram = document.getElementById('idProgram');
-    var id = parseInt(idProgram.value);
-    
-    console.log(currentProg.getCalendar());
-
-    var prog = new Program();
-    prog.setIdProgram(id);
-    prog.setName(document.getElementById("nameProgram").value);
-    prog.setDescription(document.getElementById("descProgram").value);
-    prog.setCalendar(currentProg.getCalendar());
-    prog.setStarted(started);
-    if( started) {
-      prog.setStartAt(new Date());
-    }
-    
-    // Update the program, return to the list of programs.
-    dbUpdateProgram(prog, callback);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 
 /**
- * Display the program selected in the list of programs.
+ * Remove a day in the calendar.
  */
-listItemProgram.onclick = function(e) {
-
-  var collEnfants = e.target.parentNode.childNodes;
-  var i = 0;
-  for (i = 0; i < collEnfants.length; i++)  {
-    
-    if (collEnfants[i].tagName === 'P') {
-      var id = parseInt(e.target.parentNode.id);
-      loadProgram(id, displayProgram);
-      break;
-    }
-  }
-};
-
-/**
- * Load a program.
- * @param id Id of the program.
- */
-function loadProgram(id, callback) {
-  try {
-    console.log("loadProgram");
-    document.querySelector('#updProgram').className = 'current';
-    document.querySelector('[data-position="current"]').className = 'left';
-    document.getElementById('btn-del-prog').disabled = false;
-     
-    var transaction = db.transaction(["programs"]);
-    var objectStore = transaction.objectStore("programs", 'readonly');
-    
-    var request = objectStore.get(parseInt(id));
-    
-    request.onerror = function(event) {
-      console.log("Not found for Id: " + id);
-    };
-    
-    request.onsuccess = function(evt) {
-      var value = evt.target.result;
-       
-      try {
-        var idProgram = request.result.idProgram;
-        document.getElementById('idProgram').value = idProgram;
-      } catch (e) {
-        console.log(e);
-      }
-
-      var curProg = new Program();
-      curProg.setName(request.result.name);
-      curProg.setDescription(request.result.desc);
-      curProg.setIdProgram(request.result.idProgram);
-      curProg.setCalendar(request.result.week);
-
-      if (request.result.hasOwnProperty("started")) {
-        curProg.setStarted(request.result.started);
-      } else {
-        curProg.setStarted(false);
-      }
-
-      if (request.result.hasOwnProperty("startAt")) {
-        curProg.setStartAt(request.result.startAt);
-      } else {
-        curProg.setStartAt(null);
-      }
-      console.log(curProg);
-      callback(curProg);
-    };
-  } catch (ex) {
-    console.log(ex);
-  }
-}
-
-/**
- * Display the current Program.
- * @param prog The program to display.
- */
-function displayProgram(prog) {
-
-  try {
-    var name = document.getElementById('nameProgram');
-    var desc = document.getElementById('descProgram');
-  
-    name.value = prog.getName();
-    desc.value = prog.getDescription();
-
-    var calendar = prog.getCalendar();
-
-    /** Load the current Program */
-    currentProg.setCalendar(calendar);
-    currentProg.setIdProgram(prog.getIdProgram());
-    currentProg.setName(prog.getName());
-    currentProg.setDescription(prog.getDescription());
-    currentProg.setStarted(prog.isStarted());
-    currentProg.setStartAt(prog.getStartAt());
-
-    console.log(currentProg);
-    
-    var listWeeks= document.getElementById("weeks");
-    removeAllItems(listWeeks);
-    if (calendar === undefined) {
-      return;
-    }
-    
-    var currentDate =  new Date();
-    var now =  new Date();
-    if (currentProg.isStarted()) {
-      currentDate = new Date(currentProg.getStartAt().getTime());
-      now = new Date(currentProg.getStartAt().getTime());
-    } 
-    var day = currentDate.getDay();
-    var date = currentDate.getDate();
-
-    for (var j = 0; j < calendar.length; j++) {
-      var ol = document.createElement("ol");
-      try {
-
-        for (var i = 0; i < 7; i++) {
-          var li = document.createElement("li");
-          li.id = "" + i + "/" + "" + j;
-
-          var span = document.createElement("span");
-
-          var newDate = ((date + i - day) + (7*j) );
-          currentDate.setDate(newDate);
-          
-          span.textContent = currentDate.getDate();
-          
-          span.className ="day";
-          span.id = "" + i + "/" + "" + j;
-         
-          var pHour = document.createElement("span");
-          pHour.id = "" + i + "/" + "" + j;
-          pHour.className ="hour";
-
-          var session = prog.getSession(j, i);
-          if (session != -1 && session !== 0) {
-            li.className = "daySelected";
-            var h = prog.getHour(j, i);
-
-            li.value = session;
-            pHour.innerHTML = h.getDisplay();
-            pHour.value = session;
-            span.value = session;
-          } else {
-            pHour.innerHTML ="&nbsp;";
-          }
-          li.appendChild(span);
-          li.appendChild(pHour);
-          console.log("now:" + now.getDate() + " currentDate:" + currentDate.getDate());
-          if (currentDate.getDate() == now.getDate()) {
-            li.className = "dayCurrent";
-          } else if ( now.getDate() > currentDate.getDate() && now.getMonth() == currentDate.getMonth() ) {
-            li.className = "dayDesactivate";
-          }
-
-          ol.appendChild(li);
-          ol.addEventListener("click", clickOnProgramSession);
-        }
-      } catch(e) {
-        console.log(e);
-      }
-      
-      ol.className = "day";
-      document.querySelector('#weeks').appendChild(ol);
-    }
-  } catch(e) {
-    console.log(e);
-  } 
-}
-
-/**
- * Delete the current Program.
- */
-function deleteProgram() {
-  if (window.confirm(navigator.mozL10n.get("confirmDeleteProgram"))) {
-    try {
-      var idUpd = document.getElementById('idProgram');
-
-      var id = parseInt(idUpd.value);
-    
-      //dbDeleteProgram(id) ;
-
-      var transaction = db.transaction(["programs"],"readwrite");
-
-      transaction.oncomplete = function(event) {
-        console.log("delete program:transaction complete");
-      };
-      
-      transaction.onerror = function(event) {
-        console.log(event);
-      };
-      
-      var store = transaction.objectStore("programs");
-      console.log(id);
-      var request = store.delete(id);
-
-      request.onsuccess = function(event) {
-        console.log("Delete program succes");
-        document.querySelector('#pnl-calendar').className = 'current';
-        document.querySelector('#updProgram').className = 'right';
-      
-        displayCalendar();
-      };
-
-      request.onerror = function(event) {
-        console.log("Delete program error" + event);
-      } 
-    } catch(e) {
-      console.log(e);
-    }
-  }
-}
-
-/**
- * Remove the session for the program
- */
-function removeProgSession() {
+function removeDay() {
   if (window.confirm(navigator.mozL10n.get("confirmRemoveSession"))) {
     try {
       currentProg.removeSession();
 
       // Reload the current program.
-      displayProgram(currentProg);
+      //displayProgram(currentProg);
       
-      document.querySelector('#listSessions').className = 'right';
-      document.querySelector('#updProgram').className = 'current';
+      document.querySelector('#pnl-day').className = 'right';
+      document.querySelector('#pnl-calendar').className = 'current';
     } catch(e) {
       console.log(e);
     }
+  }
+}
+/**
+ * Initialize the list of sessions for a Day.
+ */
+function initPnlDay() {
+  try {
+    var objectStore = db.transaction("sessions").objectStore("sessions");
+    var listSes = document.getElementById("list-select-session");
+    removeAllItems(listSes);
+
+      // Load the list of sessions.
+    objectStore.openCursor().onsuccess = function(event) {
+      console.log(event);
+
+      try {
+        var cursor = event.target.result;
+        if (cursor) {
+          addSessionProg(listSes, cursor, -1);
+          cursor.continue();
+        } else {
+          // returnToCalendar();
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    };
+  } catch(e) {
+    console.log(e);
   }
 }

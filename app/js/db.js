@@ -64,6 +64,9 @@ function init() {
       if (thisDB.objectStoreNames.contains("calendar")) {
         var objectStore = thisDB.createObjectStore("calendar", { keyPath : "idCalendar" , autoIncrement: true });
         objectStore.createIndex("dateSession", "dSession", {unique:false});
+      } else {
+        var objectStore = thisDB.createObjectStore("calendar", { keyPath : "idCalendar" , autoIncrement: true });
+        objectStore.createIndex("dateSession", "dSession", {unique:false});
       }
       // Parameters.
       if (thisDB.objectStoreNames.contains("parameters")) {
@@ -325,26 +328,24 @@ function dbDeleteProgram(id) {
 }
 
 /**
- * Update the program.
+ * Update/Add a day in the calendar.
  */
-function dbUpdateProgram(program, callbackRet) {
+function dbStoreCalendar(doe, callbackRet) {
 
- var transaction = db.transaction(["programs"],"readwrite");
-  var store = transaction.objectStore("programs");
+  var transaction = db.transaction(["calendar"],"readwrite");
+  var store = transaction.objectStore("calendar");
   
-  if (program.getIdProgram() == -1) {
-    //Define a new programRecord
-    var programRecord = {
-      name: program.getName(),
-      desc: program.getDescription(),
-      week: program.getCalendar(),
-      started: program.isStarted(),
-      startAt: program.getStartAt(),
+  if (doe.idCalendar == -1) {
+    //Define a new Day of Exercice.
+    var doeRecord = {
+      dSession: doe.day,
+      idSession: doe.idSession,
+      executed: doe.executed,
       created:new Date()
     };
     
     /* */
-    var request = store.add(programRecord);
+    var request = store.add(doeRecord);
     request.onerror = function(e) {
       console.log("Error program" + e.target.error.name);
     };
@@ -353,20 +354,18 @@ function dbUpdateProgram(program, callbackRet) {
       callbackRet();
     };
   } else {
-    var programRecord = {
-      name: program.getName(),
-      desc: program.getDescription(),
-      week: program.getCalendar(),
+    var doeRecord = {
+      dSession: doe.day,
+      idSession: doe.idSession,
+      executed: doe.executed,
       created:new Date(),
-      idProgram: program.getIdProgram(),
-      started: program.isStarted(),
-      startAt: program.getStartAt()
+      idCalendar: doe.idCalendar  
     };
-    var request = store.put(programRecord);
+    var request = store.put(doeRecord);
     request.onerror = function(e) {
       console.log("Error SportsTimer", e.target.error.name);
     };
-      
+
     request.onsuccess = function(event) {
       callbackRet();
     };

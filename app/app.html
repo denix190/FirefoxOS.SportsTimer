@@ -301,9 +301,9 @@
  <!--·························· Calendar ··························-->
   <section role="region" id="pnl-calendar" data-position="right">
     <header class="fixed">
-      <a id="btn-go-main-prog-back" href="#"><span class="icon icon-back">back</span></a>
+      <a id="btn-go-main-calendar-back" href="#"><span class="icon icon-back">back</span></a>
      <menu type="toolbar">
-       <button class="icon icon-add" id="btn-go-add-program">
+       <button class="icon icon-add" id="btn-go-add-day">
          <span>edit</span>
        </button>
      </menu>
@@ -433,68 +433,12 @@
     </article>
   </section>
 
- <!-- Add/Update Program -->
-  <section role="region" id="updProgram" data-position="right">
-    <header class="fixed">
-      <a id="btn-go-upd-program-back" href="#"><span class="icon icon-back">back</span></a>
-       <menu type="toolbar">
-         <button id="btn-upd-program" data-l10n-id="idUpdProgram">Save</button>
-       </menu>
-      
-      <h1 data-l10n-id="idProgram">Program</h1>
-    </header>
-    <article class="scrollable header">
-      <p width="100%" style="margin-top:2px; margin-bottom:2px;">
-        <input id="nameProgram" type="text" maxlength="20" data-l10n-id="idNameProgram" placeholder="" required/>
-        <input type="hidden" id="idProgram" value=""/>
-      </p>
-
-      <div style="width:100%">
-        <span style="float:left;width:49%;margin-top:1.0rem;font-size:medium;" data-l10n-id="idCalendar">Calendar</span> 
-        <button id="btn-add-week" class="recommend" style="margin-top:1px;width:49%;line-height:2rem;height:2.0rem;" data-l10n-id="idAddWeek" >Add</button>
-      </div>
-
-      <div style="width:100%;" id="calendar">
-        <ol class="horizontal">
-          <li>Su</li>
-          <li>Mo</li>
-          <li>Tu</li>
-          <li>We</li>
-          <li>Th</li>
-          <li>Fr</li>
-          <li>Sa</li>
-        </ol>
-        <ol class="day" id="weeks"/>
-      </div>
-
-      <div style="border-top:5px;">
-         <button style="margin-top:2px;" id="btn-start-prog" class="recommend" data-l10n-id="idStartProgram" >Start</button>
-        
-      </div>
-      
-      <div width="100%">
-        <textarea id="descProgram" data-l10n-id="idDescProgram" placeholder=""></textarea>
-      </div>
-
-      <div>
-        
-        <button id="btn-del-prog" class="danger" data-l10n-id="idDeleteProgram" >Delete</button>
-      </div>
-
-      <div>
-        <button id="btn-list-alarm" class="recommend" >Alarm</button>
-                <button id="btn-remove-Allalarm" class="danger" >Remove Alarms</button>
-      </div>
-      
-    </article>
-  </section>
-
   <!--·························· Select Sessions for program ··························-->
-  <section role="region" id="listSessions" data-position="right">
+  <section role="region" id="pnl-day" data-position="right">
     <header class="fixed">
-      <a id="btn-go-program-back" href="#"><span class="icon icon-back">back</span></a>
+      <a id="btn-go-day-back" href="#"><span class="icon icon-back">back</span></a>
       <menu type="toolbar">
-        <button id="btn-go-upd-session-prog" data-l10n-id="idUpdProgram">Save</button>
+        <button id="btn-go-upd-day" data-l10n-id="idUpdProgram">Save</button>
       </menu>
       <h1>Sessions</h1>
     </header>
@@ -504,13 +448,18 @@
         <span data-l10n-id="idSession">Session</span>
         <select id="list-select-session"></select>
       </p>
+
       <p style="margin-top:2px; margin-bottom:2px;">
         <span data-l10n-id="idStartTime">Hour</span>
-        <input id="startTime" style="width:50%;float:right;" placeholder="" type="time"/>
+      </p>
+      <p style="margin-top:2px; margin-bottom:2px;">
+       
+        <input id="startDay" style="width:45%;float:left;" placeholder="" type="date"/>
+        <input id="startTime" style="width:30%;float:right;" placeholder="" type="time"/>
       </p>
       <div>
         <button id="btn-execute-session" class="recommend" data-l10n-id="idExecuteSession" >Run</button>
-        <button id="btn-remove-progses" class="danger" data-l10n-id="idRemoveSession" >Remove</button>
+        <button id="btn-remove-day" class="danger" data-l10n-id="idRemoveSession" >Remove</button>
       </div>
       
     </article>
@@ -843,6 +792,7 @@
   <script type="text/javascript" defer src="js/export.js"></script>
   <script type="text/javascript" defer src="js/import.js"></script>
   <script type="text/javascript" defer src="js/program.js"></script>
+  <script type="text/javascript" defer src="js/calendar.js"></script>
   <script type="text/javascript" defer src="js/parameters.js"></script>
   <script type="text/javascript" defer src="js/app.js"></script>
   <script type="text/javascript" defer src="js/l10n.js" charset="utf-8"></script>
