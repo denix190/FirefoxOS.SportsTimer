@@ -331,44 +331,56 @@ function dbDeleteProgram(id) {
  * Update/Add a day in the calendar.
  */
 function dbStoreCalendar(doe, callbackRet) {
+  try {
+    console.log("dbStoreCalendar");
+    console.log(doe);
+    var transaction = db.transaction(["calendar"],"readwrite");
+    var store = transaction.objectStore("calendar");
 
-  var transaction = db.transaction(["calendar"],"readwrite");
-  var store = transaction.objectStore("calendar");
-  
-  if (doe.idCalendar == -1) {
-    //Define a new Day of Exercice.
-    var doeRecord = {
-      dSession: doe.day,
-      idSession: doe.idSession,
-      executed: doe.executed,
-      created:new Date()
-    };
-    
-    /* */
-    var request = store.add(doeRecord);
-    request.onerror = function(e) {
-      console.log("Error program" + e.target.error.name);
-    };
-    
-    request.onsuccess = function(event) {
-      callbackRet();
-    };
-  } else {
-    var doeRecord = {
-      dSession: doe.day,
-      idSession: doe.idSession,
-      executed: doe.executed,
-      created:new Date(),
-      idCalendar: doe.idCalendar  
-    };
-    var request = store.put(doeRecord);
-    request.onerror = function(e) {
-      console.log("Error SportsTimer", e.target.error.name);
-    };
-
-    request.onsuccess = function(event) {
-      callbackRet();
-    };
-
+    if (doe.idCalendar == -1) {
+      console.log("doe.idCalendar == -1");
+      //Define a new Calendar.
+      var doeRecord = {
+        dSession: doe.day,
+        idSession: doe.idSession,
+        executed: doe.executed,
+        created:new Date()
+      };
+      console.log(doeRecord);
+      /* */
+      var request = store.add(doeRecord);
+      request.onerror = function(e) {
+        console.log("Error program" + e.target.error.name);
+      };
+      
+      request.onsuccess = function(event) {
+        console.log("onsuccess");
+        try {
+          callbackRet();
+        } catch(e) {
+          console.log(e);
+        }
+      };
+    } else {
+      console.log("doe.idCalendar != -1");
+      var doeRecord = {
+        dSession: doe.day,
+        idSession: doe.idSession,
+        executed: doe.executed,
+        created:new Date(),
+        idCalendar: doe.idCalendar  
+      };
+      var request = store.put(doeRecord);
+      request.onerror = function(e) {
+        console.log("Error SportsTimer", e.target.error.name);
+      };
+      
+      request.onsuccess = function(event) {
+        console.log("onsuccess");
+        callbackRet();
+      };
+    }
+  } catch(e) {
+    console.log(e);
   }
-}
+} 

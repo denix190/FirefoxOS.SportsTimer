@@ -1,6 +1,11 @@
 /**
  * Class Session.
 */ 
+function SessionData() {
+  this.idSession = -1;
+  this.name = "";
+}
+
 
 function Session() {
   this.flagStartSes = false;

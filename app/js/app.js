@@ -445,7 +445,9 @@ document.querySelector('#btn-choose-sessions').addEventListener('click', functio
 document.querySelector('#btn-choose-calendar').addEventListener('click', function () {
   isProgramDisplay = true;
 
-  displayCalendar();
+  getSessions(displayCalendar);
+
+  //displayCalendar();
   
   document.querySelector('#pnl-calendar').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
@@ -507,13 +509,9 @@ document.querySelector('#btn-go-add-day').addEventListener('click', function () 
   initPnlDay();
 });
 
-
-
-
 ///////////////////////////////////////////////////////////////////
 // Panel: pnl-day.
 ///////////////////////////////////////////////////////////////////
-
 
 document.querySelector('#btn-go-day-back').addEventListener('click', function () {
   document.querySelector('#pnl-day').className = 'left';
@@ -553,7 +551,7 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
 
     console.log(""+ d);
     console.log(doe);
-    dbStoreCalendar(doe, displayCalendar);
+    dbStoreCalendar(doe, getSessions(displayCalendar));
   } catch (ex) {
     console.log(ex);
   }
@@ -863,7 +861,6 @@ function loadSession( id )  {
  * @param id id of the session.
  */
 function getSession( id , dateEvent, programName, Callback)  {
-
 
   var transaction = db.transaction(["sessions"]);
   var objectStore = transaction.objectStore("sessions", 'readonly');
@@ -1622,6 +1619,34 @@ function displayListSessions() {
 }
 
 /**
+ * Display the list of Sessions.
+*/
+function getSessions(callback) {
+ 
+  var objectStore = db.transaction("sessions").objectStore("sessions");
+  var sessions = [];
+
+  objectStore.openCursor().onsuccess = function(event) {
+    try {
+      var cursor = event.target.result;
+      if (cursor) {
+        var sessionData = new SessionData();
+        sessionData.idSession = cursor.value.idSession;
+        sessionData.name = cursor.value.name;
+        sessions.push(sessionData);
+        cursor.continue();
+      }
+      else {
+        callback(sessions);
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  };
+}
+
+
+/**
  * Add an Session to the list.
 */ 
 function addSession(list, cursor) {
@@ -1656,7 +1681,7 @@ function addSessionProg(list, cursor, id) {
   if (cursor.value.idSession === id) {
     opt.selected = true;
   }
-  opt.innerHTML = cursor.value.name
+  opt.innerHTML = cursor.value.name;
   
   list.appendChild(opt);
 }
@@ -1733,27 +1758,28 @@ function removeAllItems(list) {
 /**
  * Display the calendar.
 */
-function displayCalendar() {
+function displayCalendar(listSessions) {
   try {
-  var objectStore = db.transaction("calendar").objectStore("calendar");
-  var listCalendar = document.getElementById("list-calendar");
-  
-  removeAllItems(listCalendar);
-  
-  objectStore.openCursor().onsuccess = function(event) {
-    try {
-      var cursor = event.target.result;
-      if (cursor) {
-        displayDay(listCalendar, cursor);
-        cursor.continue();
+    var objectStore = db.transaction("calendar").objectStore("calendar");
+    var listCalendar = document.getElementById("list-calendar");
+
+    removeAllItems(listCalendar);
+
+    objectStore.openCursor().onsuccess = function(event) {
+      try {
+        var cursor = event.target.result;
+        if (cursor) {
+          
+          displayDay(listCalendar, cursor, listSessions);
+          cursor.continue();
+        }
+        else {
+          // alert("No more entries!");
+        }
+      } catch(e) {
+        console.log(e);
       }
-      else {
-        // alert("No more entries!");
-      }
-    } catch(e) {
-      console.log(e);
-    }
-  };
+    };
   } catch(e) {
     console.log(e);
   }
@@ -1762,7 +1788,7 @@ function displayCalendar() {
 /**
  * Display a day.
 */ 
-function displayDay(list, cursor) {
+function displayDay(list, cursor, listSessions) {
   console.log(cursor.value);
   var li = document.createElement("li");
   
@@ -1776,7 +1802,14 @@ function displayDay(list, cursor) {
   a.appendChild(p0);
 
   var p1 = document.createElement("p");
-  p1.innerHTML = cursor.value.idSession;
+  
+
+  for (var i = 0; i < listSessions.length;i++) {
+    if (cursor.value.idSession == listSessions[i].idSession) {
+      p1.innerHTML = listSessions[i].name;
+    }
+  }
+
   a.appendChild(p1);
 
   li.appendChild(a);
@@ -1935,9 +1968,6 @@ listSlctSes.onclick = function(e) {
   }
 };
 
-
-
-
 /**
  * Remove a day in the calendar.
  */
@@ -1978,6 +2008,7 @@ function initPnlDay() {
           // returnToCalendar();
         }
       } catch(e) {
+
         console.log(e);
       }
     };
