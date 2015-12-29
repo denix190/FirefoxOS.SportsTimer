@@ -28,6 +28,22 @@ var parameters = new Parameters();
 var currentProg = new Program();
 var isProgramDisplay = false;
 
+// List Exercises.
+var listItemEx = document.getElementById('list-items-ex');
+
+// List Session 
+var listItemSes = document.getElementById('list-items-ses');
+
+// List Session for program
+var listSlctSes = document.getElementById('list-select-session');
+
+// List Calendar
+var listCalendar = document.getElementById('list-calendar');
+
+// List All images.
+var listImages = document.getElementById('list-images');
+
+
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
 
@@ -447,8 +463,7 @@ document.querySelector('#btn-choose-calendar').addEventListener('click', functio
 
   getSessions(displayCalendar);
 
-  //displayCalendar();
-  
+ 
   document.querySelector('#pnl-calendar').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
 });
@@ -504,11 +519,46 @@ document.querySelector('#btn-go-add-day').addEventListener('click', function () 
 
   document.querySelector('#pnl-day').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
-  
-  //displayCalendar();
-  initPnlDay();
+
+  var doe = new DayOfExercice();
+  doe.idSession = -1;
+
+  initPnlDay(doe);
 });
 
+
+/**
+ * Select a day in the calendar.
+ */
+listCalendar.onclick = function(e) {
+
+  document.querySelector('#pnl-day').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+
+  document.getElementById('btn-add-sesEx').disabled = false;
+  document.getElementById('btn-del-ses').className = "danger";
+  
+  var collEnfants = e.target.parentNode.childNodes;
+  var i = 0;
+  for (i = 0; i < collEnfants.length; i++)  {
+    console.log(collEnfants[i].tagName);
+    if (collEnfants[i].tagName === 'P') {
+      try {
+        var id = parseInt(e.target.parentNode.id);
+        console.log(id);
+
+        dbLoadCalendar(id, initPnlDay);
+
+        // initPnlDay(id);
+        break;
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+  }
+};
+
+    
 ///////////////////////////////////////////////////////////////////
 // Panel: pnl-day.
 ///////////////////////////////////////////////////////////////////
@@ -525,7 +575,6 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
   try {
     document.querySelector('#pnl-calendar').className = 'current';
     document.querySelector('#pnl-day').className = 'left';
-    //document.querySelector('[data-position="current"]').className = 'left';
 
     var session = document.getElementById('list-select-session');
    
@@ -533,6 +582,9 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
 
     var startTime = document.getElementById('startTime');
     var startDay = document.getElementById('startDay');
+
+    var idCalendar = document.getElementById('idCalendar');
+
 
     var valueAsNumber = startTime.valueAsNumber;
     var h = new Date(valueAsNumber);
@@ -548,15 +600,19 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
     var doe = new DayOfExercice();
     doe.day = d;
     doe.idSession = idSession;
-
+    doe.idCalendar = parseInt(idCalendar.value);
+    
     console.log(""+ d);
     console.log(doe);
-    dbStoreCalendar(doe, getSessions(displayCalendar));
+    dbStoreCalendar(doe, function () {
+      getSessions(displayCalendar);
+    });
   } catch (ex) {
     console.log(ex);
   }
  
 });
+
 
 
 // Remove the current day in the calendar.
@@ -576,20 +632,6 @@ document.querySelector('#btn-remove-day').addEventListener('click', removeDay);
 
 
 
-// List Exercises.
-var listItemEx = document.getElementById('list-items-ex');
-
-// List Session 
-var listItemSes = document.getElementById('list-items-ses');
-
-// List Session for program
-var listSlctSes = document.getElementById('list-select-session');
-
-// List Program
-var listItemProgram = document.getElementById('list-items-progs');
-
-// List All images.
-var listImages = document.getElementById('list-images');
 
 /**
  * Load the list of Images.
@@ -1622,7 +1664,7 @@ function displayListSessions() {
  * Display the list of Sessions.
 */
 function getSessions(callback) {
- 
+  console.log("getSessions");   
   var objectStore = db.transaction("sessions").objectStore("sessions");
   var sessions = [];
 
@@ -1631,7 +1673,7 @@ function getSessions(callback) {
       var cursor = event.target.result;
       if (cursor) {
         var sessionData = new SessionData();
-        sessionData.idSession = cursor.value.idSession;
+        sessionData.idSession = cursor.value.idSession; 
         sessionData.name = cursor.value.name;
         sessions.push(sessionData);
         cursor.continue();
@@ -1673,7 +1715,7 @@ function addSession(list, cursor) {
 /**
  * Add an Session to the list.
 */ 
-function addSessionProg(list, cursor, id) {
+function addSessionToList(list, cursor, id) {
 
   var opt = document.createElement("option");
   opt.value = cursor.value.idSession;
@@ -1759,17 +1801,20 @@ function removeAllItems(list) {
  * Display the calendar.
 */
 function displayCalendar(listSessions) {
+  console.log("displayCalendar");
   try {
-    var objectStore = db.transaction("calendar").objectStore("calendar");
     var listCalendar = document.getElementById("list-calendar");
-
     removeAllItems(listCalendar);
+    var objectStore = db.transaction("calendar").objectStore("calendar");
 
-    objectStore.openCursor().onsuccess = function(event) {
+    var index = objectStore.index("dateSession");
+
+    var range = IDBKeyRange.lowerBound(new Date());
+    
+    index.openCursor(range).onsuccess = function(event) {
       try {
         var cursor = event.target.result;
         if (cursor) {
-          
           displayDay(listCalendar, cursor, listSessions);
           cursor.continue();
         }
@@ -1789,27 +1834,25 @@ function displayCalendar(listSessions) {
  * Display a day.
 */ 
 function displayDay(list, cursor, listSessions) {
-  console.log(cursor.value);
+
   var li = document.createElement("li");
   
   var a = document.createElement("a");
-  a.setAttribute("id", cursor.value.idSession);
+  a.setAttribute("id", cursor.value.idCalendar);
   a.href = "#";
 
   var p0 = document.createElement("p");
-  p0.innerHTML = cursor.value.dSession.toLocaleDateString() +
-            " " + cursor.value.dSession.toLocaleTimeString();
+  
+  for (var i = 0; i < listSessions.length;i++) {
+    if (cursor.value.idSession == listSessions[i].idSession) {
+      p0.innerHTML = listSessions[i].name;
+    }
+  }
   a.appendChild(p0);
 
   var p1 = document.createElement("p");
-  
-
-  for (var i = 0; i < listSessions.length;i++) {
-    if (cursor.value.idSession == listSessions[i].idSession) {
-      p1.innerHTML = listSessions[i].name;
-    }
-  }
-
+  p1.innerHTML = cursor.value.dSession.toLocaleDateString() +
+            " " + cursor.value.dSession.toLocaleTimeString();
   a.appendChild(p1);
 
   li.appendChild(a);
@@ -1972,12 +2015,12 @@ listSlctSes.onclick = function(e) {
  * Remove a day in the calendar.
  */
 function removeDay() {
-  if (window.confirm(navigator.mozL10n.get("confirmRemoveSession"))) {
+  if (window.confirm(navigator.mozL10n.get("confirmRemoveDay"))) {
     try {
-      currentProg.removeSession();
-
-      // Reload the current program.
-      //displayProgram(currentProg);
+      var idCalendar = document.getElementById('idCalendar');
+      
+      dbDeleteCalendar(parseInt(idCalendar.value));
+      getSessions(displayCalendar);
       
       document.querySelector('#pnl-day').className = 'right';
       document.querySelector('#pnl-calendar').className = 'current';
@@ -1989,26 +2032,36 @@ function removeDay() {
 /**
  * Initialize the list of sessions for a Day.
  */
-function initPnlDay() {
+function initPnlDay(dayOfExercice) {
   try {
-    var objectStore = db.transaction("sessions").objectStore("sessions");
     var listSes = document.getElementById("list-select-session");
     removeAllItems(listSes);
 
-      // Load the list of sessions.
+    if (dayOfExercice.day != null) {
+      var startTime = document.getElementById('startTime');
+      startTime.valueAsNumber = dayOfExercice.day.getTime();
+      console.log(startTime);
+ 
+      var startDay = document.getElementById('startDay');
+      startDay.valueAsNumber = dayOfExercice.day.getTime();
+      console.log(startDay);
+    }
+    var idCalendar = document.getElementById('idCalendar');
+    idCalendar.value = dayOfExercice.idCalendar;
+    console.log(dayOfExercice);
+    // Load the list of sessions.
+    var objectStore = db.transaction("sessions").objectStore("sessions");
     objectStore.openCursor().onsuccess = function(event) {
-      console.log(event);
 
       try {
         var cursor = event.target.result;
         if (cursor) {
-          addSessionProg(listSes, cursor, -1);
+          addSessionToList(listSes, cursor, dayOfExercice.idSession);
           cursor.continue();
         } else {
           // returnToCalendar();
         }
       } catch(e) {
-
         console.log(e);
       }
     };

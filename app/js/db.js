@@ -315,10 +315,10 @@ function dbDeleteSessionByName(sessionName) {
 
 }
 
-function dbDeleteProgram(id) {
+function dbDeleteCalendar(id) {
   try {
-    var transaction = db.transaction(["programs"],"readwrite");
-    var store = transaction.objectStore("programs");
+    var transaction = db.transaction(["calendar"],"readwrite");
+    var store = transaction.objectStore("calendar");
     console.log(id);
     var request = store.delete(id);
   } catch(e) {
@@ -333,12 +333,12 @@ function dbDeleteProgram(id) {
 function dbStoreCalendar(doe, callbackRet) {
   try {
     console.log("dbStoreCalendar");
-    console.log(doe);
+    
     var transaction = db.transaction(["calendar"],"readwrite");
     var store = transaction.objectStore("calendar");
 
     if (doe.idCalendar == -1) {
-      console.log("doe.idCalendar == -1");
+      console.log(doe);
       //Define a new Calendar.
       var doeRecord = {
         dSession: doe.day,
@@ -354,7 +354,6 @@ function dbStoreCalendar(doe, callbackRet) {
       };
       
       request.onsuccess = function(event) {
-        console.log("onsuccess");
         try {
           callbackRet();
         } catch(e) {
@@ -362,7 +361,7 @@ function dbStoreCalendar(doe, callbackRet) {
         }
       };
     } else {
-      console.log("doe.idCalendar != -1");
+    
       var doeRecord = {
         dSession: doe.day,
         idSession: doe.idSession,
@@ -383,4 +382,31 @@ function dbStoreCalendar(doe, callbackRet) {
   } catch(e) {
     console.log(e);
   }
-} 
+}
+
+/**
+ * Load the data the session in the panel.
+ */
+function dbLoadCalendar( idCalendar, callback )  {
+  var transaction = db.transaction(["calendar"]);
+  var objectStore = transaction.objectStore("calendar", 'readonly');
+  
+  var request = objectStore.get(parseInt(idCalendar));
+  
+  request.onerror = function(event) {
+    console.log("Not found for Id: " + id);
+  };
+  
+  request.onsuccess = function(evt) {
+    var doe = new DayOfExercice();
+
+    doe.idSession = request.result.idSession;
+    doe.executed = request.result.executed;
+    doe.day = request.result.dSession;
+    doe.idCalendar = request.result.idCalendar;
+    console.log(doe);
+    callback( doe);
+    
+   // idSession.value = id;
+  };
+}
