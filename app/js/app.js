@@ -164,36 +164,6 @@ document.querySelector('#imagePath').addEventListener('click', function () {
     document.querySelector('[data-position="current"]').className = 'left';
 });
 
-
-// document.querySelector('#btn-go-upd-program-back').addEventListener('click', function () {
-//   var idProgram = document.getElementById('idProgram');
-
-//   var id = parseInt(idProgram.value);
-//   if (id == -1) {
-//     document.querySelector('#updProgram').className = 'right';
-//     document.querySelector('[data-position="current"]').className = 'current';
-//   } else {
-//     document.querySelector('#updProgram').className = 'right';
-//     document.querySelector('#pnl-calendar').className = 'current';
-//   }
-
-// });
-
-
-
-// document.querySelector('#btn-execute-session').addEventListener('click', function () {
-//   try {
-//     var session = document.getElementById('list-select-session');
-//     var id = parseInt(session.options[session.selectedIndex].value);
-//     document.querySelector('#updProgram').className = 'right';
-//     document.querySelector('#listSessions').className = 'right';
-//     displaySession(id);
-//   } catch(e) {
-//     console.log(e);
-//   }
-// });
-
-
 /**
  * Launch SportsTimer.
  */
@@ -585,7 +555,6 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
 
     var idCalendar = document.getElementById('idCalendar');
 
-
     var valueAsNumber = startTime.valueAsNumber;
     var h = new Date(valueAsNumber);
   
@@ -601,9 +570,7 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
     doe.day = d;
     doe.idSession = idSession;
     doe.idCalendar = parseInt(idCalendar.value);
-    
-    console.log(""+ d);
-    console.log(doe);
+
     dbStoreCalendar(doe, function () {
       getSessions(displayCalendar);
     });
@@ -1834,7 +1801,7 @@ function displayCalendar(listSessions) {
  * Display a day.
 */ 
 function displayDay(list, cursor, listSessions) {
-
+  var date = new Date();
   var li = document.createElement("li");
   
   var a = document.createElement("a");
@@ -1851,124 +1818,18 @@ function displayDay(list, cursor, listSessions) {
   a.appendChild(p0);
 
   var p1 = document.createElement("p");
+  if (cursor.value.dSession.getDate() == date.getDate() &&
+      cursor.value.dSession.getMonth() == date.getMonth() ) {
+    p0.className = "currentDay";
+    p1.className = "currentDay";
+  }
+  
   p1.innerHTML = cursor.value.dSession.toLocaleDateString() +
             " " + cursor.value.dSession.toLocaleTimeString();
   a.appendChild(p1);
 
   li.appendChild(a);
   list.appendChild(li);
-}
-
-
-
-/**
- * callback function call when you click on a cell of the calendar.
- * 
- */
-function clickOnProgramSession(e) {
-  try {
-    var objectStore = db.transaction("sessions").objectStore("sessions");
-    var listSes = document.getElementById("list-select-session");
-    
-    removeAllItems(listSes);
-    
-    // Load the list of sessions.
-    objectStore.openCursor().onsuccess = function(event) {
-      var id = e.target.parentNode.value;
-
-      try {
-        var cursor = event.target.result;
-        if (cursor) {
-          addSessionProg(listSes, cursor, id);
-          cursor.continue();
-        }
-        else {
-          // End of list of sessions.
-          document.querySelector('#listSessions').className = 'current';
-          document.querySelector('[data-position="current"]').className = 'left';
-
-          if (e.target.nodeName === 'OL') {
-            slctSession = e.target;
-          } else if (e.target.nodeName === 'LI') {
-            slctSession = e.target; 
-          } else if (e.target.nodeName === 'SPAN') {
-            slctSession = e.target.parentNode; 
-          }
-          console.log(slctSession.value);
-          var startTime = document.getElementById('startTime');
-          if (slctSession.value !== 0) {
-            // New session for a program
-
-            var values = e.target.id.split("/");
-            var week = parseInt(values[1]);
-            var day = parseInt(values[0]);
-
-            var now =  new Date();
-            var date = now.getDate();
-            var newDate = ((date + day - now.getDay()) + (7*week) );
-            
-            console.log("week " + week + " day " + day + " newDate " + newDate);
-            currentProg.sessionSelected(week, day);
-            var hour = currentProg.getHour(week, day);
-
-            if (newDate == date) {
-              document.getElementById('btn-execute-session').className= "recommend";
-            } else {
-              document.getElementById('btn-execute-session').className= "invisible";
-            }
-            
-            // Start of the session.
-            var start = Date.UTC(1970, 1, 1, hour.hours, hour.minutes);
-            startTime.valueAsNumber = start;
-            console.log(startTime);
- 
-            document.getElementById('btn-remove-progses').className= "danger";
-          } else {
-            // display an existing session
-            try {
-              document.getElementById('btn-remove-progses').className= "invisible";
-              startTime.valueAsDate = new Date(1970, 1, 1, 12, 0);
-              startTime.innerHTML = "12:0";
-            } catch(e) {
-              console.log(e);
-            }
-          }
-        }
-      } catch(e) {
-        console.log(e);
-      }
-    };
-  } catch(e) {
-    console.log(e);
-  }
-}
-
-/**
- * Display the session selected in the calendar.
- */
-function displayProgramSession(value) {
-
-  try {
-    document.querySelector('#updSession').className = 'current';
-    document.querySelector('#updProgram').className = 'right';
-
-    document.getElementById('btn-remove-progses').className = "danger";
-
-    document.getElementById('btn-del-ses').className ="invisible";
-
-    var id = parseInt(value);
-    
-    var idSession = document.getElementById('idSession');
-    idSession.value = id;
-    
-    session.setIdSession(id);
- 
-    listSessionEx(id);
-    loadSession(id);
-
-  } catch (ex) {
-    console.log(ex);
-  } 
 }
 
 /**

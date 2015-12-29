@@ -417,3 +417,7 @@ span.hour {
     font-size:1.0rem;
     color:black;
 }
+
+p.currentDay {
+    background-color: #553cd1;
+}
