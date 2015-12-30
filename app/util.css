@@ -422,7 +422,7 @@ span.hour {
  * Current day in the calendar.
  */
 p.currentDay {
-    background-color: #553cd1;
+    background-color: #8434bc;
 }
 
 /** 
@@ -433,9 +433,13 @@ p.pastDay {
 }
 
 p.nextDay {
-    background-color: #c85a5a;
+    background-color: rgb(85, 60, 209);
+}
+
+p.executedDay {
+    background-color: #45ff00;
 }
 
 p.notExecutedDay {
-    background-color: red;
+    background-color: #f55a1d;
 }

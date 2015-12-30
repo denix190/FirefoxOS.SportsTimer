@@ -523,6 +523,49 @@ document.querySelector('#btn-execute-session').addEventListener('click', functio
        console.log("" + alarm.date);
      });
    };
+
+  try {
+    document.querySelector('#pnl-calendar').className = 'current';
+    document.querySelector('#pnl-day').className = 'left';
+
+    var session = document.getElementById('list-select-session');
+    console.log(session);
+    var idSession = parseInt(session.options[session.selectedIndex].value);
+
+    var startTime = document.getElementById('startTime');
+    var startDay = document.getElementById('startDay');
+
+    var idCalendar = document.getElementById('idCalendar');
+
+    var valueAsNumber = startTime.valueAsNumber;
+    var h = new Date(valueAsNumber);
+     
+    var day = startDay.valueAsNumber;
+    var d = new Date(day);
+    d.setHours(h.getUTCHours());
+    d.setMinutes(h.getUTCMinutes());
+
+    var doe = new DayOfExercice();
+    doe.day = d;
+    doe.idSession = idSession;
+    doe.idCalendar = parseInt(idCalendar.value);
+    doe.executed = true;
+
+    // console.log("delAlarm: " + doe.idCalendar);
+    // if (doe.idCalendar != -1) {
+    //   // Suppress the old alarm.
+    //   delAlarm(doe);
+    // }
+    // sendAlarm(doe, session.options[session.selectedIndex].innerHTML);
+
+    dbStoreCalendar(doe, function () {
+      displaySession(idSession);
+      // getSessions(displayCalendar);
+    });
+  } catch (ex) {
+    console.log(ex);
+  }
+
 });
 
 // Update a day for the calendar.
@@ -543,7 +586,6 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
 
     var valueAsNumber = startTime.valueAsNumber;
     var h = new Date(valueAsNumber);
-  
      
     var day = startDay.valueAsNumber;
     var d = new Date(day);
@@ -1811,7 +1853,10 @@ function displayDay(list, cursor, listSessions) {
   a.appendChild(p0);
 
   var p1 = document.createElement("p");
-  if (cursor.value.dSession.getTime() < date.getTime()) {
+  if (cursor.value.executed) {
+    p0.className = "executedDay";
+    p1.className = "executedDay";
+  } else  if (cursor.value.dSession.getTime() < date.getTime()) {
     if (cursor.value.executed) {
       p0.className = "pastDay";
       p1.className = "pastDay";
