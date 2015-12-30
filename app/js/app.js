@@ -168,26 +168,32 @@ document.querySelector('#imagePath').addEventListener('click', function () {
  * Launch SportsTimer.
  */
 function launchSelf() {
+  try {
   var request = window.navigator.mozApps.getSelf();
   request.onsuccess = function() {
     if (request.result) {
       request.result.launch();
-      displaySession(alarm.data.idSession);
+      //displaySession(alarm.data.idSession);
     }
   };
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 /**
  * Launch the application and display the session.
  */
 if (navigator.mozSetMessageHandler) {
+  
   navigator.mozSetMessageHandler("alarm", function (alarm) {
     // only launch a notification if the Alarm is of the right type for this app 
-    if(alarm.data.program) {
+    console.log(alarm);
+    if(alarm.data.sessionName) {
       launchSelf();
       // Create a notification when the alarm is due
       try {
-        notifyMe(alarm.data.program + "/" +  alarm.data.session);
+        notifyMe(alarm.data.sessionName);
         // Display the session.
        
       } catch(e) {
@@ -281,72 +287,41 @@ if (navigator.mozSetMessageHandler) {
 //   updateProgram( startProgram, true);
 // });
 
-/**
- * Start the current program.
- * Send alarms for each exercise.
- */
-function startProgram () {
+function delAlarm(doe) {
+  console.log("delAlarm" + doe.idCalendar);
+  var allAlarmsRequest = navigator.mozAlarms.getAll();
+  allAlarmsRequest.onsuccess = function() {
 
-  if(navigator.mozAlarms) {
-
-    try {
-      var dateEvent =  new Date();
-      dateEvent.setSeconds(0);
-      var now =  new Date();
-      var day = dateEvent.getDay();
-      var date = dateEvent.getDate();
-      var calendar = currentProg.getCalendar();
-
-      for (var j = 0; j < calendar.length; j++) {
-        try {
-          for (var i = 0; i < 7; i++) {
-            var newDate = ((date + i - day) + (7*j) );
-            dateEvent.setDate(newDate);
-
-            var session = currentProg.getSession(j, i);
-            if (session != -1 && session !== 0) {
-              var h = currentProg.getHour(j, i);
-              dateEvent.setHours(h.hours);
-              dateEvent.setMinutes(h.minutes);
-
-              if (dateEvent.getTime() > now.getTime()) {
-                var d = new Date();
-                d.setTime(dateEvent.getTime());
-                var sessionName = getSession( currentProg.getSession(j, i), d, currentProg.getName(), sendAlarm );
-              }
-            } 
-          }
-        } catch(e) {
-          console.log(e);
-        }
+    this.result.forEach(function (alarm) {
+      console.log("Alarm remove alarm.data.idCalendar :" +
+                  alarm.data.idCalendar +
+                  "doe.idCalendar" +  doe.idCalendar);
+      if (alarm.data.idCalendar == doe.idCalendar) {
+        console.log("Alarm remove :" + doe.idCalendar);
+        navigator.mozAlarms.remove(alarm.id);
       }
-
-    } catch(e) {
-      console.log(e);
-    }
-  } else {
-    console.log("Alarm not created - your browser does not support the Alarm API.");
-  }
+     });
+   };
 }
 
 /**
  * Send the alarm.
- * @param date The date of the alarm
- * @param data the data to send to the alarm
+ * @param date The DayOfExercice.
  */
-function sendAlarm(date, programName, sessionId, sessionName) {
-
-  console.log("sendAlarm Date " + date +
-              " programName " + programName +
-              " sessionName " + sessionName);
-  var data = {
-    program: programName, 
-    session: sessionName,
-    idSession: sessionId
-  };
-
+function sendAlarm(doe, sessionName) {
   try {
-    var alarmRequest = navigator.mozAlarms.add(date, "ignoreTimezone", data);
+    
+    console.log("sendAlarm Date " + doe.day +
+                " sessionName " + sessionName +
+                " idSession " + doe.idSession +
+               " idCalendar " + doe.idCalendar);
+    var data = {
+      idCalendar: doe.idCalendar,
+      sessionName: sessionName,
+      idSession: doe.idSession
+    };
+    console.log(data);
+    var alarmRequest = navigator.mozAlarms.add(doe.day, "ignoreTimezone", data);
     
     alarmRequest.onsuccess = function () {
       console.log("onsuccess alarm:" + date);
@@ -539,6 +514,17 @@ document.querySelector('#btn-go-day-back').addEventListener('click', function ()
  
 });
 
+document.querySelector('#btn-execute-session').addEventListener('click', function () {
+   var allAlarmsRequest = navigator.mozAlarms.getAll();
+   allAlarmsRequest.onsuccess = function() {
+  
+     this.result.forEach(function (alarm) {
+       console.log( alarm);
+       console.log("" + alarm.date);
+     });
+   };
+});
+
 // Update a day for the calendar.
 document.querySelector('#btn-go-upd-day').addEventListener('click', function () {
 
@@ -547,7 +533,7 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
     document.querySelector('#pnl-day').className = 'left';
 
     var session = document.getElementById('list-select-session');
-   
+    console.log(session);
     var idSession = parseInt(session.options[session.selectedIndex].value);
 
     var startTime = document.getElementById('startTime');
@@ -558,18 +544,22 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
     var valueAsNumber = startTime.valueAsNumber;
     var h = new Date(valueAsNumber);
   
-    var hour = new Hour();
-    hour.setTime(h.getUTCHours(), h.getUTCMinutes());
-    
+     
     var day = startDay.valueAsNumber;
     var d = new Date(day);
-    d.setHours(h.getHours());
-    d.setMinutes(h.getMinutes());
+    d.setHours(h.getUTCHours());
+    d.setMinutes(h.getUTCMinutes());
 
     var doe = new DayOfExercice();
     doe.day = d;
     doe.idSession = idSession;
     doe.idCalendar = parseInt(idCalendar.value);
+    console.log("delAlarm: " + doe.idCalendar);
+    if (doe.idCalendar != -1) {
+      // Suppress the old alarm.
+      delAlarm(doe);
+    }
+    sendAlarm(doe, session.options[session.selectedIndex].innerHTML);
 
     dbStoreCalendar(doe, function () {
       getSessions(displayCalendar);
@@ -1775,8 +1765,11 @@ function displayCalendar(listSessions) {
     var objectStore = db.transaction("calendar").objectStore("calendar");
 
     var index = objectStore.index("dateSession");
-
-    var range = IDBKeyRange.lowerBound(new Date());
+    var date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    var range = IDBKeyRange.lowerBound(date);
     
     index.openCursor(range).onsuccess = function(event) {
       try {
@@ -1818,10 +1811,21 @@ function displayDay(list, cursor, listSessions) {
   a.appendChild(p0);
 
   var p1 = document.createElement("p");
-  if (cursor.value.dSession.getDate() == date.getDate() &&
+  if (cursor.value.dSession.getTime() < date.getTime()) {
+    if (cursor.value.executed) {
+      p0.className = "pastDay";
+      p1.className = "pastDay";
+    } else {
+      p0.className = "notExecutedDay";
+      p1.className = "notExecutedDay";
+    }
+  } else if (cursor.value.dSession.getDate() == date.getDate() &&
       cursor.value.dSession.getMonth() == date.getMonth() ) {
     p0.className = "currentDay";
     p1.className = "currentDay";
+  } else {
+     p0.className = "nextDay";
+    p1.className = "nextDay";
   }
   
   p1.innerHTML = cursor.value.dSession.toLocaleDateString() +
@@ -1879,9 +1883,12 @@ function removeDay() {
   if (window.confirm(navigator.mozL10n.get("confirmRemoveDay"))) {
     try {
       var idCalendar = document.getElementById('idCalendar');
-      
+      console.log("idCalendar:" + idCalendar);
       dbDeleteCalendar(parseInt(idCalendar.value));
       getSessions(displayCalendar);
+      var doe = new DayOfExercice();
+      doe.idCalendar = parseInt(idCalendar.value);
+      delAlarm(doe);
       
       document.querySelector('#pnl-day').className = 'right';
       document.querySelector('#pnl-calendar').className = 'current';
@@ -1900,8 +1907,13 @@ function initPnlDay(dayOfExercice) {
 
     if (dayOfExercice.day != null) {
       var startTime = document.getElementById('startTime');
-      startTime.valueAsNumber = dayOfExercice.day.getTime();
+      var start = Date.UTC(1970, 1, 1, dayOfExercice.day.getHours(),
+                           dayOfExercice.day.getMinutes());
+      startTime.valueAsNumber = start;
       console.log(startTime);
+
+      //startTime.valueAsNumber = dayOfExercice.day.getTime();
+      //console.log(startTime);
  
       var startDay = document.getElementById('startDay');
       startDay.valueAsNumber = dayOfExercice.day.getTime();

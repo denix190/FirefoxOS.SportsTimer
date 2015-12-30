@@ -418,6 +418,24 @@ span.hour {
     color:black;
 }
 
+/** 
+ * Current day in the calendar.
+ */
 p.currentDay {
     background-color: #553cd1;
+}
+
+/** 
+ * Old session in the calendar.
+ */
+p.pastDay {
+    background-color: rgb(197, 193, 193);
+}
+
+p.nextDay {
+    background-color: #c85a5a;
+}
+
+p.notExecutedDay {
+    background-color: red;
 }

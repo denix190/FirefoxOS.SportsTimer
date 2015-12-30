@@ -332,7 +332,7 @@ function dbDeleteCalendar(id) {
  */
 function dbStoreCalendar(doe, callbackRet) {
   try {
-    console.log("dbStoreCalendar");
+    console.log("dbStoreCalendar" + doe.idCalendar);
     
     var transaction = db.transaction(["calendar"],"readwrite");
     var store = transaction.objectStore("calendar");
