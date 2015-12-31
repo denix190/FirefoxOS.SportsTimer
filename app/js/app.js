@@ -167,13 +167,13 @@ document.querySelector('#imagePath').addEventListener('click', function () {
 /**
  * Launch SportsTimer.
  */
-function launchSelf() {
+function launchSelf(idSession) {
   try {
   var request = window.navigator.mozApps.getSelf();
   request.onsuccess = function() {
     if (request.result) {
       request.result.launch();
-      //displaySession(alarm.data.idSession);
+      displaySession(idSession);
     }
   };
   } catch(e) {
@@ -190,7 +190,7 @@ if (navigator.mozSetMessageHandler) {
     // only launch a notification if the Alarm is of the right type for this app 
     console.log(alarm);
     if(alarm.data.sessionName) {
-      launchSelf();
+      launchSelf(alarm.data.idSession);
       // Create a notification when the alarm is due
       try {
         notifyMe(alarm.data.sessionName);
@@ -550,13 +550,6 @@ document.querySelector('#btn-execute-session').addEventListener('click', functio
     doe.idSession = idSession;
     doe.idCalendar = parseInt(idCalendar.value);
     doe.executed = true;
-
-    // console.log("delAlarm: " + doe.idCalendar);
-    // if (doe.idCalendar != -1) {
-    //   // Suppress the old alarm.
-    //   delAlarm(doe);
-    // }
-    // sendAlarm(doe, session.options[session.selectedIndex].innerHTML);
 
     dbStoreCalendar(doe, function () {
       displaySession(idSession);
@@ -1861,8 +1854,8 @@ function displayDay(list, cursor, listSessions) {
       p0.className = "pastDay";
       p1.className = "pastDay";
     } else {
-      p0.className = "notExecutedDay";
-      p1.className = "notExecutedDay";
+        p0.className = "notExecutedDay";
+        p1.className = "notExecutedDay";
     }
   } else if (cursor.value.dSession.getDate() == date.getDate() &&
       cursor.value.dSession.getMonth() == date.getMonth() ) {
@@ -1955,18 +1948,31 @@ function initPnlDay(dayOfExercice) {
       var start = Date.UTC(1970, 1, 1, dayOfExercice.day.getHours(),
                            dayOfExercice.day.getMinutes());
       startTime.valueAsNumber = start;
-      console.log(startTime);
-
-      //startTime.valueAsNumber = dayOfExercice.day.getTime();
-      //console.log(startTime);
- 
+      
       var startDay = document.getElementById('startDay');
       startDay.valueAsNumber = dayOfExercice.day.getTime();
-      console.log(startDay);
+
+      var now = new Date();
+
+      // You can run the session for the current day only.
+      if (dayOfExercice.day.getDate() == now.getDate() &&
+          dayOfExercice.day.getMonth() == now.getMonth() ) {
+        document.getElementById('btn-execute-session').className = "recommend"
+      } else {
+        document.getElementById('btn-execute-session').className = "invisible";
+      }
+    } else {
+      document.getElementById('btn-execute-session').className = "invisible";
     }
+    
+    if (dayOfExercice.executed) {
+      document.getElementById('btn-execute-session').className = "invisible";
+    }
+    
     var idCalendar = document.getElementById('idCalendar');
     idCalendar.value = dayOfExercice.idCalendar;
     console.log(dayOfExercice);
+
     // Load the list of sessions.
     var objectStore = db.transaction("sessions").objectStore("sessions");
     objectStore.openCursor().onsuccess = function(event) {

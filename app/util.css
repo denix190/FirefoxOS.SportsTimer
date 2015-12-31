@@ -422,7 +422,7 @@ span.hour {
  * Current day in the calendar.
  */
 p.currentDay {
-    background-color: #8434bc;
+    background-color: orange;
 }
 
 /** 
@@ -433,7 +433,7 @@ p.pastDay {
 }
 
 p.nextDay {
-    background-color: rgb(85, 60, 209);
+    background-color: rgb(224, 222, 236);
 }
 
 p.executedDay {
@@ -441,5 +441,27 @@ p.executedDay {
 }
 
 p.notExecutedDay {
-    background-color: #f55a1d;
+    -webkit-animation: blink 0.5s linear infinite;
+    -moz-animation: blink 1.5s linear infinite;
+    animation: blink 2.0s linear infinite;
+} 
+    
+@keyframes blink {
+  0% {
+    opacity: 1.0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+ 50% {
+    opacity: 0.5;
+  }
+ 75% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 1.0;
+  }
+  0% { background-color: grey; }  
+  100% { backgorund-color: black; }
 }
