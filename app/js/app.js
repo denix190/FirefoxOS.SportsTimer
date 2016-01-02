@@ -472,9 +472,9 @@ document.querySelector('#btn-go-add-day').addEventListener('click', function () 
 });
 
 
-document.querySelector('#btn-go-options-day').addEventListener('click', function () {
-  window.alert("options");
-});
+// document.querySelector('#btn-go-options-day').addEventListener('click', function () {
+//   window.alert("options");
+// });
 
 /**
  * Select a day in the calendar.
