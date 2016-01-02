@@ -1801,6 +1801,7 @@ function displayCalendar(listSessions) {
 
     var index = objectStore.index("dateSession");
     var date = new Date();
+    date.setDate(date.getDate() - 3);
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
@@ -1831,38 +1832,60 @@ function displayCalendar(listSessions) {
 function displayDay(list, cursor, listSessions) {
   var date = new Date();
   var li = document.createElement("li");
-  
+
+  var state = StateEnum.PAST;
+  var arrow = "";
   var a = document.createElement("a");
   a.setAttribute("id", cursor.value.idCalendar);
   a.href = "#";
 
+  console.log("Date " + cursor.value.dSession +
+               " executed: "+ cursor.value.executed)
+
   var p0 = document.createElement("p");
-  
+  var p1 = document.createElement("p");
+
+  if (cursor.value.executed) {
+    state = StateEnum.EXECUTED;
+    arrow =  "&#10003 ";
+  } else if (cursor.value.dSession.getDate() == date.getDate() &&
+             cursor.value.dSession.getMonth() == date.getMonth() ) {
+    state = StateEnum.CURRENT;
+    arrow = "&#8594; ";
+  } else if (cursor.value.dSession.getTime() < date.getTime()) {
+    if (cursor.value.executed) {
+      arrow =  "&#10003 ";
+      state = StateEnum.EXECUTED;
+    } else {
+      arrow =  "&#8593";
+      state = StateEnum.LATE;
+    }
+  } else {
+    arrow =  "&#8595 ";
+    state = StateEnum.NEXT;
+  }
+
   for (var i = 0; i < listSessions.length;i++) {
     if (cursor.value.idSession == listSessions[i].idSession) {
-      p0.innerHTML = listSessions[i].name;
+      p0.innerHTML = arrow + listSessions[i].name;
     }
   }
   a.appendChild(p0);
 
-  var p1 = document.createElement("p");
-  if (cursor.value.executed) {
+  if (state === StateEnum.EXECUTE) {
     p0.className = "executedDay";
     p1.className = "executedDay";
-  } else  if (cursor.value.dSession.getTime() < date.getTime()) {
-    if (cursor.value.executed) {
-      p0.className = "pastDay";
-      p1.className = "pastDay";
-    } else {
-        p0.className = "notExecutedDay";
-        p1.className = "notExecutedDay";
-    }
-  } else if (cursor.value.dSession.getDate() == date.getDate() &&
-      cursor.value.dSession.getMonth() == date.getMonth() ) {
+  } else if (state === StateEnum.PAST) {
+    p0.className = "pastDay";
+    p1.className = "pastDay";
+  } else if (state === StateEnum.LATE) {
+    p0.className = "notExecutedDay";
+    p1.className = "notExecutedDay";
+  } else if (state === StateEnum.CURRENT) {
     p0.className = "currentDay";
     p1.className = "currentDay";
-  } else {
-     p0.className = "nextDay";
+  } else if (state === StateEnum.FUTURE) {
+    p0.className = "nextDay";
     p1.className = "nextDay";
   }
   

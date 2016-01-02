@@ -16,3 +16,12 @@ const RECOVERY_COLOR = 'rgb(53, 146, 35)';
 const BETWEEN_COLOR = 'rgb(0, 154, 253)';
 
 const TEXT_COLOR = 'rgb(110, 110, 110)';
+
+var StateEnum = {
+  PAST: 1,
+  CURRENT: 2,
+  FUTURE:3,
+  EXECUTED:4,
+  LATE:5
+};
+  
