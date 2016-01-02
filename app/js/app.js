@@ -340,8 +340,8 @@ function sendAlarm(doe, sessionName) {
 // Button Event.
 
 // Exercise
-document.querySelector('#btn-previous-ex').addEventListener('click', previousEx);
-document.querySelector('#btn-next-ex').addEventListener('click', nextEx);
+document.querySelector('#btn-previous-ex').addEventListener('click', btnPreviousEx);
+document.querySelector('#btn-next-ex').addEventListener('click', btnNextEx);
 document.querySelector('#btn-start-ex').addEventListener('click', startEx);
 document.querySelector('#btn-pause-ex').addEventListener('click', pauseEx);
 document.querySelector('#btn-cancel-ex').addEventListener('click', cancelEx);
@@ -471,6 +471,10 @@ document.querySelector('#btn-go-add-day').addEventListener('click', function () 
   initPnlDay(doe);
 });
 
+
+document.querySelector('#btn-go-options-day').addEventListener('click', function () {
+  window.alert("options");
+});
 
 /**
  * Select a day in the calendar.
@@ -1176,6 +1180,22 @@ function deleteExercise() {
 }
 
 
+function btnPreviousEx() {
+
+  if (flagStart && !window.confirm(navigator.mozL10n.get("confirmPreviousExercice"))) {
+    return;
+  }
+  previousEx();
+}
+
+function btnNextEx() {
+  console.log("flagStart:" + flagStart);
+  if (flagStart && !window.confirm(navigator.mozL10n.get("confirmNextExercice"))) {
+    return;
+  }
+  nextEx();
+}
+
 function previousEx() {
 
   var ok = session.setNumExercise(session.getNumExercise() - 1);
@@ -1183,8 +1203,8 @@ function previousEx() {
   return ok;
 }
 
-function nextEx() {
 
+function nextEx() {
   var ret = session.setNumExercise(session.getNumExercise() + 1);
   displayCurrentExercise();
   return ret;
@@ -1605,6 +1625,7 @@ function displayCurrentExercise() {
   try {
     curExercise = session.getCurrentExercise();
     if (curExercise !== null) {
+      durationCounter = 0;
       var nameExercise = document.getElementById("idNameExercise");
       var image = document.getElementById("idImageExercise");
       var infoExercise = document.getElementById("idInfoExercise");
