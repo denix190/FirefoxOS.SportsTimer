@@ -238,7 +238,7 @@ div.footer {
   padding-left: 50px;
 }
 
- .parameters {
+.parameters {
      padding-left: 10px;
      font-size: 2rem;
 }
@@ -464,4 +464,13 @@ p.notExecutedDay {
   }
   0% { background-color: grey; }  
   100% { backgorund-color: black; }
+}
+
+.headerParameters {
+    background-color:rgb(231,231,231);
+    width:100%;
+    padding-left: 10px;
+    font-size: 2rem;
+    height: 3.5rem;
+    margin-top: 6px;
 }

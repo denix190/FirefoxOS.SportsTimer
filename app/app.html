@@ -683,8 +683,7 @@
             <input type="checkbox" checked  id="chk-sound">
             </input>
             <span></span>
-          </label>  
-
+          </label>
       </div>
 
       <div style="height:7rem;">
@@ -694,9 +693,18 @@
           <span></span>
         </label>         
          <p style="padding-left:10px; font-size:1.2rem;line-height:1.5rem;" data-l10n-id="idInfoNextExercise">Save history</p> 
-      </div> 
+      </div>
+
+      <div style="height:7rem;border-style: solid none none">
+        <div class="headerParameters">
+          <label data-l10n-id="idNbDays">Calendar</label>
+        </div>
+        <label data-l10n-id="idNbDays" class="parameters">Number of day</label>
+          <input id="nbRetry" type="number" placeholder="1" required min="1" max="10" value="1" />
+
+      </div>
     </article>
-        
+    
   </section>
 
   <!--·························· Export ··························-->
@@ -719,14 +727,6 @@
       <p width="100%">
         <input id="fileName" type="text" maxlength="20" data-l10n-id="idFileName" placeholder="File Name" required/>
       </p>
-     
-      <!-- <div style="height:5rem;"> -->
-      <!--    <label data-l10n-id="idData" class="parameters">Data</label> -->
-      <!--    <label class="pack-switch"> -->
-      <!--     <input type="checkbox" checked class="denix" id="chk-dataExport"> -->
-      <!--     <span></span> -->
-      <!--   </label> -->
-      <!-- </div> -->
       <div>
         <button id="btn-export" class="recommend" data-l10n-id="idExport" >Export</button>
       </div>
