@@ -695,13 +695,21 @@
          <p style="padding-left:10px; font-size:1.2rem;line-height:1.5rem;" data-l10n-id="idInfoNextExercise">Save history</p> 
       </div>
 
-      <div style="height:7rem;border-style: solid none none">
-        <div class="headerParameters">
-          <label data-l10n-id="idNbDays">Calendar</label>
-        </div>
-        <label data-l10n-id="idNbDays" class="parameters">Number of day</label>
-          <input id="nbRetry" type="number" placeholder="1" required min="1" max="10" value="1" />
-
+      <div>
+        <!-- <div class="headerParameters"> -->
+        <header> 
+          <h2 data-l10n-id="idNbDays" style="background-color:rgb(231,231,231);">Calendar</h2>
+        </header>
+        <div data-type="list">
+          <ul style="margin-top:2px;line-height:4.0rem;">
+            <li>
+              <label>
+                <input style="float:right;width:25%;" id="nbDayCalendar" type="number" placeholder="1" required min="1" max="10" value="1" />
+                <span data-l10n-id="idCalendarNbDays">Number of days</span>
+              </label>
+            </li>
+          </ul>
+          </div>
       </div>
     </article>
     

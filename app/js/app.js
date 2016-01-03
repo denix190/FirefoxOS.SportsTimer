@@ -109,6 +109,8 @@ document.querySelector('#btn-go-param-ex').addEventListener('click', function ()
 document.querySelector('#btn-go-params-ex-back').addEventListener('click', function () {
   document.querySelector('#pnl_parameters').className = 'right';
   document.querySelector('[data-position="current"]').className = 'current';
+
+  updateCalendarNbDays(parseInt(document.querySelector('#nbDayCalendar').value));
 });
 
 // Export
@@ -1655,7 +1657,7 @@ function displayCurrentExercise() {
  * Display the list of Sessions.
 */
 function displayListSessions() {
-  //loadParameters(1);
+
   var objectStore = db.transaction("sessions").objectStore("sessions");
   var listSes = document.getElementById("list-items-ses");
   
@@ -1822,7 +1824,8 @@ function displayCalendar(listSessions) {
 
     var index = objectStore.index("dateSession");
     var date = new Date();
-    date.setDate(date.getDate() - 3);
+
+    date.setDate(date.getDate() - parameters.getCalendarNbDays());
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
@@ -1883,7 +1886,7 @@ function displayDay(list, cursor, listSessions) {
     }
   } else {
     arrow =  "&#8595 ";
-    state = StateEnum.NEXT;
+    state = StateEnum.FUTURE;
   }
 
   for (var i = 0; i < listSessions.length;i++) {
@@ -1893,21 +1896,16 @@ function displayDay(list, cursor, listSessions) {
   }
   a.appendChild(p0);
 
-  if (state === StateEnum.EXECUTE) {
-    p0.className = "executedDay";
-    p1.className = "executedDay";
+  if (state === StateEnum.EXECUTED) {
+    li.className = "executedDay";
   } else if (state === StateEnum.PAST) {
-    p0.className = "pastDay";
-    p1.className = "pastDay";
+    li.className = "pastDay";
   } else if (state === StateEnum.LATE) {
-    p0.className = "notExecutedDay";
-    p1.className = "notExecutedDay";
+    li.className = "notExecutedDay";
   } else if (state === StateEnum.CURRENT) {
-    p0.className = "currentDay";
-    p1.className = "currentDay";
+    li.className = "currentDay";
   } else if (state === StateEnum.FUTURE) {
-    p0.className = "nextDay";
-    p1.className = "nextDay";
+    li.className = "nextDay";
   }
   
   p1.innerHTML = cursor.value.dSession.toLocaleDateString() +
@@ -1917,46 +1915,6 @@ function displayDay(list, cursor, listSessions) {
   li.appendChild(a);
   list.appendChild(li);
 }
-
-/**
- * Select a session for a program
- */
-listSlctSes.onclick = function(e) {
-  
-  var collEnfants = e.target.parentNode.childNodes;
-
-  var i = 0;
-  for (i = 0; i < collEnfants.length; i++)  {
-    
-    if (collEnfants[i].tagName === 'P') {
-      try {
-        document.querySelector('#updProgram').className = 'current';
-        document.querySelector('#listSessions').className = 'left';
-
-        var id = parseInt(e.target.parentNode.id);
-
-        // The session select on the calendar.
-        slctSession.style.color = "red";
-        slctSession.className = "daySelected";
-        slctSession.innerHTML = "&#10003";
-        
-        // Session selected id :  column / row 
-        // 
-        var values = slctSession.id.split("/");
-        var week = parseInt(values[1]);
-        var day = parseInt(values[0]);
-        console.log("week" + week + " day " + day + " id " + id);
-        currentProg.setSession(week, day, id);
-
-        slctSession.value = id;
-
-        break;
-      } catch (ex) {
-        console.log(ex);
-      }
-    }
-  }
-};
 
 /**
  * Remove a day in the calendar.
@@ -1997,10 +1955,12 @@ function initPnlDay(dayOfExercice) {
       startDay.valueAsNumber = dayOfExercice.day.getTime();
 
       var now = new Date();
+      now.setHours(23);
+      now.setMinutes(59);
+      now.setSeconds(59);
 
       // You can run the session for the current day only.
-      if (dayOfExercice.day.getDate() == now.getDate() &&
-          dayOfExercice.day.getMonth() == now.getMonth() ) {
+      if (dayOfExercice.day.getTime() <= now.getTime() ) {
         document.getElementById('btn-execute-session').className = "recommend"
       } else {
         document.getElementById('btn-execute-session').className = "invisible";

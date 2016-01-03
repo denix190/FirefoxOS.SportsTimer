@@ -474,3 +474,29 @@ p.notExecutedDay {
     height: 3.5rem;
     margin-top: 6px;
 }
+
+
+p.currentDay {
+    background-color: orange;
+}
+
+/** 
+ * Old session in the calendar.
+ */
+li.pastDay {
+    background-color: rgb(197, 193, 193);
+}
+
+li.nextDay {
+    background-color: rgb(224, 222, 236);
+}
+
+li.executedDay {
+    background-color: #45ff00;
+}
+
+li.notExecutedDay {
+    -webkit-animation: blink 0.5s linear infinite;
+    -moz-animation: blink 1.5s linear infinite;
+    animation: blink 2.0s linear infinite;
+} 
