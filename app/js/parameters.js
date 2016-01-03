@@ -136,7 +136,6 @@ function loadParameters() {
         if (cursor) {
           if (cursor.value.id == 1) {
             cpt += 1;
-            console.log("1 " + cursor.value.value);
             parameters.setSound (cursor.value.value);
             var chk = document.getElementById("chk-sound");
             chk.checked = parameters.isSound();
@@ -144,15 +143,12 @@ function loadParameters() {
           
           if (cursor.value.id == 2) {
             cpt += 2;
-            console.log("2 " + cursor.value.value);   
             parameters.setNextExercise (cursor.value.value);
             var chk = document.getElementById("chk-next-exercice");
             chk.checked = parameters.isNextExercise();
           }
           if (cursor.value.id == 3) {
-            
             cpt += 3;
-            console.log("3 " + cursor.value.value);
             parameters.setCalendarNbDays (cursor.value.value);
             var nbDays = document.getElementById("nbDayCalendar");
             nbDays.value = parameters.getCalendarNbDays();
