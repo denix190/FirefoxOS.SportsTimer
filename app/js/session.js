@@ -108,8 +108,8 @@ Session.prototype.startSes = function() {
       this.timerSession = window.setInterval(
         function() {
           try {
-            session.addSessionSec();
-            displaySecond(document.getElementById('chronoSession'), session.getSessionSec(), TEXT_COLOR );
+            curSession.addSessionSec();
+            displaySecond(document.getElementById('chronoSession'), curSession.getSessionSec(), TEXT_COLOR );
           } catch(e) {
             console.log(e);
           } }, 1000);
@@ -131,8 +131,8 @@ Session.prototype.continue = function() {
       this.timerSession = window.setInterval(
         function() {
           try {
-            session.addSessionSec();
-            displaySecond(document.getElementById('chronoSession'), session.getSessionSec());
+            curSession.addSessionSec();
+            displaySecond(document.getElementById('chronoSession'), curSession.getSessionSec());
           } catch(e) {
             console.log(e);
           } }, 1000);
