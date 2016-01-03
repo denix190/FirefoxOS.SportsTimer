@@ -172,7 +172,7 @@ Session.prototype.cancelSes = function() {
 };
 
 /**
- * Cancel the current Session.
+ * Stop the current Session.
 */
 Session.prototype.stopSes = function() {
   try {

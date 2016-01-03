@@ -18,14 +18,14 @@ var slctSession;
 var chronoDisplay = document.getElementById('chronoDisplay');
 var nbRetryDisplay = document.getElementById('nbRetryDisplay');
 
-var session = new Session();
+var curSession = new Session();
 var chronos = new Chronos();
 
 // Parameters
 var parameters = new Parameters();
-
+ 
 // The current program to display.
-var currentProg = new Program();
+
 var isProgramDisplay = false;
 
 // List Exercises.
@@ -785,7 +785,7 @@ function displaySession(id) {
   var idSession = document.getElementById('idSession');
   idSession.value = id;
   
-  session.setIdSession(id);
+  curSession.setIdSession(id);
   
   var title = document.getElementById('idTitleSession');
   
@@ -803,11 +803,11 @@ function displaySession(id) {
     try {
       title.innerHTML = request.result.name;
       if (request.result.hasOwnProperty("chainExercises")) {
-        session.setChainExercises( request.result.chainExercises);
+        curSession.setChainExercises( request.result.chainExercises);
       } else {
-        session.setChainExercises(false);
+        curSession.setChainExercises(false);
       }
-      session.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
+      curSession.setdelayBetweenExercises(parseInt(request.result.delayBetweenExercises));
     } catch (e) {
       console.log(e);
     }
@@ -1200,21 +1200,20 @@ function btnNextEx() {
 
 function previousEx() {
 
-  var ok = session.setNumExercise(session.getNumExercise() - 1);
+  var ok = curSession.setNumExercise(curSession.getNumExercise() - 1);
   displayCurrentExercise();
   return ok;
 }
 
 
 function nextEx() {
-  var ret = session.setNumExercise(session.getNumExercise() + 1);
+  var ret = curSession.setNumExercise(curSession.getNumExercise() + 1);
   displayCurrentExercise();
   return ret;
 }
 
 function hasNextEx() {
-  console.log(session.hasNextExercise());
-  return session.hasNextExercise();
+  return curSession.hasNextExercise();
 }
 
 function pauseEx() {
@@ -1230,7 +1229,7 @@ function pauseEx() {
     }
   }
   // Pause the session.
-  session.pauseSes();
+  curSession.pauseSes();
 }
 
 function startEx() {
@@ -1243,23 +1242,23 @@ function startEx() {
     nbRetryDisplay.textContent = nbRetryCounter + "/" + curExercise.getNbRetry();
     typeCounter = STATE_EX_EFFORT;
 
-    curExercise = session.getCurrentExercise();
+    curExercise = curSession.getCurrentExercise();
 
     var effortDiv = document.getElementById('effortDiv');
     effortDiv.style.color = EFFORT_COLOR;
         
     chronos.start();
     flagStart = true;
-    session.startSes();
+    curSession.startSes();
     try {
       var exercise = new Exercise(name, curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
-      session.startExercise(exercise);
+      curSession.startExercise(exercise);
     } catch(e) {
       console.log(e);
     }
   } else {
     if (typeCounter == STATE_EX_PAUSE) {
-      session.continue();
+      curSession.continue();
       chronos.start();
       typeCounter = typeCounterPause;
     }
@@ -1349,24 +1348,24 @@ function display() {
         // Pass to the next exercise.
         var ok = nextEx();
         if (!ok) {
-          session.stopExercise();
+          curSession.stopExercise();
           endExercise();
           chronos.stop();
-          session.stopSes();
+          curSession.stopSes();
           playSound('finalSound');
           break;
         }
         
-        if (!session.isChainExercises()) {
+        if (!curSession.isChainExercises()) {
           typeCounter = STATE_EX_EFFORT;
-          session.stopExercise();
+          curSession.stopExercise();
           endExercise();
           chronos.stop();
           break;
         }
       }
     } else {
-      session.stopExercise();
+      curSession.stopExercise();
       endExercise();
       chronos.stop();
       break;
@@ -1376,11 +1375,11 @@ function display() {
       // Sound begin chain exercice.
       playSound('beginChangeSound');
     }
-    if ( durationBetweenExercise <= session.getdelayBetweenExercises()) {
-      displaySecond(chronoDisplay, session.getdelayBetweenExercises() - durationBetweenExercise, BETWEEN_COLOR);
+    if ( durationBetweenExercise <= curSession.getdelayBetweenExercises()) {
+      displaySecond(chronoDisplay, curSession.getdelayBetweenExercises() - durationBetweenExercise, BETWEEN_COLOR);
       durationBetweenExercise++;
     } else {
-      if (durationBetweenExercise >= session.getdelayBetweenExercises()) {
+      if (durationBetweenExercise >= curSession.getdelayBetweenExercises()) {
         // Temps entre exercise depasse. Exercice suivant.
         durationBetweenExercise = 0;
         typeCounter = STATE_EX_EFFORT;
@@ -1445,7 +1444,7 @@ function cancelEx() {
     endExercise();
     
     // Cancel the session.
-    session.cancelSes();
+    curSession.cancelSes();
   }
 }
 
@@ -1590,7 +1589,7 @@ function updateSession(flagExercise) {
 function listSessionEx(idSession) {
   var objectStore = db.transaction("exercice").objectStore("exercice");
   
-  session.initListExercises();
+  curSession.initListExercises();
 
   var index = objectStore.index("BySession");
   var id = parseInt(idSession);
@@ -1602,7 +1601,7 @@ function listSessionEx(idSession) {
       if (cursor) {
         var exercise = new Exercise( cursor.value.name,  cursor.value.duration,  cursor.value.breakTime, cursor.value.nbRetry);
         exercise.setImagePath(cursor.value.imagePath);
-        session.addListExercises(exercise);
+        curSession.addListExercises(exercise);
         cursor.continue();
       }
       else {
@@ -1625,7 +1624,7 @@ function listSessionEx(idSession) {
  */
 function displayCurrentExercise() {
   try {
-    curExercise = session.getCurrentExercise();
+    curExercise = curSession.getCurrentExercise();
     if (curExercise !== null) {
       durationCounter = 0;
       var nameExercise = document.getElementById("idNameExercise");
@@ -1635,8 +1634,8 @@ function displayCurrentExercise() {
       var idCurExercise = document.getElementById("idCurExercise");
 
       idCurExercise.textContent = ""
-                                + (session.getNumExercise() + 1)
-                                +"/" + session.getNbExercises();
+                                + (curSession.getNumExercise() + 1)
+                                +"/" + curSession.getNbExercises();
 
       nameExercise.textContent = curExercise.getName();
       infoExercise.textContent = "[" + getStringTime(curExercise.getDuration()) + 
