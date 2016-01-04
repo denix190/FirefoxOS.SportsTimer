@@ -415,6 +415,15 @@ document.querySelector('#btn-choose-calendar').addEventListener('click', functio
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
+document.querySelector('#btn-choose-history').addEventListener('click', function () {
+
+  displayHistory();
+
+  document.querySelector('#pnl-history').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+
 ///////////////////////////////////////////////////////////////////
 // Panel: sessions.
 ///////////////////////////////////////////////////////////////////
@@ -473,11 +482,6 @@ document.querySelector('#btn-go-add-day').addEventListener('click', function () 
   initPnlDay(doe);
 });
 
-
-// document.querySelector('#btn-go-options-day').addEventListener('click', function () {
-//   window.alert("options");
-// });
-
 /**
  * Select a day in the calendar.
  */
@@ -509,7 +513,13 @@ listCalendar.onclick = function(e) {
   }
 };
 
-    
+// Panel: pnl-history
+document.querySelector('#btn-go-main-history-back').addEventListener('click', function () {
+  document.querySelector('#pnl-history').className = 'left';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
+
+
 ///////////////////////////////////////////////////////////////////
 // Panel: pnl-day.
 ///////////////////////////////////////////////////////////////////
@@ -801,6 +811,7 @@ function displaySession(id) {
   
   request.onsuccess = function(evt) {
     try {
+      curSession.setName(request.result.name);
       title.innerHTML = request.result.name;
       if (request.result.hasOwnProperty("chainExercises")) {
         curSession.setChainExercises( request.result.chainExercises);
@@ -1995,4 +2006,81 @@ function initPnlDay(dayOfExercice) {
   } catch(e) {
     console.log(e);
   }
+}
+
+
+//////////////////////////////////
+//  History
+//////////////////////////////////
+
+/*====================================================
+* Calendar
+* ==================================================== */
+/**
+ * Display the History.
+*/
+function displayHistory(listSessions) {
+  console.log("displayCalendar");
+  try {
+    var listHistory = document.getElementById("list-history");
+    removeAllItems(listHistory);
+    var objectStore = db.transaction("history").objectStore("history");
+
+    var index = objectStore.index("dateHistory");
+    var date = new Date();
+
+    date.setDate(date.getDate() - parameters.getCalendarNbDays());
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    var range = IDBKeyRange.lowerBound(date);
+    
+    index.openCursor(range).onsuccess = function(event) {
+      try {
+        var cursor = event.target.result;
+        if (cursor) {
+          displayHistorySession(listHistory, cursor);
+          cursor.continue();
+        }
+        else {
+          // alert("No more entries!");
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    };
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+/**
+ * Display a session of the History.
+*/ 
+function displayHistorySession(list, cursor) {
+  var date = new Date();
+  var li = document.createElement("li");
+
+  var a = document.createElement("a");
+  a.setAttribute("id", cursor.value.idHistory);
+  a.href = "#";
+
+  console.log("Date " + cursor.value.beginSession);
+  console.log(cursor.value);
+
+  var p0 = document.createElement("p");
+  var p1 = document.createElement("p");
+
+  p0.innerHTML =  cursor.value.nameSession;
+  a.appendChild(p0);
+
+  p1.innerHTML = cursor.value.beginSession.toLocaleDateString() +
+            " " + cursor.value.beginSession.toLocaleTimeString() +
+            " (" +
+            getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")" ;
+            //")" );
+  a.appendChild(p1);
+
+  li.appendChild(a);
+  list.appendChild(li);
 }

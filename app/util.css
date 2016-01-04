@@ -383,19 +383,19 @@ ol.day li {
 /** Day with a session. */
 li.daySelected  {
     background-color: rgb(118, 209, 26) !important;
-    font-size: xsmall !important;
+    font-size: x-small !important;
 }
 
 /* The current Date */
 li.dayCurrent  {
     background-color: rgb(91, 92, 98) !important;
-    font-size: xsmall !important;
+    font-size: x-small !important;
 }
 
 /* Desactivate Date */
 li.dayDesactivate  {
     background-color: rgb(209, 212, 209) !important;
-    font-size: xsmall !important;
+    font-size: x-small !important;
 }
 
 .invisible {
@@ -463,7 +463,7 @@ p.notExecutedDay {
     opacity: 1.0;
   }
   0% { background-color: grey; }  
-  100% { backgorund-color: black; }
+  100% { background-color: lightgrey; }
 }
 
 .headerParameters {

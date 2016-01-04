@@ -273,6 +273,7 @@
           <div class="footer" >
             <button id="btn-choose-sessions" data-l10n-id="btnChooseSessions" class="recommend" >Sessions</button>
             <button id="btn-choose-calendar" data-l10n-id="btnChooseCalendar" class="recommend" >Calendar</button>
+            <button id="btn-choose-history" data-l10n-id="btnChooseHistory" class="recommend" >History</button>
         </div>
       </article>
     </section> <!-- end drawer -->
@@ -303,24 +304,36 @@
     <header class="fixed">
       <a id="btn-go-main-calendar-back" href="#"><span class="icon icon-back">back</span></a>
       <menu type="toolbar">
-       <!--  <button class="icon icon-options" id="btn-go-options-day"> -->
-       <!--   <span>options</span> -->
+        <!--  <button class="icon icon-options" id="btn-go-options-day"> -->
+        <!--   <span>options</span> -->
        <!-- </button> -->
        <button class="icon icon-add" id="btn-go-add-day">
          <span>edit</span>
        </button>
-     </menu>
-     <h1 data-l10n-id="idTitleCalendar">Calendar</h1>
-     </header>
-      <article class="scrollable header">
-        <div data-type="list">
-          <ul id="list-calendar">
-          </ul>         
-        </div>
-      </article>
-    </section> <!-- end drawer -->
-  </section>
+      </menu>
+      <h1 data-l10n-id="idTitleCalendar">Calendar</h1>
+    </header>
+    <article class="scrollable header">
+      <div data-type="list">
+        <ul id="list-calendar">
+        </ul>         
+      </div>
+    </article>
+  </section> <!-- end drawer -->
 
+  <!--·························· List of Sessions ··························-->
+  <section role="region" id="pnl-history" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-main-history-back" href="#"><span class="icon icon-back">back</span></a>
+      <h1 data-l10n-id="idTitleHistory">History</h1>
+    </header>
+    <article class="scrollable header">
+      <div data-type="list">
+        <ul id="list-history">
+        </ul>         
+      </div>
+    </article>
+  </section> <!-- end drawer -->
 
   <!--·························· Current Session··························-->
   <section role="region" id="currentSession" data-position="right">
@@ -804,6 +817,7 @@
   <script type="text/javascript" defer src="js/import.js"></script>
   <script type="text/javascript" defer src="js/program.js"></script>
   <script type="text/javascript" defer src="js/calendar.js"></script>
+    <script type="text/javascript" defer src="js/history.js"></script>
   <script type="text/javascript" defer src="js/parameters.js"></script>
   <script type="text/javascript" defer src="js/app.js"></script>
   <script type="text/javascript" defer src="js/l10n.js" charset="utf-8"></script>

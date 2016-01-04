@@ -8,7 +8,8 @@ const STATE_EX_PAUSE = 3;
 const STATE_EX_BETWEEN = 4;
 const dbName = "exerciceData";
 
-const dbVersion = 38;
+// Version for the DB.
+const dbVersion = 39;
 
 const EFFORT_COLOR = '#F97C17';
 const EFFORT_END_COLOR = 'red';

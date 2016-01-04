@@ -23,12 +23,13 @@ function init() {
       db = DBOpenRequest.result;
       displayListSessions();
 
-      // Load Programs.
+      // Load parameters.
       
       loadParameters();
     };
 
     DBOpenRequest.onupgradeneeded = function(event) {
+      console.log("onupgradeneeded");
       var thisDB = event.target.result;
 
       thisDB.onerror = function(event) {
@@ -45,7 +46,7 @@ function init() {
         var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});
         var sessionIndex = objectStore.createIndex("BySession", "idSession" , {unique: false});                
       }
-
+      console.log("onupgradeneeded 1");
       if (thisDB.objectStoreNames.contains("sessions")) {
         thisDB.deleteObjectStore("sessions");
         var objectStore = thisDB.createObjectStore("sessions", { keyPath : "idSession" , autoIncrement: true });
@@ -55,19 +56,37 @@ function init() {
         var nameIndex = objectStore.createIndex("by_name", "name", {unique: false});                
       }
 
+      
       // Programs.
       if (thisDB.objectStoreNames.contains("programs")) {
         thisDB.deleteObjectStore("programs");
       }
 
+       console.log("onupgradeneeded 2");
       // Calendar.
       if (thisDB.objectStoreNames.contains("calendar")) {
+        console.log("onupgradeneeded 21");
+        thisDB.deleteObjectStore("calendar");
         var objectStore = thisDB.createObjectStore("calendar", { keyPath : "idCalendar" , autoIncrement: true });
         objectStore.createIndex("dateSession", "dSession", {unique:false});
+         console.log("onupgradeneeded 211");
       } else {
+         console.log("onupgradeneeded 22");
         var objectStore = thisDB.createObjectStore("calendar", { keyPath : "idCalendar" , autoIncrement: true });
         objectStore.createIndex("dateSession", "dSession", {unique:false});
       }
+
+       console.log("onupgradeneeded 3");
+      // History of the sessions
+      if (!thisDB.objectStoreNames.contains("history")) {
+        var objectStore = thisDB.createObjectStore("history", { keyPath : "idHistory" , autoIncrement: true });
+        objectStore.createIndex("dateHistory", "beginSession", {unique:false});
+      } else {
+         var objectStore = thisDB.createObjectStore("history", { keyPath : "idHistory" , autoIncrement: true });
+        objectStore.createIndex("dateHistory", "beginSession", {unique:false});
+      }
+
+       console.log("onupgradeneeded 4");
       // Parameters.
       if (thisDB.objectStoreNames.contains("parameters")) {
         thisDB.deleteObjectStore("parameters");
