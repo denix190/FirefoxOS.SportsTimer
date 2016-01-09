@@ -581,15 +581,35 @@ document.querySelector('#btn-execute-session').addEventListener('click', functio
 document.querySelector('#btn-go-upd-day').addEventListener('click', function () {
 
   try {
-    document.querySelector('#pnl-calendar').className = 'current';
-    document.querySelector('#pnl-day').className = 'left';
 
     var session = document.getElementById('list-select-session');
     console.log(session);
+
+    if (session.selectedIndex == -1) {
+      window.alert(navigator.mozL10n.get("idAlertNoSession"));
+      return;
+    }
+    
     var idSession = parseInt(session.options[session.selectedIndex].value);
 
     var startTime = document.getElementById('startTime');
     var startDay = document.getElementById('startDay');
+
+    if (startTime.value == "") {
+      window.alert(navigator.mozL10n.get("idAlertNoTime"));
+      return;
+    }
+
+    if (startDay.value == "") {
+      window.alert(navigator.mozL10n.get("idAlertNoDay"));
+      return;
+    }
+
+    document.querySelector('#pnl-calendar').className = 'current';
+    document.querySelector('#pnl-day').className = 'left';
+
+    console.log(startTime);
+    console.log(startDay);
 
     var idCalendar = document.getElementById('idCalendar');
 
@@ -2013,9 +2033,6 @@ function initPnlDay(dayOfExercice) {
 //  History
 //////////////////////////////////
 
-/*====================================================
-* Calendar
-* ==================================================== */
 /**
  * Display the History.
 */
