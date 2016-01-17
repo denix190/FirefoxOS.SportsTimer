@@ -14,8 +14,8 @@
    id="svg4874"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="thigh.svg"
-   inkscape:export-filename="/home/denis/projects/SportsTimer/FirefoxOS.SportsTimer/app/images/gym-thigh.png"
+   sodipodi:docname="squat.svg"
+   inkscape:export-filename="/home/denis/projects/SportsTimer/experimental/FirefoxOS.SportsTimer/app/images/gym-squat.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -178,7 +178,7 @@
        inkscape:connector-curvature="0" />
     <path
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:13;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 227.5567,940.3622 c 46.4433,0 46.4433,0 46.4433,0"
+       d="m 224,992.3622 c 0,-46.4433 0,-46.4433 0,-46.4433"
        id="path3257-6"
        inkscape:connector-curvature="0" />
     <path
@@ -192,5 +192,45 @@
        id="path5495"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.93999999;fill:#ff0000;fill-opacity:1;stroke:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4660"
+       sodipodi:cx="109.28571"
+       sodipodi:cy="836.64789"
+       sodipodi:rx="39.285713"
+       sodipodi:ry="34.285713"
+       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       transform="matrix(0.18017684,0,0,0.19077161,61.759228,811.46275)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.93999999;fill:#ff0000;fill-opacity:1;stroke:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4660-9"
+       sodipodi:cx="109.28571"
+       sodipodi:cy="836.64789"
+       sodipodi:rx="39.285713"
+       sodipodi:ry="34.285713"
+       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       transform="matrix(0.18017684,0,0,0.19077161,39.759228,811.46275)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.93999999;fill:#ff0000;fill-opacity:1;stroke:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4660-9-0"
+       sodipodi:cx="109.28571"
+       sodipodi:cy="836.64789"
+       sodipodi:rx="39.285713"
+       sodipodi:ry="34.285713"
+       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       transform="matrix(0.18017684,0,0,0.19077161,191.75923,833.46275)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.93999999;fill:#ff0000;fill-opacity:1;stroke:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4660-9-9"
+       sodipodi:cx="109.28571"
+       sodipodi:cy="836.64789"
+       sodipodi:rx="39.285713"
+       sodipodi:ry="34.285713"
+       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       transform="matrix(0.18017684,0,0,0.19077161,215.75923,833.46275)" />
   </g>
 </svg>
