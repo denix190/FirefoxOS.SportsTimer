@@ -668,7 +668,6 @@ function initListImages() {
   // List of all images.
   var listImages = [
         "gym-null.png",
-        "dessin.svg",
     "gym-ab-bikes.png",
     "gym-crunch-abdos.png",
     "gym-flexion.png",
