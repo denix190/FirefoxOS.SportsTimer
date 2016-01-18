@@ -672,7 +672,7 @@ function initListImages() {
     "gym-crunch-abdos.png",
     "gym-flexion.png",
     "gym-planche.png",
-    "gym-pump.png",
+    "gym-push-up.png",
     "gym-squat.png",
     "gym-allonge.png",
     "gym-desk.png",
