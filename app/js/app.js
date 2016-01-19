@@ -686,7 +686,10 @@ function initListImages() {
     "gym-single-leg-hip-raise.png",
     "gym-bridge.png",
     "gym-mountain.png",
-    "gym-situps.png"];
+    "gym-situps.png",
+    "gym-leg-raises.png",
+    "gym-flutter-kicks.png",
+    "gym-air-bike-crunches.png"];
   
   for (var i = 0; i < listImages.length; i++) {
     addImage("images/" + listImages[i]);
