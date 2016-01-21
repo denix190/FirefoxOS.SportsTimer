@@ -691,7 +691,8 @@ function initListImages() {
         "gym-situps.png",
         "gym-leg-raises.png",
         "gym-flutter-kicks.png",
-        "gym-air-bike-crunches.png"];
+        "gym-air-bike-crunches.png",
+        "gym-wall-push-ups.png"];
   
   for (var i = 0; i < listImages.length; i++) {
     addImage("images/" + listImages[i]);
