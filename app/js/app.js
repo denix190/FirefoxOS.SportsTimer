@@ -667,40 +667,40 @@ document.querySelector('#btn-remove-day').addEventListener('click', removeDay);
 function initListImages() {
   // List of all images.
   var listImages = [
-        "gym-null.png",
-        "gym-ab-bikes.png",
-        "gym-crunch-abdos.png",
-        "gym-flexion.png",
-        "gym-planche.png",
-        "gym-push-up.png",
-        "gym-squat.png",
-        "gym-jump-squat.png",
-        "gym-allonge.png",
-        "gym-desk.png",
-        "gym-side-plank.png",
-        "gym-standing-butterfly.png",
-        "gym-arm.png",
-        "gym-curl.png",
-        "gym-shoulder.png",
-        "gym-thigh.png",
-        "gym-donkey-side-kick.png",
-        "gym-donkey-kick.png",
-        "gym-single-leg-hip-raise.png",
-        "gym-bridge.png",
-        "gym-mountain.png",
-        "gym-situps.png",
-        "gym-leg-raises.png",
-        "gym-flutter-kicks.png",
-        "gym-air-bike-crunches.png",
-        "gym-wall-push-ups.png"];
+        ["gym-null.png",""],
+        ["gym-ab-bikes.png", "ab-bikes"],
+        ["gym-crunch-abdos.png", "crunch-abdos"],
+        ["gym-flexion.png", "flexion.png"],
+        ["gym-planche.png", "gym-planche.png"],
+        ["gym-push-up.png", "push-up.png"],
+        ["gym-squat.png", "squat"],
+        ["gym-jump-squat.png", "jump-squat"],
+        ["gym-allonge.png", "allonge"],
+        ["gym-desk.png", "desk"],
+        ["gym-side-plank.png", "side-plank"],
+        ["gym-standing-butterfly.png", "standing-butterfly.png"],
+        ["gym-arm.png", "arm"],
+        ["gym-curl.png", "curl"],
+        ["gym-shoulder.png", "shoulder"],
+        ["gym-thigh.png", "thigh"],
+        ["gym-donkey-side-kick.png", "donkey-side-kick"],
+        ["gym-donkey-kick.png", "donkey-kick"],
+        ["gym-single-leg-hip-raise.png", "single-leg-hip-raise"],
+        ["gym-bridge.png", "bridge"],
+        ["gym-mountain.png", "mountain"],
+        ["gym-situps.png", "situps"],
+        ["gym-leg-raises.png", "leg-raises"],
+        ["gym-flutter-kicks.png", "flutter-kicks"],
+        ["gym-air-bike-crunches.png", "air-bike-crunches"], 
+        ["gym-wall-push-ups.png"], "wall-push-ups"];
   
   for (var i = 0; i < listImages.length; i++) {
-    addImage("images/" + listImages[i]);
+    addImage("images/" + listImages[i][0], listImages[i][1]);
   }
 
 }
 
-function addImage(path) {
+function addImage(path, text) {
   var li = document.createElement("li");
   var aside = document.createElement("aside");
   aside.className = "pack-end";
@@ -708,7 +708,12 @@ function addImage(path) {
   image.src = path;
   image.id = path;
 
+  var pInfo = document.createElement("p");
+  pInfo.innerHTML = text;
+
   aside.appendChild(image);
+  aside.appendChild(pInfo);
+
   li.appendChild(aside);
   listImages.appendChild(li);
 

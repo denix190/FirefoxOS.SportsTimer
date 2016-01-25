@@ -13,8 +13,8 @@
    height="200"
    id="svg4874"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="allonge.svg"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="side-plank.svg"
    inkscape:export-filename="/home/denis/projects/SportsTimer/experimental/FirefoxOS.SportsTimer/app/images/gym-allonge.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -142,20 +142,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="-137.74409"
-     inkscape:cy="122.46032"
+     inkscape:zoom="2"
+     inkscape:cx="53.735169"
+     inkscape:cy="61.85148"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      height="300px"
      showborder="true"
      inkscape:showpageshadow="true"
-     inkscape:window-width="1386"
-     inkscape:window-height="696"
-     inkscape:window-x="2"
-     inkscape:window-y="57"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
     <inkscape:grid
@@ -174,7 +174,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -201,7 +201,7 @@
        sodipodi:cy="330.93362"
        sodipodi:rx="92.85714"
        sodipodi:ry="95.714287"
-       d="m 437.14285,330.93362 a 92.85714,95.714287 0 1 1 -185.71428,0 92.85714,95.714287 0 1 1 185.71428,0 z"
+       d="m 437.14285,330.93362 c 0,52.86155 -41.57356,95.71429 -92.85714,95.71429 -51.28359,0 -92.85714,-42.85274 -92.85714,-95.71429 0,-52.86154 41.57355,-95.71428 92.85714,-95.71428 51.28358,0 92.85714,42.85274 92.85714,95.71428 z"
        transform="matrix(-0.09881568,0.19925202,-0.14004574,-0.06945333,140.69391,938.062)" />
     <path
        style="fill:none;stroke:#000000;stroke-width:16.02000046;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -229,13 +229,13 @@
        inkscape:original-d="m 54.887877,994.85057 c 13.125019,-7.03641 9.462662,-14.74625 10.946919,-26.77433"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.22348905px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 149.60159,985.16092 133.61722,1030.6947 70,1008.3622 86.441094,961.52745 c 0,0 126.321006,47.26695 63.160496,23.63347 z"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.20235109px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 149.61026,986.8865 -15.98823,37.3188 -63.632599,-18.3034 16.445069,-38.38502 c 0,0 126.35155,38.73932 63.17576,19.36962 z"
        id="path3761"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 80,1002.3622 c 0,40 0,40 0,40 l 0,0"
+       style="fill:none;stroke:#000000;stroke-width:11.58911991;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 76,1005.4584 c 0,37.3076 0,37.3076 0,37.3076 l 0,0"
        id="path4454"
        inkscape:connector-curvature="0" />
     <path
@@ -245,7 +245,7 @@
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:12.53926754;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 90,968.3622 c 47.63229,11.39765 47.63229,11.39765 47.63229,11.39765 l 0,0"
+       d="m 92,970.3622 c 47.63229,11.39765 47.63229,11.39765 47.63229,11.39765 l 0,0"
        id="path4454-7"
        inkscape:connector-curvature="0"
        inkscape:transform-center-x="-134.33426"

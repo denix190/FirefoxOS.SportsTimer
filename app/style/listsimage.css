@@ -35,7 +35,7 @@
 /* List items */
 [data-type="listImage"] li {
   width: 100%;
-  height: 200px;
+  height: 250px;
   box-sizing: border-box;
   border-bottom: solid 0.1rem #e7e7e7;
   color: #333;
@@ -109,6 +109,9 @@ li a:active {
   margin: 0;
   -moz-margin-start: 0.5rem;
   text-align: end;
+  border-bottom-width: thin;
+  border-bottom-style: solid;
+  border-bottom-color: #000;
 }
 
 [data-type="listImage"] aside.icon {
@@ -132,7 +135,7 @@ li a:active {
   background: transparent center center / cover;
   position: relative;
   border-width:1px;
-  border-style:solid;
+  border-style:none;
 
   /* Favor performance over quality */
   image-rendering: -moz-crisp-edges;
