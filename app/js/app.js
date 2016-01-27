@@ -670,15 +670,15 @@ function initListImages() {
         ["gym-null.png",""],
         ["gym-ab-bikes.png", "ab-bikes"],
         ["gym-crunch-abdos.png", "crunch-abdos"],
-        ["gym-flexion.png", "flexion.png"],
-        ["gym-planche.png", "gym-planche.png"],
-        ["gym-push-up.png", "push-up.png"],
+        ["gym-flexion.png", "flexion"],
+        ["gym-planche.png", "gym-planche"],
+        ["gym-push-up.png", "push-up"],
         ["gym-squat.png", "squat"],
         ["gym-jump-squat.png", "jump-squat"],
         ["gym-allonge.png", "allonge"],
         ["gym-desk.png", "desk"],
         ["gym-side-plank.png", "side-plank"],
-        ["gym-standing-butterfly.png", "standing-butterfly.png"],
+        ["gym-standing-butterfly.png", "standing-butterfly"],
         ["gym-arm.png", "arm"],
         ["gym-curl.png", "curl"],
         ["gym-shoulder.png", "shoulder"],
@@ -692,7 +692,7 @@ function initListImages() {
         ["gym-leg-raises.png", "leg-raises"],
         ["gym-flutter-kicks.png", "flutter-kicks"],
         ["gym-air-bike-crunches.png", "air-bike-crunches"], 
-        ["gym-wall-push-ups.png"], "wall-push-ups"];
+        ["gym-wall-push-ups.png", "wall-push-ups"] ];
   
   for (var i = 0; i < listImages.length; i++) {
     addImage("images/" + listImages[i][0], listImages[i][1]);
