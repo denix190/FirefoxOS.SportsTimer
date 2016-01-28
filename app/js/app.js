@@ -692,7 +692,9 @@ function initListImages() {
         ["gym-leg-raises.png", "leg-raises"],
         ["gym-flutter-kicks.png", "flutter-kicks"],
         ["gym-air-bike-crunches.png", "air-bike-crunches"], 
-        ["gym-wall-push-ups.png", "wall-push-ups"] ];
+        ["gym-wall-push-ups.png", "wall-push-ups"],
+        ["gym-ball.png", "ball"]
+];
   
   for (var i = 0; i < listImages.length; i++) {
     addImage("images/" + listImages[i][0], listImages[i][1]);
