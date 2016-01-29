@@ -167,6 +167,13 @@ Session.prototype.pauseSes = function() {
 };
 
 /**
+ * End of the session. 
+ */
+Session.prototype.endOfSession = function() {
+  this.flagStartSes = false;
+};
+
+/**
  * Cancel the current Session.
 */
 Session.prototype.cancelSes = function() {

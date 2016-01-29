@@ -1234,7 +1234,6 @@ function btnPreviousEx() {
 }
 
 function btnNextEx() {
-  console.log("flagStart:" + flagStart);
   if (flagStart && !window.confirm(navigator.mozL10n.get("confirmNextExercice"))) {
     return;
   }
@@ -1471,6 +1470,7 @@ function displaySecond(display, nbSec, style) {
 
 function endExercise() {
   flagStart = false;
+  curSession.endOfSession();
 }
 
 /**
