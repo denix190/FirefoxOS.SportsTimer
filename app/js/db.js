@@ -357,7 +357,6 @@ function dbStoreCalendar(doe, callbackRet) {
     var store = transaction.objectStore("calendar");
 
     if (doe.idCalendar == -1) {
-      console.log(doe);
       //Define a new Calendar.
       var doeRecord = {
         dSession: doe.day,
@@ -365,7 +364,7 @@ function dbStoreCalendar(doe, callbackRet) {
         executed: doe.executed,
         created:new Date()
       };
-      console.log(doeRecord);
+
       /* */
       var request = store.add(doeRecord);
       request.onerror = function(e) {
@@ -374,6 +373,8 @@ function dbStoreCalendar(doe, callbackRet) {
       
       request.onsuccess = function(event) {
         try {
+          var idCalendar = event.target.result;
+          doe.idCalendar = idCalendar;
           callbackRet();
         } catch(e) {
           console.log(e);
@@ -394,7 +395,6 @@ function dbStoreCalendar(doe, callbackRet) {
       };
       
       request.onsuccess = function(event) {
-        console.log("onsuccess");
         callbackRet();
       };
     }
@@ -428,4 +428,42 @@ function dbLoadCalendar( idCalendar, callback )  {
     
    // idSession.value = id;
   };
+}
+
+
+/**
+ * Make a DayOfExercice to executed for the idCalendar.
+ * @param idCalendar.
+ */
+function dbExecuteCalendar( idCalendar)  {
+  try {
+    var transaction = db.transaction(["calendar"], 'readwrite');
+    var objectStore = transaction.objectStore("calendar");
+
+    var request = objectStore.get(parseInt(idCalendar));
+  
+    request.onerror = function(event) {
+      console.log("Not found for Id: " + id);
+    };
+    
+    request.onsuccess = function(evt) {
+      try {
+        var doe = request.result;
+        doe.executed = true;
+        
+        var requestUpdate = objectStore.put(doe);
+        
+        requestUpdate.onerror = function(event) {
+          console.log("Update error for idCalendar:" + idCalendar);
+        };
+        requestUpdate.onsuccess = function(event) {
+          console.log("Update success for idCalendar:" + idCalendar);
+        };
+      } catch(e) {
+        console.log(e);
+      }
+    };
+  } catch(e) {
+    console.log(e);
+  }
 }

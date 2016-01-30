@@ -17,6 +17,7 @@ function Session() {
   this.chainExercises = false;
   this.delayBetweenExercises = 0;
   this.idSession;
+  this.idCalendar = 0;
   this.name = "" ;
 
   /* List of exercises for the current session. */
@@ -28,6 +29,14 @@ function Session() {
 
 Session.prototype.setIdSession = function(id) {
   this.idSession = id;
+};
+
+Session.prototype.setIdCalendar = function(idCalendar) {
+  this.idCalendar = idCalendar;
+};
+
+Session.prototype.getIdCalendar = function() {
+  return this.idCalendar;
 };
 
 Session.prototype.setName = function(name) {
