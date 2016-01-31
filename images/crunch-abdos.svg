@@ -14,8 +14,8 @@
    id="svg4874"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="ab-bikes.svg"
-   inkscape:export-filename="/home/denis/projects/SportsTimer/experimental/FirefoxOS.SportsTimer/app/images/gym-ab-bikes.png"
+   sodipodi:docname="crunch-abdos.svg"
+   inkscape:export-filename="/home/denis/projects/SportsTimer/experimental/FirefoxOS.SportsTimer/app/images/gym-crunch-abdos.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -124,20 +124,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="189.42993"
-     inkscape:cy="118.70177"
+     inkscape:zoom="1"
+     inkscape:cx="117.00905"
+     inkscape:cy="219.53705"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      height="300px"
      showborder="true"
      inkscape:showpageshadow="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="713"
-     inkscape:window-x="-2"
-     inkscape:window-y="-3"
-     inkscape:window-maximized="1"
+     inkscape:window-width="923"
+     inkscape:window-height="661"
+     inkscape:window-x="439"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true">
     <inkscape:grid
@@ -178,7 +178,7 @@
        sodipodi:cy="330.93362"
        sodipodi:rx="92.85714"
        sodipodi:ry="95.714287"
-       d="m 437.14285,330.93362 a 92.85714,95.714287 0 1 1 -185.71428,0 92.85714,95.714287 0 1 1 185.71428,0 z"
+       d="m 437.14285,330.93362 c 0,52.86155 -41.57356,95.71429 -92.85714,95.71429 -51.28359,0 -92.85714,-42.85274 -92.85714,-95.71429 0,-52.86154 41.57355,-95.71428 92.85714,-95.71428 51.28358,0 92.85714,42.85274 92.85714,95.71428 z"
        transform="matrix(-0.00516228,0.1172592,-0.16247247,-0.00715276,125.42919,986.29423)"
        inkscape:transform-center-y="22.435608"
        inkscape:transform-center-x="-17.384288" />
@@ -190,20 +190,22 @@
        inkscape:transform-center-x="13.470844"
        inkscape:transform-center-y="10.2293" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:13.10000038;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 158.27138,1026.2968 89.45724,-9.8692"
-       id="path4741"
-       inkscape:connector-curvature="0" />
-    <path
        style="fill:none;stroke:#000000;stroke-width:13.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 162,1025.3622 30,-30 30,30"
+       d="m 162,1025.3622 18,-33 30,0"
        id="path4743"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;stroke:#ff0000;stroke-width:0.70899588px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:url(#Arrow1Lend)"
-       d="m 238.80007,1009.1076 c -6.4624,-9.77296 -9.12373,-15.51056 -16.23316,-17.42208 -11.46367,-3.08214 -16.38769,-3.4016 -16.38769,-3.4016"
-       id="path3101"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="csc" />
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:13.10000038;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 150,180 30,-20 40,-10"
+       id="path6680"
+       inkscape:connector-curvature="0"
+       transform="translate(0,852.3622)"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:url(#Arrow1Lend);fill-opacity:1"
+       d="m 168,974.3622 c 50,0 50,0 50,0"
+       id="path7202"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
