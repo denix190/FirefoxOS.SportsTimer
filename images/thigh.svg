@@ -13,9 +13,9 @@
    height="200"
    id="svg4874"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="squat.svg"
-   inkscape:export-filename="/home/denis/projects/SportsTimer/experimental/FirefoxOS.SportsTimer/app/images/gym-squat.png"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="thigh.svg"
+   inkscape:export-filename="/home/denis/projects/SportsTimer/experimental/FirefoxOS.SportsTimer/app/images/gym-thigh.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -90,6 +90,34 @@
        effect="spiro"
        id="path-effect4477-6-0"
        is_visible="true" />
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3910"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3913"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -107,10 +135,10 @@
      height="300px"
      showborder="true"
      inkscape:showpageshadow="true"
-     inkscape:window-width="1370"
-     inkscape:window-height="721"
-     inkscape:window-x="281"
-     inkscape:window-y="27"
+     inkscape:window-width="863"
+     inkscape:window-height="599"
+     inkscape:window-x="367"
+     inkscape:window-y="107"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -164,7 +192,7 @@
        sodipodi:cy="330.93362"
        sodipodi:rx="92.85714"
        sodipodi:ry="95.714287"
-       d="m 437.14285,330.93362 a 92.85714,95.714287 0 1 1 -185.71428,0 92.85714,95.714287 0 1 1 185.71428,0 z"
+       d="m 437.14285,330.93362 c 0,52.86155 -41.57356,95.71429 -92.85714,95.71429 -51.28359,0 -92.85714,-42.85274 -92.85714,-95.71429 0,-52.86154 41.57355,-95.71428 92.85714,-95.71428 51.28358,0 92.85714,42.85274 92.85714,95.71428 z"
        transform="matrix(0.11737277,0,0,0.16262984,186.48913,852.54252)" />
     <path
        style="fill:none;stroke:#000000;stroke-width:24.276;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -200,7 +228,7 @@
        sodipodi:cy="836.64789"
        sodipodi:rx="39.285713"
        sodipodi:ry="34.285713"
-       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       d="m 148.57143,836.64789 c 0,18.93547 -17.58882,34.28571 -39.28572,34.28571 C 87.588813,870.9336 70,855.58336 70,836.64789 c 0,-18.93548 17.588813,-34.28572 39.28571,-34.28572 21.6969,0 39.28572,15.35024 39.28572,34.28572 z"
        transform="matrix(0.18017684,0,0,0.19077161,61.759228,811.46275)" />
     <path
        sodipodi:type="arc"
@@ -210,7 +238,7 @@
        sodipodi:cy="836.64789"
        sodipodi:rx="39.285713"
        sodipodi:ry="34.285713"
-       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       d="m 148.57143,836.64789 c 0,18.93547 -17.58882,34.28571 -39.28572,34.28571 C 87.588813,870.9336 70,855.58336 70,836.64789 c 0,-18.93548 17.588813,-34.28572 39.28571,-34.28572 21.6969,0 39.28572,15.35024 39.28572,34.28572 z"
        transform="matrix(0.18017684,0,0,0.19077161,39.759228,811.46275)" />
     <path
        sodipodi:type="arc"
@@ -220,7 +248,7 @@
        sodipodi:cy="836.64789"
        sodipodi:rx="39.285713"
        sodipodi:ry="34.285713"
-       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       d="m 148.57143,836.64789 c 0,18.93547 -17.58882,34.28571 -39.28572,34.28571 C 87.588813,870.9336 70,855.58336 70,836.64789 c 0,-18.93548 17.588813,-34.28572 39.28571,-34.28572 21.6969,0 39.28572,15.35024 39.28572,34.28572 z"
        transform="matrix(0.18017684,0,0,0.19077161,191.75923,833.46275)" />
     <path
        sodipodi:type="arc"
@@ -230,7 +258,13 @@
        sodipodi:cy="836.64789"
        sodipodi:rx="39.285713"
        sodipodi:ry="34.285713"
-       d="m 148.57143,836.64789 a 39.285713,34.285713 0 1 1 -78.57143,0 39.285713,34.285713 0 1 1 78.57143,0 z"
+       d="m 148.57143,836.64789 c 0,18.93547 -17.58882,34.28571 -39.28572,34.28571 C 87.588813,870.9336 70,855.58336 70,836.64789 c 0,-18.93548 17.588813,-34.28572 39.28571,-34.28572 21.6969,0 39.28572,15.35024 39.28572,34.28572 z"
        transform="matrix(0.18017684,0,0,0.19077161,215.75923,833.46275)" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:url(#Arrow1Lend)"
+       d="m 257,914.3622 2,61 0,30"
+       id="path3130"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
   </g>
 </svg>
