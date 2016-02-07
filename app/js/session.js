@@ -23,7 +23,8 @@ function Session() {
   /* List of exercises for the current session. */
   this.listExercises;
   this.numExercise = 0;
-  
+
+  // History of the exercises.
   this.exercises = new Array();
 }
 
@@ -89,6 +90,7 @@ Session.prototype.getNextExercise = function (numExercise) {
 Session.prototype.initListExercises = function () {
   this.numExercise = 0;
   this.listExercises = [];
+  this.exercises = new Array();
 };
 
 Session.prototype.hasNextExercise = function () {
@@ -122,7 +124,8 @@ Session.prototype.startSes = function() {
     if (this.flagStartSes === false) {
       this.beginSession = new Date();
       this.sessionSec = 0;
-
+      
+      this.exercises = new Array();
       this.timerSession = window.setInterval(
         function() {
           try {
@@ -223,15 +226,6 @@ Session.prototype.getSessionSec = function () {
 Session.prototype.addSessionSec = function () {
   this.sessionSec++;
 };
-
-// Session.prototype.displaySessionx = function() {
-//   try {
-//     this.sessionSec++;
-//     displaySecond(document.getElementById('chronoSession'), this.sessionSec);
-//   } catch(e) {
-//       console.log(e);
-//   }
-// };
 
 /**
 * Start a new Exercise

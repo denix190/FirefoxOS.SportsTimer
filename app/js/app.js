@@ -148,6 +148,16 @@ document.querySelector('#btn-go-about-ex-back').addEventListener('click', functi
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
+// Export History
+document.querySelector('#btn-go-export-history').addEventListener('click', function () {
+  document.querySelector('#pnl_export_history').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#btn-go-export-history-back').addEventListener('click', function () {
+  document.querySelector('#pnl_export_history').className = 'right';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
 
 // Hide panel List sessions.
 document.querySelector('#btn-go-current-session-back').addEventListener('click', function () {
@@ -373,6 +383,8 @@ document.querySelector('#btn-add-sesEx').addEventListener('click', addExercisesT
 document.querySelector('#btn-del-ses').addEventListener('click', deleteSession);
 
 document.querySelector('#btn-export').addEventListener('click', exportSessions);
+
+document.querySelector('#btn-export-history').addEventListener('click', exportHistory);
 
 
 // Display Image
@@ -1249,6 +1261,7 @@ function previousEx() {
 
 function nextEx() {
   var ret = curSession.setNumExercise(curSession.getNumExercise() + 1);
+
   displayCurrentExercise();
   return ret;
 }
@@ -1292,8 +1305,9 @@ function startEx() {
     chronos.start();
     flagStart = true;
     curSession.startSes();
+    console.log("curSession.startSes();");
     try {
-      var exercise = new Exercise(name, curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
+      var exercise = new Exercise(curExercise.getName(), curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
       curSession.startExercise(exercise);
       if (curSession.getIdCalendar() != 0) {
         dbExecuteCalendar(curSession.getIdCalendar());
@@ -1394,12 +1408,21 @@ function display() {
         // Pass to the next exercise.
         var ok = nextEx();
         if (!ok) {
+          // End of the session.
           curSession.stopExercise();
           endExercise();
           chronos.stop();
           curSession.stopSes();
           playSound('finalSound');
           break;
+        } else {
+          curSession.stopExercise();
+          var exercise = new Exercise(curSession.getCurrentExercise().getName(),
+                                      curSession.getCurrentExercise().getDuration(),
+                                      curSession.getCurrentExercise().getBreakTime(),
+                                      curSession.getCurrentExercise().getNbRetry());
+          curSession.startExercise(exercise);
+          
         }
         
         if (!curSession.isChainExercises()) {

@@ -18,7 +18,7 @@ function dbStoreHistory(session) {
      exercises: session.exercises,
      created:new Date()
    };
-
+   console.log(historyRecord);
    /* */
    var request = store.add(historyRecord);
    request.onerror = function(e) {
