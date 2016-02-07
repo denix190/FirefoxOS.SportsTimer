@@ -1748,7 +1748,7 @@ function displayListSessions() {
  * Display the list of Sessions.
 */
 function getSessions(callback) {
-  console.log("getSessions");   
+
   var objectStore = db.transaction("sessions").objectStore("sessions");
   var sessions = [];
 
@@ -1885,7 +1885,7 @@ function removeAllItems(list) {
  * Display the calendar.
 */
 function displayCalendar(listSessions) {
-  console.log("displayCalendar");
+
   try {
     var listCalendar = document.getElementById("list-calendar");
     removeAllItems(listCalendar);
