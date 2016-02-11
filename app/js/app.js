@@ -606,12 +606,12 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
     var startTime = document.getElementById('startTime');
     var startDay = document.getElementById('startDay');
 
-    if (startTime.value == "") {
+    if (startTime.value === "") {
       window.alert(navigator.mozL10n.get("idAlertNoTime"));
       return;
     }
 
-    if (startDay.value == "") {
+    if (startDay.value === "") {
       window.alert(navigator.mozL10n.get("idAlertNoDay"));
       return;
     }
@@ -677,33 +677,35 @@ function initListImages() {
   // List of all images.
   var listImages = [
         ["gym-null.png",""],
-        ["gym-ab-bikes.png", "ab-bikes"],
-        ["gym-crunch-abdos.png", "crunch-abdos"],
-        ["gym-flexion.png", "flexion"],
-        ["gym-planche.png", "gym-planche"],
-        ["gym-push-up.png", "push-up"],
-        ["gym-squat.png", "squat"],
-        ["gym-jump-squat.png", "jump-squat"],
-        ["gym-allonge.png", "allonge"],
-        ["gym-desk.png", "desk"],
-        ["gym-side-plank.png", "side-plank"],
-        ["gym-standing-butterfly.png", "standing-butterfly"],
-        ["gym-arm.png", "arm"],
-        ["gym-curl.png", "curl"],
-        ["gym-shoulder.png", "shoulder"],
-        ["gym-thigh.png", "thigh"],
-        ["gym-donkey-side-kick.png", "donkey-side-kick"],
-        ["gym-donkey-kick.png", "donkey-kick"],
-        ["gym-single-leg-hip-raise.png", "single-leg-hip-raise"],
-        ["gym-bridge.png", "bridge"],
-        ["gym-mountain.png", "mountain"],
-        ["gym-situps.png", "situps"],
-        ["gym-leg-raises.png", "leg-raises"],
-        ["gym-flutter-kicks.png", "flutter-kicks"],
-        ["gym-air-bike-crunches.png", "air-bike-crunches"], 
-        ["gym-wall-push-ups.png", "wall-push-ups"],
-        ["gym-ball.png", "ball"],
-        ["gym-push-up-ball.png", "push up with ball"]
+        ["gym-ab-bikes.png", "Ab bikes"],
+        ["gym-crunch-abdos.png", "Crunch abdos"],
+        ["gym-flexion.png", "Flexion"],
+        ["gym-planche.png", "Planche"],
+        ["gym-push-up.png", "Push up"],
+        ["gym-squat.png", "Squat"],
+        ["gym-jump-squat.png", "Jump squat"],
+        ["gym-allonge.png", "Allonge"],
+        ["gym-desk.png", "Desk"],
+        ["gym-side-plank.png", "Side plank"],
+        ["gym-standing-butterfly.png", "Standing butterfly"],
+        ["gym-arm.png", "Arm"],
+        ["gym-curl.png", "Curl"],
+        ["gym-shoulder.png", "Shoulder"],
+        ["gym-thigh.png", "Thigh"],
+        ["gym-donkey-side-kick.png", "Donkey side kick"],
+        ["gym-donkey-kick.png", "Donkey kick"],
+        ["gym-single-leg-hip-raise.png", "Single leg hip raise"],
+        ["gym-bridge.png", "Bridge"],
+        ["gym-mountain.png", "Mountain"],
+        ["gym-situps.png", "Situps"],
+        ["gym-leg-raises.png", "Leg raises"],
+        ["gym-flutter-kicks.png", "Flutter kicks"],
+        ["gym-air-bike-crunches.png", "Air bike crunches"], 
+        ["gym-wall-push-ups.png", "Wall push ups"],
+        ["gym-ball.png", "Ball"],
+        ["gym-push-up-ball.png", "Push up with ball"],
+        ["gym-child-pose.png", "Child pose"],
+        ["gym-side-lunge-strech.png", "Side lunge strech"]
 ];
   
   for (var i = 0; i < listImages.length; i++) {
