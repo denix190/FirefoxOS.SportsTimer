@@ -43,6 +43,8 @@ var listCalendar = document.getElementById('list-calendar');
 // List All images.
 var listImages = document.getElementById('list-images');
 
+// List History.
+var listHistory = document.getElementById('list-history');
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -100,6 +102,9 @@ document.querySelector('#btn-go-upd-session-back').addEventListener('click', fun
   }
 });
 
+
+document.querySelector('#btn-remove-history-session').addEventListener('click', removeHistoSession);
+
 // Display the panel Parameters.
 document.querySelector('#btn-go-param-ex').addEventListener('click', function () {
   document.querySelector('#pnl_parameters').className = 'current';
@@ -123,6 +128,8 @@ document.querySelector('#btn-go-export-back').addEventListener('click', function
   document.querySelector('#pnl_export').className = 'right';
   document.querySelector('[data-position="current"]').className = 'current';
 });
+
+
 
 // Import
 document.querySelector('#btn-go-import').addEventListener('click', function () {
@@ -508,15 +515,10 @@ listCalendar.onclick = function(e) {
   var collEnfants = e.target.parentNode.childNodes;
   var i = 0;
   for (i = 0; i < collEnfants.length; i++)  {
-    console.log(collEnfants[i].tagName);
     if (collEnfants[i].tagName === 'P') {
       try {
         var id = parseInt(e.target.parentNode.id);
-        console.log(id);
-
         dbLoadCalendar(id, initPnlDay);
-
-        // initPnlDay(id);
         break;
       } catch (ex) {
         console.log(ex);
@@ -539,7 +541,6 @@ document.querySelector('#btn-go-main-history-back').addEventListener('click', fu
 document.querySelector('#btn-go-day-back').addEventListener('click', function () {
   document.querySelector('#pnl-day').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
- 
 });
 
 document.querySelector('#btn-execute-session').addEventListener('click', function () {
@@ -2076,8 +2077,86 @@ function initPnlDay(dayOfExercice) {
 
 /**
  * Display the History.
-*/
-function displayHistory(listSessions) {
+ */
+
+document.querySelector('#btn-go-history-session-back').addEventListener('click', function () {
+  console.log("back");
+  document.querySelector('#pnl-history-session').className = 'left';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
+
+
+function removeHistoSession() {
+  if (window.confirm(navigator.mozL10n.get("confirmRemoveHistory"))) {
+    try {
+      var idHistory = document.getElementById('idHistory');
+      dbDeleteHistory(parseInt(idHistory.value));
+
+      displayHistory();
+      document.querySelector('#pnl-history-session').className = 'left';
+      document.querySelector('[data-position="current"]').className = 'current';
+    } catch(e) {
+      console.log(e);
+    }
+  }
+}
+
+
+/**
+ * Select a session in the history.
+ */
+listHistory.onclick = function(e) {
+
+  var collEnfants = e.target.parentNode.childNodes;
+  var i = 0;
+  for (i = 0; i < collEnfants.length; i++)  {
+    if (collEnfants[i].tagName === 'P') {
+      try {
+        var id = parseInt(e.target.parentNode.id);
+        var idHistory = document.getElementById('idHistory');
+        idHistory.value = id;
+        displayHistorySession(id);
+        break;
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+  }
+};
+
+
+function displayHistorySession(id) {
+  document.querySelector('#pnl-history-session').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+
+  var transaction = db.transaction(["history"]);
+  var objectStore = transaction.objectStore("history", 'readonly');
+  var request = objectStore.get(id);
+  
+  request.onerror = function(event) {
+    console.log("Not found for Id: " + id);
+  };
+  
+  request.onsuccess = function(evt) {
+    try {
+      var title = document.getElementById('historySession-name');
+      title.innerHTML = request.result.nameSession;
+
+      var start = document.getElementById('idHistoStartTime');
+      start.innerHTML = request.result.beginSession.toLocaleDateString() +
+                " " + request.result.beginSession.toLocaleTimeString();
+
+      var end = document.getElementById('idHistoEndTime');
+      end.innerHTML = request.result.endSession.toLocaleDateString() +
+                " " + request.result.endSession.toLocaleTimeString();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+}
+
+function displayHistory() {
  
   try {
     var listHistory = document.getElementById("list-history");
@@ -2097,7 +2176,7 @@ function displayHistory(listSessions) {
       try {
         var cursor = event.target.result;
         if (cursor) {
-          displayHistorySession(listHistory, cursor);
+          displayItemHistorySession(listHistory, cursor);
           cursor.continue();
         }
         else {
@@ -2115,16 +2194,13 @@ function displayHistory(listSessions) {
 /**
  * Display a session of the History.
 */ 
-function displayHistorySession(list, cursor) {
+function displayItemHistorySession(list, cursor) {
   var date = new Date();
   var li = document.createElement("li");
 
   var a = document.createElement("a");
   a.setAttribute("id", cursor.value.idHistory);
   a.href = "#";
-
-  // console.log("Date " + cursor.value.beginSession);
-  // console.log(cursor.value);
 
   var p0 = document.createElement("p");
   var p1 = document.createElement("p");

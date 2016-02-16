@@ -336,6 +336,37 @@
     </article>
   </section> <!-- end drawer -->
 
+  <!--·························· Display history of a Sessions ··························-->
+  <section role="region" id="pnl-history-session" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-history-session-back" href="#"><span class="icon icon-back">back</span></a>
+
+      <h1 id="historySession-name">Sessions</h1>
+      <input type="hidden" id="idHistory" value=""/>
+    </header>
+    <article class="content scrollable header">
+      <input type="hidden" id="idCalendar" value=""/>
+      <p style="margin-top:2px; margin-bottom:2px;">
+        <span data-l10n-id="idSession">Session</span>
+      </p>
+
+      <p style="margin-top:2px; margin-bottom:2px;font-size:1.0rem;">
+        <span data-l10n-id="idStartTime">Hour</span>
+        <span id="idHistoStartTime"></span>
+      </p>
+
+      <p style="margin-top:2px; margin-bottom:2px;font-size:1.0rem;">
+        <span data-l10n-id="idEndTime">End</span>
+        <span id="idHistoEndTime"></span>
+      </p>
+      
+      <div>
+        <button id="btn-remove-history-session" class="danger" data-l10n-id="idRemoveHistoSession" >Remove</button>
+      </div>
+      
+    </article>
+  </section> <!-- end drawer -->
+
   <!--·························· Current Session··························-->
   <section role="region" id="currentSession" data-position="right">
     <header class="fixed">
@@ -772,7 +803,6 @@
       </p>
       <div>
         <button id="btn-export-history" class="recommend" data-l10n-id="idExport" >Export</button>
-        <button id="btn-delete-history" class="danger" data-l10n-id="idExportDelete" >Delete</button>
       </div>
 
     </article>

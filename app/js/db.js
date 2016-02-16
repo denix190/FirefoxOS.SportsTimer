@@ -467,3 +467,19 @@ function dbExecuteCalendar( idCalendar)  {
     console.log(e);
   }
 }
+
+
+
+/**
+ * Delete a day of history.
+ */
+function dbDeleteHistory(idHistory) {
+
+  var transaction = db.transaction(["history"],"readwrite");
+  var store = transaction.objectStore("history");
+  try {
+    var request = store.delete(idHistory);; 
+  } catch(e) {
+    console.log("Delete Error" + e); 
+  }
+}
