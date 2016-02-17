@@ -681,7 +681,7 @@ function initListImages() {
         ["gym-ab-bikes.png", "Ab bikes"],
         ["gym-crunch-abdos.png", "Crunch abdos"],
         ["gym-flexion.png", "Flexion"],
-        ["gym-planche.png", "Planche"],
+        ["gym-planche.png", "Plank"],
         ["gym-push-up.png", "Push up"],
         ["gym-squat.png", "Squat"],
         ["gym-jump-squat.png", "Jump squat"],
