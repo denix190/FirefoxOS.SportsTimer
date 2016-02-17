@@ -703,7 +703,7 @@ function initListImages() {
         ["gym-flutter-kicks.png", "Flutter kicks"],
         ["gym-air-bike-crunches.png", "Air bike crunches"], 
         ["gym-wall-push-ups.png", "Wall push ups"],
-        ["gym-ball.png", "Ball"],
+        ["gym-prone-leg-raise-ball.png", "Prone Leg Raise with ball"],
         ["gym-push-up-ball.png", "Push up with ball"],
         ["gym-child-pose.png", "Child pose"],
         ["gym-side-lunge-strech.png", "Side lunge strech"]
