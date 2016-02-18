@@ -2215,7 +2215,7 @@ function displayChart() {
             }
           }]
     ];
-
+    // Month
     var data = {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       series: [
@@ -2223,24 +2223,40 @@ function displayChart() {
       ]
     };
 
+    // Week
+    var dataWeek = {
+      labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
+      series: [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ]
+    };
+    
+    var now = Date.now();
+    var cur = getWeekNumber(now);
+
+    dataWeek.labels[11] = "" + cur[1];
+
     index.openCursor(range).onsuccess = function(event) {
       try {
         var cursor = event.target.result;
         if (cursor) {
-
-          var time = ((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000)/60>>0;
-          
+          var time = (cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0;
           var month = cursor.value.endSession.getMonth();
 
           data.series[0][month] = data.series[0][month] + parseInt(time);
+
+          var week = getWeekNumber(cursor.value.endSession);
 
           console.log("Month : " + month + " time " + time + " " + data.series[0][month]);
           cursor.continue();
         }
         else {
-          // alert("No more entries!");
+          var i = 0;
+          for (i = 0; i < 12;i++) {
+            data.series[0][i] = data.series[0][i]/60>>0;
+          }
           console.log(data);
-            new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+          new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
         }
       } catch(e) {
         console.log(e);
@@ -2249,13 +2265,22 @@ function displayChart() {
   } catch(e) {
     console.log(e);
   }
-  
+}
 
-  
 
-  
-
-  
+function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(+d);
+    d.setHours(0,0,0);
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+    // Get first day of year
+    var yearStart = new Date(d.getFullYear(),0,1);
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return [d.getYear() + 1900, weekNo];
 }
 
 
