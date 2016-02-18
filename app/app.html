@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="icons/styles/media_icons.css">
   <link rel="stylesheet" href="icons/styles/action_icons.css">
 
+  <link rel="stylesheet" href="chartist/chartist.min.css">
+
   <!-- Transitions -->
   <link rel="stylesheet" href="transitions.css">
 
@@ -321,6 +323,23 @@
     </article>
   </section> <!-- end drawer -->
 
+ <!--·························· Chart ··························-->
+  <section role="region" id="pnl-chart" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-main-chart-back" href="#"><span class="icon icon-back">back</span></a>
+      <h1 data-l10n-id="idTitleHistory">History</h1>
+    </header>
+    <article class="scrollable header">
+
+      <div class="ct-chart ct-perfect-fourth"></div>
+      <div>
+        <span>Time in minutes</span>
+      </div>
+      <button id="btn-detail-history" class="recommend" data-l10n-id="idSessions" >Sessions</button>
+      
+    </article>
+  </section> <!-- end drawer -->
+  
   <!--·························· List of Sessions ··························-->
   <section role="region" id="pnl-history" data-position="right">
     <header class="fixed">
@@ -358,7 +377,7 @@
         <span data-l10n-id="idEndTime">End</span>
         <span id="idHistoEndTime"></span>
       </p>
-      
+
       <div>
         <button id="btn-remove-history-session" class="danger" data-l10n-id="idRemoveHistoSession" >Remove</button>
       </div>
@@ -861,6 +880,7 @@
         
   </section>
 
+  <script type="text/javascript" defer src="chartist/chartist.min.js"></script>
   <script type="text/javascript" defer src="js/const.js"></script>
   <script type="text/javascript" defer src="js/db.js"></script>
   <script type="text/javascript" defer src="js/session.js"></script>
@@ -868,7 +888,7 @@
   <script type="text/javascript" defer src="js/import.js"></script>
   <script type="text/javascript" defer src="js/program.js"></script>
   <script type="text/javascript" defer src="js/calendar.js"></script>
-    <script type="text/javascript" defer src="js/history.js"></script>
+  <script type="text/javascript" defer src="js/history.js"></script>
   <script type="text/javascript" defer src="js/parameters.js"></script>
   <script type="text/javascript" defer src="js/app.js"></script>
   <script type="text/javascript" defer src="js/l10n.js" charset="utf-8"></script>

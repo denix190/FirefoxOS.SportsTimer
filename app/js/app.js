@@ -436,6 +436,14 @@ document.querySelector('#btn-choose-calendar').addEventListener('click', functio
 
 document.querySelector('#btn-choose-history').addEventListener('click', function () {
 
+  displayChart();
+
+  document.querySelector('#pnl-chart').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+document.querySelector('#btn-detail-history').addEventListener('click', function () {
+
   displayHistory();
 
   document.querySelector('#pnl-history').className = 'current';
@@ -533,6 +541,13 @@ document.querySelector('#btn-go-main-history-back').addEventListener('click', fu
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
+
+// pnl-chart
+
+document.querySelector('#btn-go-main-chart-back').addEventListener('click', function () {
+  document.querySelector('#pnl-chart').className = 'left';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
 
 ///////////////////////////////////////////////////////////////////
 // Panel: pnl-day.
@@ -2154,13 +2169,99 @@ function displayHistorySession(id) {
       var end = document.getElementById('idHistoEndTime');
       end.innerHTML = request.result.endSession.toLocaleDateString() +
                 " " + request.result.endSession.toLocaleTimeString();
-    } catch (e) {
+
+
+    } catch(e) {
       console.log(e);
     }
-  };
+  }
+}
+
+function displayChart() {
+
+  try {
+    var listHistory = document.getElementById("list-history");
+    removeAllItems(listHistory);
+    var objectStore = db.transaction("history").objectStore("history");
+
+    var index = objectStore.index("dateHistory");
+    var date = new Date();
+
+    date.setDate(date.getDate() - parameters.getCalendarNbDays());
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    var range = IDBKeyRange.lowerBound(date);
+
+    var options = {
+      seriesBarDistance: 15
+    };
+  
+    var responsiveOptions = [
+          ['screen and (min-width: 641px) and (max-width: 1024px)', {
+            seriesBarDistance: 10,
+            axisX: {
+              labelInterpolationFnc: function (value) {
+                                      return value;
+                                    }
+            }
+          }],
+          ['screen and (max-width: 640px)', {
+            seriesBarDistance: 5,
+            axisX: {
+              labelInterpolationFnc: function (value) {
+                                      return value[0];
+                                    }
+            }
+          }]
+    ];
+
+    var data = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      series: [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ]
+    };
+
+    index.openCursor(range).onsuccess = function(event) {
+      try {
+        var cursor = event.target.result;
+        if (cursor) {
+
+          var time = ((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000)/60>>0;
+          
+          var month = cursor.value.endSession.getMonth();
+
+          data.series[0][month] = data.series[0][month] + parseInt(time);
+
+          console.log("Month : " + month + " time " + time + " " + data.series[0][month]);
+          cursor.continue();
+        }
+        else {
+          // alert("No more entries!");
+          console.log(data);
+            new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    };
+  } catch(e) {
+    console.log(e);
+  }
+  
+
+  
+
+  
+
   
 }
 
+
+/**
+ * Display the history of the sessions.
+ */
 function displayHistory() {
  
   try {
