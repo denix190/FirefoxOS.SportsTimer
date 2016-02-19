@@ -2194,7 +2194,12 @@ function displayChart() {
     var range = IDBKeyRange.lowerBound(date);
 
     var options = {
-      seriesBarDistance: 15
+      seriesBarDistance: 10,
+      reverseData: true,
+      horizontalBars: true,
+      axisY: {
+        offset: 40
+      }
     };
   
     var responsiveOptions = [
@@ -2216,12 +2221,12 @@ function displayChart() {
           }]
     ];
     // Month
-    var data = {
+    /* var data = {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       series: [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       ]
-    };
+    }; */
 
     // Week
     var dataWeek = {
@@ -2235,7 +2240,7 @@ function displayChart() {
     var cur = getWeekNumber(now);
 
     dataWeek.labels[11] = "" + cur[1];
-
+    var delta = cur[1] - 11;
     index.openCursor(range).onsuccess = function(event) {
       try {
         var cursor = event.target.result;
@@ -2243,20 +2248,31 @@ function displayChart() {
           var time = (cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0;
           var month = cursor.value.endSession.getMonth();
 
-          data.series[0][month] = data.series[0][month] + parseInt(time);
-
+          //data.series[0][month] = data.series[0][month] + parseInt(time);
           var week = getWeekNumber(cursor.value.endSession);
+          if (cur[0] == week[0]) {
+            // Same year
+            if (cur[1] < week[1] + 11) {
+              dataWeek.series[0][week[1] - delta] = dataWeek.series[0][week[1] - delta] + parseInt(time);
+            }
+          } else {
 
-          console.log("Month : " + month + " time " + time + " " + data.series[0][month]);
+          }
+
           cursor.continue();
         }
         else {
           var i = 0;
           for (i = 0; i < 12;i++) {
-            data.series[0][i] = data.series[0][i]/60>>0;
+            if ((delta + i) > 0) {
+              dataWeek.labels[i] = "" + (delta + i);
+            } else {
+              dataWeek.labels[i] = "" + (52 + delta + i);
+            }
+            dataWeek.series[0][i] = dataWeek.series[0][i]/60>>0;
           }
-          console.log(data);
-          new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+          console.log(dataWeek);
+         new Chartist.Bar('.ct-chart', dataWeek, options/*, responsiveOptions */);
         }
       } catch(e) {
         console.log(e);
