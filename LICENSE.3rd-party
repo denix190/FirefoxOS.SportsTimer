@@ -21,3 +21,8 @@ License: Apache 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 Author: Mozilla Foundation (copyright holder)
 URL: https://github.com/buildingfirefoxos/Building-Blocks/tree/gh-pages/transitions.css
 License: Apache 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+`thirdparty/chartist`
+Author: Sam Hocevar
+URL: https://github.com/gionkunz/chartist-js/tree/master
+License: Public
