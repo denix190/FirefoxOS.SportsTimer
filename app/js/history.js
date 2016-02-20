@@ -4,8 +4,6 @@
 
 function dbStoreHistory(session) {
  try {
-    console.log("dbStoreHistory" + session.idSession);
-    
     var transaction = db.transaction(["history"],"readwrite");
     var store = transaction.objectStore("history");
 
@@ -18,7 +16,7 @@ function dbStoreHistory(session) {
      exercises: session.exercises,
      created:new Date()
    };
-   console.log(historyRecord);
+
    /* */
    var request = store.add(historyRecord);
    request.onerror = function(e) {

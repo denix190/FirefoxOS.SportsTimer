@@ -129,8 +129,6 @@ document.querySelector('#btn-go-export-back').addEventListener('click', function
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
-
-
 // Import
 document.querySelector('#btn-go-import').addEventListener('click', function () {
   loadListFiles('sdcard'); 
@@ -161,11 +159,26 @@ document.querySelector('#btn-go-export-history').addEventListener('click', funct
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
+// Import History
+document.querySelector('#btn-go-import-history').addEventListener('click', function () {
+
+  loadListFilesHistory('sdcard');
+  document.querySelector('#pnl_import_history').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+    
+    
 document.querySelector('#btn-go-export-history-back').addEventListener('click', function () {
   document.querySelector('#pnl_export_history').className = 'right';
   document.querySelector('[data-position="current"]').className = 'current';
 });
 
+// Back 
+document.querySelector('#btn-go-import-history-back').addEventListener('click', function () {
+  document.querySelector('#pnl_import_history').className = 'right';
+  document.querySelector('[data-position="current"]').className = 'current';
+});
+    
 // Hide panel List sessions.
 document.querySelector('#btn-go-current-session-back').addEventListener('click', function () {
   document.querySelector('#currentSession').className = 'right';
@@ -2169,8 +2182,6 @@ function displayHistorySession(id) {
       var end = document.getElementById('idHistoEndTime');
       end.innerHTML = request.result.endSession.toLocaleDateString() +
                 " " + request.result.endSession.toLocaleTimeString();
-
-
     } catch(e) {
       console.log(e);
     }
@@ -2271,7 +2282,6 @@ function displayChart() {
             }
             dataWeek.series[0][i] = dataWeek.series[0][i]/60>>0;
           }
-          console.log(dataWeek);
          new Chartist.Bar('.ct-chart', dataWeek, options/*, responsiveOptions */);
         }
       } catch(e) {
@@ -2282,7 +2292,6 @@ function displayChart() {
     console.log(e);
   }
 }
-
 
 function getWeekNumber(d) {
     // Copy date so don't modify original

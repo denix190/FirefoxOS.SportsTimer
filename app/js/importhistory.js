@@ -1,36 +1,36 @@
 'use strict';
 
 /**
- * Class ImportSession
+ * Class ImportHistory
  * @param sessions sessions to load.
  * @param deleteAll Remove all the sessions, before import else replace.
  */
-function ImportSession(sessions, deleteAll) {
-    this.sessions = sessions;
+function ImportHistory(stories, deleteAll) {
+    this.stories = stories;
     this.deleteAll = deleteAll;
 }
 
 /**
  * load the session.
 */ 
-ImportSession.prototype.load = function() {
+ImportHistory.prototype.load = function() {
   var i = 0;
   try {
+
     if (this.deleteAll) {
-      // Remove all session and exercises.
-      dbDeleteAllSessions();
-    } else {
-      // Remove all session already present;
-      var listSessions = new Array();
-      for(i = 0; i < this.sessions.length;i++) {
-        listSessions.push(this.sessions[i].name);
-      }
-      dbDeleteSessions(listSessions);
+      // Remove all History
+      dbDeleteAllHistory();
     }
-   
-    for(i = 0; i < this.sessions.length;i++) {
-      // Delete all sessions.
-      dbAddSession(this.sessions[i]);
+
+    for(i = 0; i < this.stories.length;i++) {
+      var session =  new Session();
+      session.beginSession = new Date(this.stories[i].beginSession);
+      session.endSession = new Date(this.stories[i].endSession);
+      session.name = this.stories[i].nameSession;
+      session.idSession = this.stories[i].idSession;
+      session.exercises = this.stories[i].exercises;
+
+      dbStoreHistory(session);
     }
   } catch(e) {
     console.log(e);
@@ -42,7 +42,7 @@ ImportSession.prototype.load = function() {
  * listFiles element to load.
  */
 
-ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
+ImportHistory.prototype.loadListFiles = function(storagename, listFiles) {
 
   if (typeof navigator.getDeviceStorage === "function") {
     var files = navigator.getDeviceStorage(storagename);
@@ -57,8 +57,8 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
           fileName = "sdcard/" + fileName;
 
           var posSlash = fileName.lastIndexOf('/');
-
-          if (posSlash != -1 && fileName.substring(posSlash + 1).startsWith("st") && fileName.endsWith(".json")) {
+         
+          if (posSlash != -1 && fileName.substring(posSlash + 1).startsWith("st-histo") && fileName.endsWith(".json")) {
             var li = document.createElement("li");
             var a = document.createElement("a");
             a.setAttribute("id", file.name);
@@ -93,12 +93,12 @@ ImportSession.prototype.loadListFiles = function(storagename, listFiles) {
 };
 
 // List Files.
-var listFiles = document.getElementById('list-files');
+var listFilesHistory = document.getElementById('list-filesHistory');
 
 /*
  * Import sessions from file.
  */
-listFiles.onclick = function(e) {
+listFilesHistory.onclick = function(e) {
 
   var parent = e.target.innerHTML;
   var sdcard = navigator.getDeviceStorage('sdcard');
@@ -114,16 +114,14 @@ listFiles.onclick = function(e) {
         var sessions = JSON.parse(reader.result);
         
         // Write sessions
-        if (window.confirm(navigator.mozL10n.get("confirmImportSession"))) {
-          var chkReplaceAll = document.getElementById('chk-replaceAll');
-          var importSession = new ImportSession(sessions, chkReplaceAll.checked);
-          importSession.load();
-          window.alert(navigator.mozL10n.get("ImportSessionFinish"));
-          dataChange(0);
+        if (window.confirm(navigator.mozL10n.get("confirmImportHistory"))) {
+          var chkReplaceAll = document.getElementById('chk-replaceAllHistory');
+          var importHistory = new ImportHistory(sessions, chkReplaceAll.checked);
+          importHistory.load();
+          window.alert(navigator.mozL10n.get("ImportHistoryFinish"));
 
-          document.querySelector('#pnl_import').className = 'right';
+          document.querySelector('#pnl_import-history').className = 'right';
           document.querySelector('[data-position="current"]').className = 'current';
-          
         }
       };
       reader.readAsText(file, 'utf-8');
@@ -141,14 +139,14 @@ listFiles.onclick = function(e) {
 /**
  * Load the import files.
  */
-function loadListFiles(storagename) {
+function loadListFilesHistory(storagename) {
   try {
     // Remove all elements.
-    removeAllItems(document.getElementById("list-files"));
+    removeAllItems(listFilesHistory);
     
     if (typeof navigator.getDeviceStorage === "function") {        
-      var importSession = new ImportSession();
-      importSession.loadListFiles('sdcard', listFiles);
+      var importHistory = new ImportHistory();
+      importHistory.loadListFiles('sdcard', listFilesHistory);
     } else {
       window.alert("getDeviceStorage not a function");
     }

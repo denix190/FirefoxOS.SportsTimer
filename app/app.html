@@ -253,8 +253,10 @@
         <ul>
           <li><a id="btn-go-param-ex" href="#" data-click="nav" data-click-location="params" data-l10n-id="idParameters">Parameters</a></li>
           <li><a id="btn-go-export" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExport">Export</a></li>
-          <li><a id="btn-go-export-history" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExportHistory">Export History</a></li>
           <li><a id="btn-go-import" href="#" data-click="nav" data-click-location="open" data-l10n-id="idImport">Import</a></li>
+          <li><a id="btn-go-import-history" href="#" data-click="nav" data-click-location="open" data-l10n-id="idImportHistory">Import history</a></li>
+          <li><a id="btn-go-export-history" href="#" data-click="nav" data-click-location="open" data-l10n-id="idExportHistory">Export history</a></li>
+
           <li><a id="btn-go-about-ex" href="#" data-click="nav" data-click-location="open" data-l10n-id="idAbout">About</a></li>
         </ul>
       </nav>
@@ -825,6 +827,27 @@
     </article>
         
   </section>
+
+  <!--·························· Import History ··························-->
+  <section role="region" id="pnl_import_history" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-import-history-back" href="#"><span class="icon icon-close">back</span></a>
+      <h1 data-l10n-id="idImportHistory">Import history</h1>
+    </header>
+    <article class="scrollable header">
+      <div style="height:5rem;">
+         <label data-l10n-id="idReplace" class="parameters">Replace:</label>
+         <label class="pack-switch">
+          <input type="checkbox" checked class="denix" id="chk-replaceAllHistory">
+          <span></span>
+         </label>
+      </div>
+      <div data-type="list" class="files">
+        <ul id="list-filesHistory" style="height:100%">
+        </ul>
+      </div>
+    </article>
+  </section>
   
   <!--·························· Import ··························-->
   <section role="region" id="pnl_import" data-position="right">
@@ -886,6 +909,7 @@
   <script type="text/javascript" defer src="js/session.js"></script>
   <script type="text/javascript" defer src="js/export.js"></script>
   <script type="text/javascript" defer src="js/import.js"></script>
+  <script type="text/javascript" defer src="js/importhistory.js"></script>
   <script type="text/javascript" defer src="js/program.js"></script>
   <script type="text/javascript" defer src="js/calendar.js"></script>
   <script type="text/javascript" defer src="js/history.js"></script>

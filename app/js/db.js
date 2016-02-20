@@ -483,3 +483,29 @@ function dbDeleteHistory(idHistory) {
     console.log("Delete Error" + e); 
   }
 }
+
+/**
+ * Delete all History Session.
+ */
+
+function dbDeleteAllHistory() {
+
+  var objectStore = db.transaction(["history"],"readwrite").objectStore("history");
+  
+  try {
+    objectStore.openCursor().onsuccess =  function(event) {
+      try {
+        var cursor = event.target.result;
+
+        if (cursor) {
+          cursor.delete();
+          cursor.continue();
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    };
+  } catch(e) {
+    console.log("Delete Error" + e); 
+  }
+}
