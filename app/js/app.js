@@ -2250,6 +2250,9 @@ function displayChart() {
     var now = Date.now();
     var cur = getWeekNumber(now);
 
+    // Last Week for the previous year.
+    var lastWeek = getWeekNumber(new Date(cur[0] - 1, 11, 31));
+    
     dataWeek.labels[11] = "" + cur[1];
     var delta = cur[1] - 11;
     index.openCursor(range).onsuccess = function(event) {
@@ -2267,7 +2270,8 @@ function displayChart() {
               dataWeek.series[0][week[1] - delta] = dataWeek.series[0][week[1] - delta] + parseInt(time);
             }
           } else {
-
+            // Previous year
+            dataWeek.series[0][week[1] -lastWeek[1]- delta] = dataWeek.series[0][week[1] - lastWeek[1] - delta] + parseInt(time);
           }
 
           cursor.continue();
@@ -2278,7 +2282,7 @@ function displayChart() {
             if ((delta + i) > 0) {
               dataWeek.labels[i] = "" + (delta + i);
             } else {
-              dataWeek.labels[i] = "" + (52 + delta + i);
+              dataWeek.labels[i] = "" + (lastWeek[1] + delta + i);
             }
             dataWeek.series[0][i] = dataWeek.series[0][i]/60>>0;
           }
