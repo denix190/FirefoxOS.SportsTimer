@@ -270,12 +270,10 @@ function notifyMe(msg) {
 if (navigator.mozSetMessageHandler) {
   navigator.mozSetMessageHandler("notification", function (message) {
     if (!message.clicked) {
-      console.log("clicked");
       return;
     }
     
     navigator.mozApps.getSelf().onsuccess = function (evt) {
-      console.log("app");
       var app = this.result;
       app.launch();
     };
@@ -325,11 +323,7 @@ function delAlarm(doe) {
   allAlarmsRequest.onsuccess = function() {
 
     this.result.forEach(function (alarm) {
-      console.log("Alarm remove alarm.data.idCalendar :" +
-                  alarm.data.idCalendar +
-                  "doe.idCalendar" +  doe.idCalendar);
       if (alarm.data.idCalendar == doe.idCalendar) {
-        console.log("Alarm remove :" + doe.idCalendar);
         navigator.mozAlarms.remove(alarm.id);
       }
      });
@@ -622,7 +616,6 @@ document.querySelector('#btn-execute-session').addEventListener('click', functio
 document.querySelector('#btn-go-upd-day').addEventListener('click', function () {
 
   try {
-
     var session = document.getElementById('list-select-session');
 
     if (session.selectedIndex == -1) {
@@ -631,7 +624,6 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
     }
     
     var idSession = parseInt(session.options[session.selectedIndex].value);
-
     var startTime = document.getElementById('startTime');
     var startDay = document.getElementById('startDay');
 
@@ -812,7 +804,6 @@ function displayExercise(id) {
     };
     
     request.onsuccess = function(evt) {
-
       var value = evt.target.result;
       var name = document.getElementById('nameExUpd');
       var desc = document.getElementById('descExUpd');
@@ -1345,7 +1336,7 @@ function startEx() {
     try {
       var exercise = new Exercise(curExercise.getName(), curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
       curSession.startExercise(exercise);
-      if (curSession.getIdCalendar() != 0) {
+      if (curSession.getIdCalendar() !== 0) {
         dbExecuteCalendar(curSession.getIdCalendar());
       }
     } catch(e) {
@@ -1425,7 +1416,7 @@ function display() {
         durationCounter = 0;
       }
     } else {
-      var nbSec =  curExercise.getBreakTime() - breakTimeCounter;
+      var nbSec = curExercise.getBreakTime() - breakTimeCounter;
       displaySecond(chronoDisplay, nbSec, RECOVERY_COLOR);
     }
     
@@ -1543,8 +1534,6 @@ function cancelEx() {
 
   if (window.confirm(navigator.mozL10n.get("confirmCancelSession"))) { 
     chronos.stop();
-    // chronoDisplay.textContent = "00:00";
-
     displaySecond(chronoDisplay, 0, EFFORT_COLOR);
     nbRetryDisplay.textContent = "0/0";
     endExercise();
@@ -1705,7 +1694,10 @@ function listSessionEx(idSession) {
     try {
       var cursor = event.target.result;
       if (cursor) {
-        var exercise = new Exercise( cursor.value.name,  cursor.value.duration,  cursor.value.breakTime, cursor.value.nbRetry);
+        var exercise = new Exercise(cursor.value.name,
+                                    cursor.value.duration,
+                                    cursor.value.breakTime,
+                                    cursor.value.nbRetry);
         exercise.setImagePath(cursor.value.imagePath);
         curSession.addListExercises(exercise);
         cursor.continue();
@@ -1722,8 +1714,6 @@ function listSessionEx(idSession) {
     console.log("listExercise ", e);
   };
 }
-
-
 
 /**
  * Dysplay the current exercise for the session.
@@ -2066,7 +2056,7 @@ function initPnlDay(dayOfExercice) {
 
       // You can run the session for the current day only.
       if (dayOfExercice.day.getTime() <= now.getTime() ) {
-        document.getElementById('btn-execute-session').className = "recommend"
+        document.getElementById('btn-execute-session').className = "recommend";
       } else {
         document.getElementById('btn-execute-session').className = "invisible";
       }
@@ -2113,7 +2103,6 @@ function initPnlDay(dayOfExercice) {
  */
 
 document.querySelector('#btn-go-history-session-back').addEventListener('click', function () {
-  console.log("back");
   document.querySelector('#pnl-history-session').className = 'left';
   document.querySelector('[data-position="current"]').className = 'current';
 });
@@ -2185,7 +2174,7 @@ function displayHistorySession(id) {
     } catch(e) {
       console.log(e);
     }
-  }
+  };
 }
 
 function displayChart() {
