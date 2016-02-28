@@ -46,6 +46,9 @@ var listImages = document.getElementById('list-images');
 // List History.
 var listHistory = document.getElementById('list-history');
 
+var days = null;
+
+
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
 
@@ -2314,7 +2317,13 @@ function displayHistory() {
 
     var index = objectStore.index("dateHistory");
     var date = new Date();
+    try {
+      days = navigator.mozL10n.get("days").split(",");
+    } catch (e) {
+      console.log(e);
+    }
 
+    
     date.setDate(date.getDate() - parameters.getCalendarNbDays());
     date.setHours(0);
     date.setMinutes(0);
@@ -2354,13 +2363,14 @@ function displayItemHistorySession(list, cursor) {
   var p0 = document.createElement("p");
   var p1 = document.createElement("p");
 
-  p0.innerHTML =  cursor.value.nameSession;
+  p0.innerHTML =  cursor.value.nameSession +
+            " (" +
+            getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")";
   a.appendChild(p0);
 
-  p1.innerHTML = cursor.value.beginSession.toLocaleDateString() +
-            " " + cursor.value.beginSession.toLocaleTimeString() +
-            " (" +
-            getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")" ;
+  p1.innerHTML =  days[cursor.value.beginSession.getDay()] + " "
+            + cursor.value.beginSession.toLocaleDateString() +
+            " " + cursor.value.beginSession.toLocaleTimeString();
             //")" );
   a.appendChild(p1);
 
