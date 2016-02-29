@@ -2295,7 +2295,7 @@ function getWeekNumber(d) {
     d.setHours(0,0,0);
     // Set to nearest Thursday: current date + 4 - current day number
     // Make Sunday's day number 7
-    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+    d.setDate(d.getDate() + 7 - (d.getDay()||7));
     // Get first day of year
     var yearStart = new Date(d.getFullYear(),0,1);
     // Calculate full weeks to nearest Thursday
@@ -2364,8 +2364,9 @@ function displayItemHistorySession(list, cursor) {
   var p1 = document.createElement("p");
 
   p0.innerHTML =  cursor.value.nameSession +
-            " (" +
-            getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")";
+    " (" +
+    getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")" +
+    " " + getWeekNumber(cursor.value.beginSession)[1];
   a.appendChild(p0);
 
   p1.innerHTML =  days[cursor.value.beginSession.getDay()] + " "
