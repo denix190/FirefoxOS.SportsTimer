@@ -2239,14 +2239,15 @@ function displayChart() {
       ]
     };
     
-    var now = Date.now();
-    var cur = getWeekNumber(now);
-
+    var now = new Date();
+    var curWeek = now.getWeek();
+    console.log(curWeek);
     // Last Week for the previous year.
-    var lastWeek = getWeekNumber(new Date(cur[0] - 1, 11, 31));
-    
-    dataWeek.labels[11] = "" + cur[1];
-    var delta = cur[1] - 11;
+    var lastWeek = new Date(now.getYear() - 1, 11, 31).getWeek();
+    console.log(lastWeek);
+    dataWeek.labels[11] = "" + curWeek;
+    var delta = curWeek - 11;
+    console.log("delta " + delta);
     index.openCursor(range).onsuccess = function(event) {
       try {
         var cursor = event.target.result;
@@ -2255,17 +2256,22 @@ function displayChart() {
           var month = cursor.value.endSession.getMonth();
 
           //data.series[0][month] = data.series[0][month] + parseInt(time);
-          var week = getWeekNumber(cursor.value.endSession);
-          if (cur[0] == week[0]) {
+          var week = cursor.value.endSession.getWeek();
+          console.log("date "+ cursor.value.endSession + " week " + week + " curWeek " + curWeek + " delta " + delta);
+          if (now.getYear() == cursor.value.endSession.getYear()) {
             // Same year
-            if (cur[1] < week[1] + 11) {
-              dataWeek.series[0][week[1] - delta] = dataWeek.series[0][week[1] - delta] + parseInt(time);
+            if ((curWeek < week + 11) && curWeek > week ) {
+              console.log("week - delta " + (week - delta)); 
+              dataWeek.series[0][week - delta] = dataWeek.series[0][week - delta] + parseInt(time);
+            } else {
+              console.log("week - lastWeek - delta " + (week - lastWeek - delta)); 
+              dataWeek.series[0][week - lastWeek - delta] = dataWeek.series[0][week - lastWeek - delta] + parseInt(time);
             }
           } else {
             // Previous year
-            dataWeek.series[0][week[1] -lastWeek[1]- delta] = dataWeek.series[0][week[1] - lastWeek[1] - delta] + parseInt(time);
+            console.log("week - lastWeek - delta " + (week - lastWeek - delta));
+            dataWeek.series[0][week -lastWeek- delta] = dataWeek.series[0][week - lastWeek - delta] + parseInt(time);
           }
-
           cursor.continue();
         }
         else {
@@ -2274,10 +2280,11 @@ function displayChart() {
             if ((delta + i) > 0) {
               dataWeek.labels[i] = "" + (delta + i);
             } else {
-              dataWeek.labels[i] = "" + (lastWeek[1] + delta + i);
+              dataWeek.labels[i] = "" + (lastWeek + delta + i);
             }
             dataWeek.series[0][i] = dataWeek.series[0][i]/60>>0;
           }
+          console.log(dataWeek);
          new Chartist.Bar('.ct-chart', dataWeek, options/*, responsiveOptions */);
         }
       } catch(e) {
@@ -2366,7 +2373,7 @@ function displayItemHistorySession(list, cursor) {
   p0.innerHTML =  cursor.value.nameSession +
     " (" +
     getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")" +
-    " " + getWeekNumber(cursor.value.beginSession)[1];
+    " " + cursor.value.beginSession.getWeek();
   a.appendChild(p0);
 
   p1.innerHTML =  days[cursor.value.beginSession.getDay()] + " "
@@ -2378,3 +2385,34 @@ function displayItemHistorySession(list, cursor) {
   li.appendChild(a);
   list.appendChild(li);
 }
+
+
+Date.prototype.getWeek = function() {
+    // We have to compare against the first monday of the year not the 01/01
+    // 60*60*24*1000 = 86400000
+    // 'onejan_next_monday_time' reffers to the miliseconds of the next monday after 01/01
+
+    var day_miliseconds = 86400000,
+        onejan = new Date(this.getFullYear(),0,1,0,0,0),
+        onejan_day = (onejan.getDay() ===0) ? 7 : onejan.getDay(),
+        days_for_next_monday = (8-onejan_day),
+        onejan_next_monday_time = onejan.getTime() + (days_for_next_monday * day_miliseconds),
+        // If one jan is not a monday, get the first monday of the year
+        first_monday_year_time = (onejan_day>1) ? onejan_next_monday_time : onejan.getTime(),
+        this_date = new Date(this.getFullYear(), this.getMonth(),this.getDate(),0,0,0),// This at 00:00:00
+        this_time = this_date.getTime(),
+        days_from_first_monday = Math.round(((this_time - first_monday_year_time) / day_miliseconds));
+
+    var first_monday_year = new Date(first_monday_year_time);
+
+    // We add 1 to "days_from_first_monday" because if "days_from_first_monday" is *7,
+    // then 7/7 = 1, and as we are 7 days from first monday,
+    // we should be in week number 2 instead of week number 1 (7/7=1)
+    // We consider week number as 52 when "days_from_first_monday" is lower than 0,
+    // that means the actual week started before the first monday so that means we are on the firsts
+    // days of the year (ex: we are on Friday 01/01, then "days_from_first_monday"=-3,
+    // so friday 01/01 is part of week number 52 from past year)
+    // "days_from_first_monday<=364" because (364+1)/7 == 52, if we are on day 365, then (365+1)/7 >= 52 (Math.ceil(366/7)=53) and thats wrong
+
+    return (days_from_first_monday>=0 && days_from_first_monday<364) ? Math.ceil((days_from_first_monday+1)/7) : 52;
+};
