@@ -2169,7 +2169,8 @@ function displayHistorySession(id) {
 
       var start = document.getElementById('idHistoStartTime');
       start.innerHTML = request.result.beginSession.toLocaleDateString() +
-                " " + request.result.beginSession.toLocaleTimeString();
+                " " + request.result.beginSession.toLocaleTimeString() +
+                " (" + navigator.mozL10n.get("week") + " " + request.result.beginSession.getWeek() + ")";
 
       var end = document.getElementById('idHistoEndTime');
       end.innerHTML = request.result.endSession.toLocaleDateString() +
@@ -2205,24 +2206,7 @@ function displayChart() {
       }
     };
   
-    var responsiveOptions = [
-          ['screen and (min-width: 641px) and (max-width: 1024px)', {
-            seriesBarDistance: 10,
-            axisX: {
-              labelInterpolationFnc: function (value) {
-                                      return value;
-                                    }
-            }
-          }],
-          ['screen and (max-width: 640px)', {
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc: function (value) {
-                                      return value[0];
-                                    }
-            }
-          }]
-    ];
+
     // Month
     /* var data = {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -2241,13 +2225,13 @@ function displayChart() {
     
     var now = new Date();
     var curWeek = now.getWeek();
-    console.log(curWeek);
+
     // Last Week for the previous year.
     var lastWeek = new Date(now.getYear() - 1, 11, 31).getWeek();
-    console.log(lastWeek);
+
     dataWeek.labels[11] = "" + curWeek;
     var delta = curWeek - 11;
-    console.log("delta " + delta);
+    // console.log("delta " +  delta);
     index.openCursor(range).onsuccess = function(event) {
       try {
         var cursor = event.target.result;
@@ -2255,22 +2239,30 @@ function displayChart() {
           var time = (cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0;
           var month = cursor.value.endSession.getMonth();
 
-          //data.series[0][month] = data.series[0][month] + parseInt(time);
           var week = cursor.value.endSession.getWeek();
-          console.log("date "+ cursor.value.endSession + " week " + week + " curWeek " + curWeek + " delta " + delta);
+          
           if (now.getYear() == cursor.value.endSession.getYear()) {
             // Same year
-            if ((curWeek < week + 11) && curWeek > week ) {
-              console.log("week - delta " + (week - delta)); 
-              dataWeek.series[0][week - delta] = dataWeek.series[0][week - delta] + parseInt(time);
+            if ((curWeek < week + 11) && curWeek >= week ) {
+              // console.log("date "+ cursor.value.endSession + " week " + week + " curWeek " + curWeek + " times " + time + " week - delta " + (week - delta));
+              var x = week - delta;
+              if (x >= 0 && x < 12) {
+                dataWeek.series[0][x] = dataWeek.series[0][x] + parseInt(time);
+              }
             } else {
-              console.log("week - lastWeek - delta " + (week - lastWeek - delta)); 
-              dataWeek.series[0][week - lastWeek - delta] = dataWeek.series[0][week - lastWeek - delta] + parseInt(time);
+              //console.log("date "+ cursor.value.endSession + " week " + week + " curWeek " + curWeek + " times " + time +" week - lastWeek - delta " + (week - lastWeek - delta));
+              var x = week - lastWeek - delta;
+              if (x >= 0 && x < 12) {
+                dataWeek.series[0][x] = dataWeek.series[0][x] + parseInt(time);
+              }
             }
           } else {
             // Previous year
-            console.log("week - lastWeek - delta " + (week - lastWeek - delta));
-            dataWeek.series[0][week -lastWeek- delta] = dataWeek.series[0][week - lastWeek - delta] + parseInt(time);
+            // console.log("date "+ cursor.value.endSession + " week " + week + " curWeek " + curWeek + " times " + time +" week - lastWeek - delta " + (week - lastWeek - delta));
+            var x = week - lastWeek - delta;
+              if (x >= 0 && x < 12) {
+                dataWeek.series[0][week -lastWeek- delta] = dataWeek.series[0][week - lastWeek - delta] + parseInt(time);
+              }
           }
           cursor.continue();
         }
@@ -2284,8 +2276,8 @@ function displayChart() {
             }
             dataWeek.series[0][i] = dataWeek.series[0][i]/60>>0;
           }
-          console.log(dataWeek);
-         new Chartist.Bar('.ct-chart', dataWeek, options/*, responsiveOptions */);
+          //console.log(dataWeek);
+         new Chartist.Bar('.ct-chart', dataWeek, options);
         }
       } catch(e) {
         console.log(e);
@@ -2295,22 +2287,6 @@ function displayChart() {
     console.log(e);
   }
 }
-
-function getWeekNumber(d) {
-    // Copy date so don't modify original
-    d = new Date(+d);
-    d.setHours(0,0,0);
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
-    d.setDate(d.getDate() + 7 - (d.getDay()||7));
-    // Get first day of year
-    var yearStart = new Date(d.getFullYear(),0,1);
-    // Calculate full weeks to nearest Thursday
-    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
-    return [d.getYear() + 1900, weekNo];
-}
-
 
 /**
  * Display the history of the sessions.
@@ -2371,14 +2347,15 @@ function displayItemHistorySession(list, cursor) {
   var p1 = document.createElement("p");
 
   p0.innerHTML =  cursor.value.nameSession +
-    " (" +
-    getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0)) + ")" +
-    " " + cursor.value.beginSession.getWeek();
+            " / " +
+            getStringTime(((cursor.value.endSession.getTime() - cursor.value.beginSession.getTime())/1000>>0));
   a.appendChild(p0);
 
-  p1.innerHTML =  days[cursor.value.beginSession.getDay()] + " "
-            + cursor.value.beginSession.toLocaleDateString() +
+  p1.innerHTML = days[cursor.value.beginSession.getDay()] + " " +
+            cursor.value.beginSession.toLocaleDateString() +
+            " (" + navigator.mozL10n.get("week") + " " + cursor.value.beginSession.getWeek() + ")" +
             " " + cursor.value.beginSession.toLocaleTimeString();
+
             //")" );
   a.appendChild(p1);
 
