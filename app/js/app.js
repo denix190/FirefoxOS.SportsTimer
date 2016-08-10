@@ -14,7 +14,7 @@ var chronoCounter = 0;
 var chronoDuration = 0;
 
 var flagStart = false;
-
+var chronoPause = false;
 
 // The session selected in the calendar of the program.
 var slctSession;
@@ -2432,7 +2432,6 @@ Date.prototype.getWeek = function() {
 
 function startChrono() {
 
-
   try {
 
     if (!flagStart) {
@@ -2447,8 +2446,10 @@ function startChrono() {
       
       var style = EFFORT_COLOR;
       var nbSec = chronoCounter - chronoDuration;
-      displaySecond(timerDisplay, nbSec, style);
-  
+      displaySecond(timerDisplay, nbSec, style); 
+    } else if (chronoPause == true) {
+      chronos.startChrono();
+      chronoPause = false;
     }
   } catch(e) {
     console.log(e);
@@ -2459,6 +2460,8 @@ function startChrono() {
 function cancelChrono() {
   if(flagStart) {
     flagStart = false;
+    var style = EFFORT_COLOR;
+    displaySecond(timerDisplay, 0, style);
     chronos.stop();
   }
 }
@@ -2466,23 +2469,24 @@ function cancelChrono() {
 function pauseChrono () {
   if (flagStart) {
     chronos.stop();
+    chronoPause = true;
   }
 }
 
 function displayChrono() {
   console.log("displayChrono");
   try {
-  if (chronoDuration > chronoCounter) {
-    chronos.stop();
-    playSound('beepEndSound');
-    flagStart = false;
-  } else {
-    var style = EFFORT_COLOR;
-    var nbSec = chronoCounter - chronoDuration;
-    displaySecond(timerDisplay, nbSec, style);
-    chronoDuration++;
-  }
-      } catch(e) {
+    if (chronoDuration > chronoCounter) {
+      chronos.stop();
+      playSound('beepEndSound');
+      flagStart = false;
+    } else {
+      var style = EFFORT_COLOR;
+      var nbSec = chronoCounter - chronoDuration;
+      displaySecond(timerDisplay, nbSec, style);
+      chronoDuration++;
+    }
+  } catch(e) {
     console.log(e);
   }
 }
