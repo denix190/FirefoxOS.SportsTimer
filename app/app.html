@@ -279,6 +279,7 @@
             <button id="btn-choose-sessions" data-l10n-id="btnChooseSessions" class="recommend" >Sessions</button>
             <button id="btn-choose-calendar" data-l10n-id="btnChooseCalendar" class="recommend" >Calendar</button>
             <button id="btn-choose-history" data-l10n-id="btnChooseHistory" class="recommend" >History</button>
+            <button id="btn-choose-chrono" data-l10n-id="btnChooseChrono" class="recommend" >Chrono</button>
         </div>
       </article>
     </section> <!-- end drawer -->
@@ -485,6 +486,7 @@
         <label data-l10n-id="idDelayBetween" class="parameters">Chain of exercises</label>
         <select name="idDelayBetween" id="idDelayBetweenExercises">
           <option value="0">0 sec</option>
+          <option value="5">5 sec</option>
           <option value="10">10 sec</option>
           <option value="15">15 sec</option>
           <option value="30" selected>30 sec</option>
@@ -550,11 +552,13 @@
         <div style="margin-top:2px; margin-bottom:2px;width:40%;float:left;">
           <span style="font-size:1.9rem;" data-l10n-id="idEffortTime">Effort time</span>
           <select name="duration" id="duration">
+            <option value="5">5 sec</option>
             <option value="10">10 sec</option>
             <option value="15">15 sec</option>
             <option value="30">30 sec</option>
             <option value="45">45 sec</option> 
             <option value="60" selected>1 min</option>
+            <option value="75">1 min 15 sec</option>
             <option value="90">1 min 30 sec</option>
             <option value="120">2 min</option>
             <option value="150">2 min 30 sec</option>
@@ -577,6 +581,7 @@
             <option value="30" selected>30 sec</option>
             <option value="45">45 sec</option> 
             <option value="60">1 min</option>
+            <option value="75">1 min 15 sec</option>
             <option value="90">1 min 30 sec</option>
             <option value="120">2 min</option>
             <option value="150">2 min 30 sec</option>
@@ -633,6 +638,7 @@
             <option value="30">30 sec</option> 
             <option value="45">45 sec</option>
             <option value="60" selected>1 min</option>
+            <option value="75">1 min 15 sec</option>
             <option value="90">1 min 30 sec</option>
             <option value="120">2 min</option>
             <option value="150">2 min 30 sec</option>
@@ -649,11 +655,13 @@
           <span style="font-size:1.9rem;" data-l10n-id="idRecovery">Recovery</span>
           <select name="breakTime" id="breakTimeUpd" style="margin-top:2px;">
             <option value="0">None</option>
+            <option value="5">5 sec</option>
             <option value="10">10 sec</option>
             <option value="15">15 sec</option>
             <option value="30" selected>30 sec</option>
             <option value="45">45 sec</option>
             <option value="60">1 min</option>
+            <option value="75">1 min 15 sec</option>
             <option value="90">1 min 30 sec</option>
             <option value="120">2 min</option>
             <option value="150">2 min 30 sec</option>
@@ -870,6 +878,67 @@
     </article>
   </section>
 
+  <!--·························· Chrono··························-->
+  <section role="region" id="pnl-chrono" data-position="right">
+    <header class="fixed">
+      <a id="btn-go-chrono-back" href="#"><span class="icon icon-back">back</span></a>
+      <h1 id="idTitleChrono">Chrono</h1>
+    </header>
+
+    <article class="scrollable header">
+        <div style="margin-top:2px; margin-bottom:2px;width:100%;float:right;">
+          <span style="font-size:1.9rem;" data-l10n-id="idChrono">Laps</span>
+          <select name="idLaps" id="idLaps" style="margin-top:2px;">
+            <option value="0">None</option>
+            <option value="5">5 sec</option>
+            <option value="10">10 sec</option>
+            <option value="15">15 sec</option>
+            <option value="30" selected>30 sec</option>
+            <option value="45">45 sec</option>
+            <option value="60">1 min</option>
+            <option value="75">1 min 15 sec</option>
+            <option value="90">1 min 30 sec</option>
+            <option value="105">1 min 45 sec</option>
+            <option value="120">2 min</option>
+            <option value="150">2 min 30 sec</option>
+            <option value="180">3 min</option>
+            <option value="210">3 min 30 sec</option>
+            <option value="240">4 min</option>
+            <option value="270">4 min 30 sec</option>
+            <option value="300">5 min</option>
+            <option value="330">6 min 30 sec</option>
+          </select>
+        </div>
+      </div>
+
+      
+        <div class="footer">
+          <div class="chronosAction">
+            <span id="timerDisplay" >00:00</span>
+          </div>
+          
+          <div class="magneto">
+            <table width=98%>
+              <tr>
+                <td style="text-align:center;">
+                  <button class="media-icon media-play icon_button" id="btn-start-chrono" class="recommend"></button>
+                </td>
+                
+                <td style="text-align:center;">
+                  <button class="media-icon media-pause icon_button" id="btn-pause-chrono" class="danger"></button>
+                </td>
+                <td style="text-align:center;">
+                  <button class="action-icon cancel icon_button" id="btn-cancel-chrono" class="danger"></button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+ 
+    </article>
+  </section>
+
+  
   <!--·························· About ··························-->
   <section role="region" id="pnl_about" data-position="right">
     <header class="fixed">

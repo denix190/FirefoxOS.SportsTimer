@@ -10,7 +10,11 @@ var curExercise;
 var typeCounter;
 var typeCounterPause;
 
+var chronoCounter = 0;
+var chronoDuration = 0;
+
 var flagStart = false;
+
 
 // The session selected in the calendar of the program.
 var slctSession;
@@ -47,7 +51,6 @@ var listImages = document.getElementById('list-images');
 var listHistory = document.getElementById('list-history');
 
 var days = null;
-
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -460,6 +463,14 @@ document.querySelector('#btn-detail-history').addEventListener('click', function
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
+// Display the panel for Chrono.
+document.querySelector('#btn-choose-chrono').addEventListener('click', function () {
+
+  document.querySelector('#pnl-chrono').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
+
 
 ///////////////////////////////////////////////////////////////////
 // Panel: sessions.
@@ -674,6 +685,9 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
  
 });
 
+document.querySelector('#btn-start-chrono').addEventListener('click', startChrono);
+document.querySelector('#btn-pause-chrono').addEventListener('click', pauseChrono);
+document.querySelector('#btn-cancel-chrono').addEventListener('click', cancelChrono);
 
 
 // Remove the current day in the calendar.
@@ -692,7 +706,11 @@ document.querySelector('#btn-remove-day').addEventListener('click', removeDay);
 // });
 
 
-
+// Return to the main panel
+document.querySelector('#btn-go-chrono-back').addEventListener('click', function () {
+   document.querySelector('#pnl-chrono').className = 'left';
+   document.querySelector('[data-position="current"]').className = 'current';
+});
 
 /**
  * Load the list of Images.
@@ -1569,6 +1587,21 @@ Chronos.prototype.start = function() {
   this.isLock = true;
 };
 
+
+Chronos.prototype.startChrono = function() {
+  this.timer = window.setInterval(displayChrono, 1000);
+
+  if ('requestWakeLock' in navigator) {
+    try {
+      this.lock = window.navigator.requestWakeLock("screen");
+    } catch(e) {
+      console.log("Can't lock the screen!" + e);
+    }
+  }
+
+  this.isLock = true;
+};
+
 Chronos.prototype.stop = function() {
   this.timer = window.clearInterval(this.timer);
   try {
@@ -2393,3 +2426,64 @@ Date.prototype.getWeek = function() {
 
     return (days_from_first_monday>=0 && days_from_first_monday<364) ? Math.ceil((days_from_first_monday+1)/7) : 52;
 };
+
+
+// Chrono
+
+function startChrono() {
+
+
+  try {
+
+    if (!flagStart) {
+      flagStart = true;
+      chronos.startChrono();
+      var laps = document.getElementById("idLaps");
+      var timerDisplay = document.getElementById("timerDisplay");
+      var lapsTime = laps.value;
+    
+      chronoCounter = parseInt(lapsTime);
+      chronoDuration = 0;
+      
+      var style = EFFORT_COLOR;
+      var nbSec = chronoCounter - chronoDuration;
+      displaySecond(timerDisplay, nbSec, style);
+  
+    }
+  } catch(e) {
+    console.log(e);
+  }
+
+}
+
+function cancelChrono() {
+  if(flagStart) {
+    flagStart = false;
+    chronos.stop();
+  }
+}
+
+function pauseChrono () {
+  if (flagStart) {
+    chronos.stop();
+  }
+}
+
+function displayChrono() {
+  console.log("displayChrono");
+  try {
+  if (chronoDuration > chronoCounter) {
+    chronos.stop();
+    playSound('beepEndSound');
+    flagStart = false;
+  } else {
+    var style = EFFORT_COLOR;
+    var nbSec = chronoCounter - chronoDuration;
+    displaySecond(timerDisplay, nbSec, style);
+    chronoDuration++;
+  }
+      } catch(e) {
+    console.log(e);
+  }
+}
+  
