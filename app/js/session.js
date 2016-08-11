@@ -207,12 +207,12 @@ Session.prototype.stopSes = function() {
     this.timerSession = window.clearInterval(this.timerSession);
     this.flagwalStartSes = false;
     this.endSession = new Date();
-    console.log("Stop session" + this.beginSession +
-                " end " + this.endSession +
-                " delay " + (this.endSession.getTime() - this.beginSession.getTime()));
+    // console.log("Stop session" + this.beginSession +
+    //             " end " + this.endSession +
+    //             " delay " + (this.endSession.getTime() - this.beginSession.getTime()));
 
     dbStoreHistory(this);
-    console.log(this);
+    // console.log(this);
     displaySecond(this.chronoSession, this.sessionSec);
     } catch(e) {
       console.log(e);

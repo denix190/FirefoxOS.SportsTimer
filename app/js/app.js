@@ -464,9 +464,9 @@ document.querySelector('#btn-detail-history').addEventListener('click', function
 });
 
 // Display the panel for Chrono.
-document.querySelector('#btn-choose-chrono').addEventListener('click', function () {
+document.querySelector('#btn-choose-timer').addEventListener('click', function () {
 
-  document.querySelector('#pnl-chrono').className = 'current';
+  document.querySelector('#pnl-timer').className = 'current';
   document.querySelector('[data-position="current"]').className = 'left';
 });
 
@@ -685,9 +685,9 @@ document.querySelector('#btn-go-upd-day').addEventListener('click', function () 
  
 });
 
-document.querySelector('#btn-start-chrono').addEventListener('click', startChrono);
-document.querySelector('#btn-pause-chrono').addEventListener('click', pauseChrono);
-document.querySelector('#btn-cancel-chrono').addEventListener('click', cancelChrono);
+document.querySelector('#btn-start-chrono').addEventListener('click', startTimer);
+document.querySelector('#btn-pause-chrono').addEventListener('click', pauseTimer);
+document.querySelector('#btn-cancel-chrono').addEventListener('click', cancelTimer);
 
 
 // Remove the current day in the calendar.
@@ -707,8 +707,8 @@ document.querySelector('#btn-remove-day').addEventListener('click', removeDay);
 
 
 // Return to the main panel
-document.querySelector('#btn-go-chrono-back').addEventListener('click', function () {
-   document.querySelector('#pnl-chrono').className = 'left';
+document.querySelector('#btn-go-timer-back').addEventListener('click', function () {
+   document.querySelector('#pnl-timer').className = 'left';
    document.querySelector('[data-position="current"]').className = 'current';
 });
 
@@ -1350,10 +1350,10 @@ function startEx() {
     var effortDiv = document.getElementById('effortDiv');
     effortDiv.style.color = EFFORT_COLOR;
         
-    chronos.start();
+    chronos.start(display);
     flagStart = true;
     curSession.startSes();
-    console.log("curSession.startSes();");
+    // console.log("curSession.startSes();");
     try {
       var exercise = new Exercise(curExercise.getName(), curExercise.getDuration(), curExercise.getBreakTime(), curExercise.getNbRetry());
       curSession.startExercise(exercise);
@@ -1367,7 +1367,7 @@ function startEx() {
     if (typeCounter == STATE_EX_PAUSE) {
       // State Pause restart the session.
       curSession.continue();
-      chronos.start();
+      chronos.start(display);
       typeCounter = typeCounterPause;
     }
   }
@@ -1573,7 +1573,7 @@ function Chronos() {
   this.isLock;
 }
 
-Chronos.prototype.start = function() {
+Chronos.prototype.start = function(display) {
   this.timer = window.setInterval(display, 1000);
 
   if ('requestWakeLock' in navigator) {
@@ -1659,7 +1659,7 @@ function updateSession(flagExercise) {
       
       request.onsuccess = function(event) {
         if (flagExercise) {
-          console.log("flagExercise new exercise" + event.currentTarget.result);
+          // console.log("flagExercise new exercise" + event.currentTarget.result);
           document.querySelector('#listExercise').className = 'current';
           document.querySelector('#updSession').className = 'right';
           idSession.value = event.currentTarget.result;
@@ -2428,15 +2428,15 @@ Date.prototype.getWeek = function() {
 };
 
 
-// Chrono
+// Timer
 
-function startChrono() {
+function startTimer() {
 
   try {
 
     if (!flagStart) {
       flagStart = true;
-      chronos.startChrono();
+      chronos.start(displayTimer);
       var laps = document.getElementById("idLaps");
       var timerDisplay = document.getElementById("timerDisplay");
       var lapsTime = laps.value;
@@ -2447,7 +2447,7 @@ function startChrono() {
       var style = EFFORT_COLOR;
       var nbSec = chronoCounter - chronoDuration;
       displaySecond(timerDisplay, nbSec, style); 
-    } else if (chronoPause == true) {
+    } else if (chronoPause === true) {
       chronos.startChrono();
       chronoPause = false;
     }
@@ -2457,7 +2457,7 @@ function startChrono() {
 
 }
 
-function cancelChrono() {
+function cancelTimer() {
   if(flagStart) {
     flagStart = false;
     var style = EFFORT_COLOR;
@@ -2466,15 +2466,14 @@ function cancelChrono() {
   }
 }
 
-function pauseChrono () {
+function pauseTimer () {
   if (flagStart) {
     chronos.stop();
     chronoPause = true;
   }
 }
 
-function displayChrono() {
-  console.log("displayChrono");
+function displayTimer() {
   try {
     if (chronoDuration > chronoCounter) {
       chronos.stop();
