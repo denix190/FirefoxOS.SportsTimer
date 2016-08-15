@@ -26,7 +26,7 @@ Export.prototype.build = function () {
 
 Export.prototype.generate = function () {
   var objectStore = db.transaction("sessions").objectStore("sessions");
-  var sessions = new Array();
+  var sessions = [];
   var self = this;
   objectStore.openCursor().onsuccess = function(event) {
     try {
@@ -34,7 +34,7 @@ Export.prototype.generate = function () {
       if (cursor) {
         // Add properties exercises to the session.
         var session = cursor.value;
-        session["exercises"] = new Array();
+        session["exercises"] = [];
         
         sessions.push(cursor.value);
         cursor.continue();
