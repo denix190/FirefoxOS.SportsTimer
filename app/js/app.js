@@ -202,6 +202,13 @@ document.querySelector('#imagePath').addEventListener('click', function () {
     document.querySelector('[data-position="current"]').className = 'left';
 });
 
+// Import Image
+document.querySelector('#btn-go-import-image').addEventListener('click', function () {
+  loadListImages('sdcard'); 
+  document.querySelector('#pnl_import_image').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+});
+
 /**
  * Launch SportsTimer.
  */

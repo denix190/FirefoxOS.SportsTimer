@@ -156,3 +156,22 @@ function loadListFiles(storagename) {
     window.alert(e);
   }
 }
+
+/**
+ * Load the import Images.
+ */
+function loadListImages(storagename) {
+  try {
+    // Remove all elements.
+    removeAllItems(document.getElementById("list-filesImage"));
+    
+    if (typeof navigator.getDeviceStorage === "function") {        
+      var importSession = new ImportSession();
+      importSession.loadListFiles('sdcard', listFiles);
+    } else {
+      window.alert("getDeviceStorage not a function");
+    }
+  } catch (e) {
+    window.alert(e);
+  }
+}
