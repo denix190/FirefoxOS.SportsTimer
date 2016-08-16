@@ -945,6 +945,16 @@
       <h1 data-l10n-id="idImportImage">Import Image</h1>
     </header>
     <article class="scrollable header">
+      
+      <input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+
+<!-- <form name="uploadForm"> -->
+<p><input id="uploadInput" type="file" name="myFiles" onchange="updateSize();" > selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
+<p><input type="submit" value="Send file"></p>
+<!-- </form> -->
+
+      
+<a href="#" id="fileSelect">Select some files</a>
       <div data-type="list" class="files">
         <ul id="list-filesImage" style="height:100%">
         </ul>
