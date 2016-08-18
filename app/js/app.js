@@ -203,11 +203,11 @@ document.querySelector('#imagePath').addEventListener('click', function () {
 });
 
 // Import Image
-document.querySelector('#btn-go-import-image').addEventListener('click', function () {
-  loadListImages('sdcard'); 
-  document.querySelector('#pnl_import_image').className = 'current';
-  document.querySelector('[data-position="current"]').className = 'left';
-});
+// document.querySelector('#btn-go-import-image').addEventListener('click', function () {
+//   loadListImages('sdcard'); 
+//   document.querySelector('#pnl_import_image').className = 'current';
+//   document.querySelector('[data-position="current"]').className = 'left';
+// });
 
 document.querySelector('#btn-go-import-image-back').addEventListener('click', function () {
   document.querySelector('#pnl_import_image').className = 'right';
