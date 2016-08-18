@@ -781,6 +781,7 @@ function addImage(path, text) {
   var image = document.createElement("img");
   image.src = path;
   image.id = path;
+  image.innerHTML = text;
 
   var pInfo = document.createElement("p");
   pInfo.innerHTML = text;
@@ -940,13 +941,21 @@ listImages.onclick = function(e) {
     if (parseInt(idUpd.value) == -1) {
       var imagePath = document.getElementById('imagePath');
       imagePath.src = e.target.id;
-      // imagePath.style.display = "visible";
+
+      var nameEx = document.getElementById('nameEx');
+
+      
     } else {
       var imagePath = document.getElementById('imagePathUpd');
       imagePath.src = e.target.id;
-      //imagePath.style.display = "visible";
+      var nameEx = document.getElementById('nameExUpd');
+    
     }
 
+    if (nameEx.value == "") {
+      nameEx.value = e.target.innerHTML;
+    }
+    
     document.querySelector('#pnl-chooseImage').className = 'right';
     document.querySelector('[data-position="current"]').className = 'current';
   } catch (e) {
@@ -2502,4 +2511,4 @@ function displayTimer() {
     console.log(e);
   }
 }
-  
+ 
