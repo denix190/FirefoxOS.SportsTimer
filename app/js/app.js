@@ -755,9 +755,12 @@ function initListImages() {
         // Weight
         ["gym-arm.png", "Arm"],
         ["gym-curl.png", "Curl"],
+        ["gym-dumbbell-curl.png", "Dumbbell Curl"],
+        ["gym-arm-triceps-extension.png", "Arm Triceps Extension"],
         ["gym-shoulder.png", "Shoulder"],
         ["gym-standing-butterfly.png", "Standing butterfly"],
-        ["gym-thigh.png", "Thigh"],      
+        ["gym-thigh.png", "Thigh"],
+        ["gym-lying-triceps-extension.png", "Lying Triceps Extension"],
         // Ball
         ["gym-wall-push-ups.png", "Wall push ups"],
         ["gym-prone-leg-raise-ball.png", "Prone Leg Raise with ball"],
