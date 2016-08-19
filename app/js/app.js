@@ -47,10 +47,13 @@ var listCalendar = document.getElementById('list-calendar');
 // List All images.
 var listImages = document.getElementById('list-images');
 
+var typeExercice= document.getElementById('type-Exercice');
 // List History.
 var listHistory = document.getElementById('list-history');
 
 var days = null;
+
+
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -729,50 +732,10 @@ document.querySelector('#btn-go-timer-back').addEventListener('click', function 
  * Load the list of Images.
  */
 function initListImages() {
-  // List of all images.
-  var listImages = [
-        ["gym-null.png",""],
-        ["gym-ab-bikes.png", "Ab bikes"],
-        ["gym-crunch-abdos.png", "Crunch abdos"],
-        ["gym-flexion.png", "Flexion"],
-        ["gym-planche.png", "Plank"],
-        ["gym-push-up.png", "Push up"],
-        ["gym-squat.png", "Squat"],
-        ["gym-jump-squat.png", "Jump squat"],
-        ["gym-side-kicks.png", "Side kicks"],
-        ["gym-desk.png", "Desk"],
-        ["gym-side-plank.png", "Side plank"],
-        ["gym-air-bike-crunches.png", "Air bike crunches"], 
-        ["gym-donkey-side-kick.png", "Donkey side kick"],
-        ["gym-donkey-kick.png", "Donkey kick"],
-        ["gym-single-leg-hip-raise.png", "Single leg hip raise"],
-        ["gym-bridge.png", "Bridge"],
-        ["gym-mountain.png", "Mountain"],
-        ["gym-situps.png", "Situps"],
-        ["gym-leg-raises.png", "Leg raises"],
-        ["gym-flutter-kicks.png", "Flutter kicks"],
 
-        // Weight
-        ["gym-arm.png", "Arm"],
-        ["gym-curl.png", "Curl"],
-        ["gym-dumbbell-curl.png", "Dumbbell Curl"],
-        ["gym-arm-triceps-extension.png", "Arm Triceps Extension"],
-        ["gym-shoulder.png", "Shoulder"],
-        ["gym-standing-butterfly.png", "Standing butterfly"],
-        ["gym-thigh.png", "Thigh"],
-        ["gym-lying-triceps-extension.png", "Lying Triceps Extension"],
-        // Ball
-        ["gym-wall-push-ups.png", "Wall push ups"],
-        ["gym-prone-leg-raise-ball.png", "Prone Leg Raise with ball"],
-        ["gym-push-up-ball.png", "Push up with ball"],
-        ["gym-ball-jacknife.png", "Ball jacknife"],
-        // 
-        ["gym-child-pose.png", "Child pose"],
-        ["gym-side-lunge-strech.png", "Side lunge strech"]
-];
 
-  for (var i = 0; i < listImages.length; i++) {
-    addImage("images/" + listImages[i][0], listImages[i][1]);
+  for (var i = 0; i < gymImages.length; i++) {
+    addImage("images/" + gymImages[i][0], gymImages[i][1]);
   }
 
 }
@@ -820,6 +783,19 @@ listItemEx.onclick = function(e) {
     }
   }
 };
+
+typeExercice.onchange = function() {
+
+  var id = typeExercice.options[typeExercice.selectedIndex].value;
+  removeAllItems(listImages);
+  for (var i = 0; i < gymImages.length; i++) {
+    if (parseInt(id) === 0 || gymImages[i][2] == parseInt(id) ) {
+      addImage("images/" + gymImages[i][0], gymImages[i][1]);
+    }
+  }
+
+}; 
+
 
 /**
  * Display the exercise selected.
