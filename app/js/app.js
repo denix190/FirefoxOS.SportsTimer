@@ -53,7 +53,7 @@ var listHistory = document.getElementById('list-history');
 
 var days = null;
 
-
+var curImagePath = "";
 
 // Display the panel adding a Exercise.
 document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
@@ -64,6 +64,8 @@ document.querySelector('#btn-go-add-ex').addEventListener('click', function () {
   document.getElementById('duration').value = "60";
   document.getElementById('breakTime').value = "30";
   document.getElementById('imagePath').src = "images/gym-null.png";
+  curImagePath = "images/gym-null.png";
+  
   document.getElementById('idUpd').value = "-1";
   
   document.querySelector('#addExercise').className = 'current';
@@ -196,14 +198,29 @@ document.querySelector('#btn-go-current-session-back').addEventListener('click',
 
 
 document.querySelector('#imagePathUpd').addEventListener('click', function () {
-  document.querySelector('#pnl-chooseImage').className = 'current';
-  document.querySelector('[data-position="current"]').className = 'left';
+  showChooseImage();
 });
 
 document.querySelector('#imagePath').addEventListener('click', function () {
-    document.querySelector('#pnl-chooseImage').className = 'current';
-    document.querySelector('[data-position="current"]').className = 'left';
+  showChooseImage();
 });
+
+function showChooseImage() {
+  var id = getTypeExercice(curImagePath);
+
+  for(var i = 0; i < typeExercice.options.length; i++) {
+    if (typeExercice.options[i].value == id) {
+      typeExercice.selectedIndex = i;
+      break;
+    }
+  }
+
+  displayImage(id);
+  
+  document.querySelector('#pnl-chooseImage').className = 'current';
+  document.querySelector('[data-position="current"]').className = 'left';
+        
+}
 
 // Import Image
 // document.querySelector('#btn-go-import-image').addEventListener('click', function () {
@@ -733,7 +750,6 @@ document.querySelector('#btn-go-timer-back').addEventListener('click', function 
  */
 function initListImages() {
 
-
   for (var i = 0; i < gymImages.length; i++) {
     addImage("images/" + gymImages[i][0], gymImages[i][1]);
   }
@@ -784,17 +800,18 @@ listItemEx.onclick = function(e) {
   }
 };
 
+
+/**
+ * Display the list of image for the type selected.
+ */
 typeExercice.onchange = function() {
 
   var id = typeExercice.options[typeExercice.selectedIndex].value;
   removeAllItems(listImages);
-  for (var i = 0; i < gymImages.length; i++) {
-    if (parseInt(id) === 0 || gymImages[i][2] == parseInt(id) ) {
-      addImage("images/" + gymImages[i][0], gymImages[i][1]);
-    }
-  }
-
+  displayImage(parseInt(id));
 }; 
+
+
 
 
 /**
@@ -834,6 +851,9 @@ function displayExercise(id) {
       desc.value = request.result.desc;
       console.log( request.result.imagePath);
       imagePath.src = request.result.imagePath;
+
+      curImagePath = request.result.imagePath;
+      
       idUpd.value = id;
     };
   } catch (ex) {
@@ -922,15 +942,14 @@ listImages.onclick = function(e) {
       imagePath.src = e.target.id;
 
       var nameEx = document.getElementById('nameEx');
-
-      
     } else {
       var imagePath = document.getElementById('imagePathUpd');
       imagePath.src = e.target.id;
       var nameEx = document.getElementById('nameExUpd');
     
     }
-
+    curImagePath = e.target.id;
+    
     if (nameEx.value == "") {
       nameEx.value = e.target.innerHTML;
     }
@@ -2490,4 +2509,23 @@ function displayTimer() {
     console.log(e);
   }
 }
- 
+
+
+function displayImage(typeExercice) {
+  removeAllItems(listImages);
+  for (var i = 0; i < gymImages.length; i++) {
+    if (typeExercice === 0 || gymImages[i][2] == typeExercice) {
+      addImage("images/" + gymImages[i][0], gymImages[i][1]);
+    }
+  }
+}
+
+function getTypeExercice(imageName) {
+  for (var i = 0; i < gymImages.length; i++) {
+
+    if (imageName.indexOf(gymImages[i][0]) != -1) {
+      return gymImages[i][2];
+    }
+  }
+  return 0;
+}
